@@ -1,0 +1,436 @@
+var GmapsTools = function(){
+	var mySelf = this;
+
+	var itemName;
+	var callBackBlock;
+	var FormReference;
+	var XMLData;
+	var XMLDoc;
+
+	this.itemName = 'maps';
+	this.callBackBlock = 'content';
+
+	//Map connection vars
+	var mapDiv = 'CFTI';
+	var infowindow = new google.maps.InfoWindow();
+	var map;
+
+	this.clearMap = function(){
+		var Log = new LogTools();
+		Log.clearLog(); // When Filtering i clear Log too
+		Log.addLog('Clear Map<br />', 50);
+
+		for (var i = 0; i < markersArray.length; i++) {
+			markersArray[i]['Marker'].setMap(null);
+		}
+	}
+
+	this.requestData = function(){
+		new LogTools().addLog('Requesting quakes<br />', 40);
+
+		var ajaxUpdater = new Manajax();
+
+		ajaxUpdater.TxType = 'GET';
+		ajaxUpdater.responseType = 'xml';
+
+		this.callBackBlock = 'content';
+		ajaxUpdater.callBackFunc = this.parseQuakes;
+
+		ajaxUpdater.toScroll = false;
+
+		ajaxUpdater.requestAction();
+	}
+
+	this.parseQuakes = function(XmlText){
+		new LogTools().addLog('Parsing all quakes<br />', 80);
+
+		XMLQuakeList = new DOMParser().parseFromString(XmlText.trim(), 'text/xml');
+		XMLQuakeListArrived = true;
+
+		var markers = XMLQuakeList.documentElement.getElementsByTagName("Quake");
+
+		if(0 < markers.length){
+			for (var i = 0; i < markers.length; i++) {
+			//for (var i = 0; i < 10; i++) {
+				// obtain the attribues of each marker
+				
+				var ID = XMLQuakeList.getElementsByTagName("nterr")[i].childNodes[0].nodeValue;
+				var Lat = XMLQuakeList.getElementsByTagName("lat")[i].childNodes[0].nodeValue;
+				var Lng = XMLQuakeList.getElementsByTagName("lon")[i].childNodes[0].nodeValue;
+				var Location = XMLQuakeList.getElementsByTagName("earthquakelocation")[i].childNodes[0].nodeValue;
+				var Country = XMLQuakeList.getElementsByTagName("country")[i].childNodes[0].nodeValue;
+				var Zone = XMLQuakeList.getElementsByTagName("cat")[i].childNodes[0].nodeValue;
+				var Intensity = parseFloat(XMLQuakeList.getElementsByTagName("intensity")[i].childNodes[0].nodeValue);
+
+				var CheckYear = XMLQuakeList.getElementsByTagName("anno")[i];
+				var Year = CheckYear.childNodes.length ? parseInt(CheckYear.childNodes[0].nodeValue) : '';
+
+				var CheckMonth = XMLQuakeList.getElementsByTagName("mese")[i];
+				var Month = CheckMonth.childNodes.length ? parseInt(CheckMonth.childNodes[0].nodeValue) : '';
+
+				var CheckDay =  XMLQuakeList.getElementsByTagName("giorno")[i];
+				var Day = CheckDay.childNodes.length ? parseInt(CheckDay.childNodes[0].nodeValue) : '';
+
+				var FlagFalse = XMLQuakeList.getElementsByTagName("flagfalseeq")[i].childNodes.length ? true : false;
+				var FlagUnknown = XMLQuakeList.getElementsByTagName("flagunkneq")[i].childNodes.length ? true : false;
+				var FlagStrong = XMLQuakeList.getElementsByTagName("flagstrongeq")[i].childNodes.length ? true : false;
+				var FlagRevisioned = XMLQuakeList.getElementsByTagName("flagreveq")[i].childNodes.length ? true : false;
+
+
+				var QuakePage = 'quakes/' + ID.trim() + '.html';
+
+				var onMouseOverText = 'Dettagli evento';
+
+				var OnClickText = [
+					'<div class="InfoQuake">',
+					'ID: ' +  ID + '<br />',
+					'Location: ' +  Location + ' (' + Country + ')' + '<br />',
+					'Date: ' + Year + '-' + Month + '-' + Day + '<br />',
+					'Latitudine: ' + Lat + '<br />',
+					'Longitude: ' + Lng + '<br />',
+					'Intensity: ' + Intensity + '<br />',
+					'Dettagli: <a href="' + QuakePage + '" target="_blank"> Scheda evento</a> <br />',
+					'</div>'
+				].join('\n');
+
+				var Color = '#046cd9'; //Blue, default color
+				Color = FlagRevisioned ? '#d964d2' : Color;
+				Color = FlagStrong ? '#f9691a'  : Color;
+				Color = FlagUnknown ? '#fdfb32' : Color;
+				Color = FlagFalse ? '#00ba30' : Color;
+
+				var SquareSize = '';
+
+				if(6.5 < Intensity) SquareSize = 'M 1 1 L 25 1 L 25 25 L 1 25 z';
+				if(5.5 < Intensity && 6.5 >= Intensity) SquareSize = 'M 1 1 L 21 1 L 21 21 L 1 21 z';
+				if(4.5 < Intensity && 5.5 >= Intensity) SquareSize = 'M 1 1 L 18 1 L 18 18 L 1 18 z';
+				if(3.5 < Intensity && 4.5 >= Intensity) SquareSize = 'M 1 1 L 14 1 L 14 14 L 1 14 z';
+				if(3.5 >= Intensity) SquareSize = 'M 1 1 L 11 1 L 11 11 L 1 11 z';
+
+
+				var QuakeSquare = {
+					path: SquareSize,
+					strokeColor: 'black',
+					fillColor: Color,
+					fillOpacity: 0.9, 
+				};
+
+				markersArray[i] = {
+					ID: ID,
+					Lat: Lat,
+					Lng: Lng,
+					Location: Location,
+					Country: Country,
+					Intensity: Intensity,
+					Year: Year,
+					Month: Month,
+					Day: Day,
+					Zone: Zone,
+					FlagFalse: FlagFalse,
+					FlagUnknown: FlagUnknown,
+					FlagStrong: FlagStrong,
+					FlagRevisioned: FlagRevisioned,
+					Marker: new google.maps.Marker({
+						position: new google.maps.LatLng(Lat, Lng),
+						map: null,
+						//icon: 'http://www.google.com/intl/en_us/mapfiles/ms/micons/' + Color + '-dot.png',
+						icon: QuakeSquare,
+						title: onMouseOverText,
+					})
+				};
+				
+				;
+				
+				mySelf.openPopup(markersArray[i]['Marker'], OnClickText);
+
+			}
+		}
+	}
+
+	this.openPopup = function(marker, text){
+		google.maps.event.addListener(marker, 'click', function() {
+				infowindow.setContent(text);
+				infowindow.setOptions({maxWidth:500});
+				infowindow.setOptions({maxHeight:500});
+				infowindow.open(map, marker);
+				});
+
+	}
+
+	this.showQuakes = function(Filters){
+		new LogTools().addLog('Filtering Quakes<br />', 75);
+
+		for (var i = 0; i < markersArray.length; i++) {
+			var marker = markersArray[i];
+			var YearFlag = false,
+				IntensityFlag = false,
+				ZoneFlag = false;
+				FalseFlag = false,
+				UnknownFlag = false,
+				StrongFlag = false,
+				RevisionedFlag = false;
+
+			YearFlag = ( Filters['StartYear'] <= marker['Year'] && Filters['StopYear'] >= marker['Year']) ? true : false;
+			IntensityFlag = ( Filters['StartML'] <= marker['Intensity'] && Filters['StopML'] >= marker['Intensity']) ? true : false;
+
+			if('BOTH' == Filters['Zone'] || Filters['Zone'] == marker['Zone']) 
+				ZoneFlag = true;
+
+			if(Filters['FlagFalse'])
+				FalseFlag = (marker['FlagFalse']) ? true : false;
+
+			if(Filters['FlagUnknown'])
+				UnknownFlag = (marker['FlagUnknown']) ? true : false;
+				
+			if(Filters['FlagStrong'])
+				StrongFlag = (marker['FlagStrong']) ? true : false;
+
+			if(Filters['FlagRevisioned'])
+				RevisionedFlag = (marker['FlagRevisioned']) ? true : false;
+
+			if( YearFlag && 
+				IntensityFlag &&
+				ZoneFlag &&
+				(FalseFlag || UnknownFlag || StrongFlag || RevisionedFlag)
+			)
+				marker['Marker'].setMap(map);
+		}
+		
+		new LogTools().addLog('Filtered<br />', 100);
+	}
+
+
+	this.placeMap = function(){
+		new LogTools().addLog('Getting Gmaps<br />', 20);
+
+		var mapContainer = document.createElement("div");
+		
+
+		mapContainer.setAttribute('id', mapDiv);
+		mapContainer.setAttribute('name', mapDiv);
+
+		document.getElementById('content').innerHTML = '';
+		document.getElementById('content').appendChild(mapContainer);
+
+		var mapOptions = {
+			center: new google.maps.LatLng(46,18),
+			minZoom: 3,
+			zoom: 4,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			disableDefaultUI: false,
+			streetViewControl: false
+		};
+		map = new google.maps.Map(document.getElementById(mapDiv), mapOptions);
+
+	}
+
+}
+
+var FormTools = function(){
+
+	this.getSelectedValue = function(SelectReference){
+		var index = SelectReference.selectedIndex;
+
+		return SelectReference.options[index].value;
+	}
+
+	this.getSelectedText = function(SelectReference){
+		var index = SelectReference.selectedIndex;
+
+		return SelectReference.options[index].text;
+	}
+
+	this.resetSelect = function(SelectReference){
+		SelectReference.options.length = 1;
+	}
+
+	this.toggleBlock = function(BlockReference, ToDo){
+		BlockReference.style.display = (0 == ToDo) ? 'none' : 'block';
+	}
+	
+	this.getSelectedRadioValue = function(RadioReference){
+		var len = RadioReference.length;
+
+		for (var i = 0; i < len; ++i){
+			if (RadioReference[i].checked)
+				return parseInt(RadioReference[i].value);	
+		}
+	}
+	
+	this.setTextValue = function(TextReference, Value){
+		TextReference.value = Value;
+	}
+
+}
+
+var MenuTools = function(){
+
+	this.setPeriod = function(){
+		var Items = XMLQuakeList.getElementsByTagName('anno');
+		var minYear = 9999;
+		var maxYear = -9999;
+		
+		for(i = 0; i < Items.length; i++){
+			if(parseInt(Items[i].childNodes[0].nodeValue) < minYear) minYear = Items[i].childNodes[0].nodeValue;
+			if(parseInt(Items[i].childNodes[0].nodeValue) > maxYear) maxYear = Items[i].childNodes[0].nodeValue;
+		}
+
+		document.getElementById('StartDate').value = minYear;
+		document.getElementById('StopDate').value = maxYear;
+	}
+
+	this.setMagnitude = function(){
+		var Items = XMLQuakeList.getElementsByTagName('intensity');
+		var minML = 9999;
+		var maxML = -9999;
+		
+		for(i = 0; i < Items.length; i++){
+			if(parseFloat(Items[i].childNodes[0].nodeValue) < minML) minML = Items[i].childNodes[0].nodeValue;
+			if(parseFloat(Items[i].childNodes[0].nodeValue) > maxML) maxML = Items[i].childNodes[0].nodeValue;
+		}
+
+		document.getElementById('StartML').value = minML;
+		document.getElementById('StopML').value = maxML;
+	}
+
+	this.setMenu = function(){
+		new LogTools().addLog('Setting menu<br />', 100);
+
+		this.setPeriod();
+		this.setMagnitude();
+	}
+	
+}
+
+var LanguageTools = function(){
+	var Lang = [];
+	Lang['IT_it'] = [];
+	Lang['IT_it']['period'] = 'Periodo';
+	Lang['IT_it']['fromDate'] = 'Dal';
+	Lang['IT_it']['toDate'] = 'Al';
+	Lang['IT_it']['fromML'] = 'Da';
+	Lang['IT_it']['toML'] = 'A';
+	Lang['IT_it']['intensity'] = 'Intensit&#224; Epicentrale';
+	Lang['IT_it']['eventType'] = 'Tipo evento';
+	Lang['IT_it']['false'] = 'Falsi';
+	Lang['IT_it']['unknown'] = 'Sconosciuti';
+	Lang['IT_it']['strong'] = 'Forti';
+	Lang['IT_it']['zone'] = 'Zona Eventi';
+	Lang['IT_it']['both'] = 'Tutti';
+	Lang['IT_it']['italian'] = 'Eventi Italiani';
+	Lang['IT_it']['mediterranean'] = 'Eventi Mediterranei';
+	Lang['IT_it']['reviewed'] = 'Revisionati';
+
+	Lang['EN_en'] = [];
+	Lang['EN_en']['period'] = 'Period';
+	Lang['EN_en']['fromDate'] = 'From';
+	Lang['EN_en']['toDate'] = 'To';
+	Lang['EN_en']['fromML'] = 'From';
+	Lang['EN_en']['toML'] = 'To';
+	Lang['EN_en']['intensity'] = 'Epicentral intensity';
+	Lang['EN_en']['eventType'] = 'Earthquake type';
+	Lang['EN_en']['false'] = 'False';
+	Lang['EN_en']['unknown'] = 'Unknown';
+	Lang['EN_en']['strong'] = 'Strong';
+	Lang['EN_en']['zone'] = 'Events Zone';
+	Lang['EN_en']['both'] = 'All Events';
+	Lang['EN_en']['italian'] = 'Italian Events';
+	Lang['EN_en']['mediterranean'] = 'Mediterranean Events';
+	Lang['EN_en']['reviewed'] = 'Reviewed';
+
+	this.setLanguage = function(Language){
+		var LangArray = Lang[Language];
+		for (var key in LangArray)
+			document.getElementById(key).innerHTML = LangArray[key];
+	}
+}
+
+var LogTools = function(){
+	var logBlock = document.getElementById('log');
+	var progressMeterBlock = document.getElementById('progressmeter');
+
+	this.clearLog = function(){
+		logBlock.innerHTML = '';
+		this.setProgressMeter(0);
+	}
+
+	this.addLog = function(LogString, Percentage){
+		logBlock.innerHTML += LogString;
+		this.setProgressMeter(Percentage);
+	}
+
+	this.setProgressMeter = function(Percentage){
+		progressMeterBlock.innerHTML = Percentage + '%';
+		progressMeterBlock.style.width = Percentage + '%';
+	}
+}
+
+function ResetMap(){ 
+	GmapsPilot.clearMap();
+	
+	GmapsPilot.showQuakes({
+		StartYear: parseInt(document.getElementById('StartDate').value),
+		StopYear: parseInt(document.getElementById('StopDate').value),
+		StartML: parseFloat(document.getElementById('StartML').value),
+		StopML: parseFloat(document.getElementById('StopML').value),
+		Zone: new FormTools().getSelectedValue(document.getElementById('zoneQuake')),
+		FlagFalse: document.getElementById('flagfalseeq').checked,
+		FlagUnknown: document.getElementById('flagunkneq').checked,
+		FlagStrong: document.getElementById('flagstrongeq').checked,
+		FlagRevisioned: document.getElementById('flagreveq').checked,
+	});
+
+}
+
+function initialize(){
+	MenuPilot = new MenuTools();
+	GmapsPilot = new GmapsTools();
+
+	GmapsPilot.placeMap();
+	GmapsPilot.requestData();
+
+	IntervalVar = setInterval(function(){
+		if(true == XMLQuakeListArrived){
+			clearInterval(IntervalVar);
+
+			MenuPilot.setMenu();
+		}
+	},10);
+
+	var FilterButton = document.getElementById('FilterByKindEvent');
+
+	if (window.attachEvent){
+		FilterButton.attachEvent('onclick', ResetMap );
+	}
+	else{
+		if (window.addEventListener) {
+			FilterButton.addEventListener('click', ResetMap, false);
+		}
+		else {
+			FilterButton.addEventListener('click', ResetMap, false);
+		}
+	}
+
+}
+
+var XMLQuakeList;
+var XMLQuakeListArrived = false;
+var IntervalVar = null;
+var MenuPilot = null;
+var LogPilot = null;
+var GmapsPilot = null;
+var markersArray = [];
+
+
+if (window.attachEvent){
+	window.attachEvent('onload', initialize);
+}
+else{
+	if (window.addEventListener) {
+		window.addEventListener('load', initialize, false);
+	}
+	else {
+		document.addEventListener('load', initialize, false);
+	}
+}
+

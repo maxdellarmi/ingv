@@ -1,0 +1,13 @@
+function showComment(IDRow){
+	var Comments =	document.getElementsByClassName('HiddenLocComments');
+	
+	var CommentsLength = Comments.length;
+
+	for (var i = 0; i < CommentsLength; i++){
+		Comments[i].style.display = 'none';
+	}
+
+	var RequestRow = document.getElementById(IDRow);
+	RequestRow.style.display = 'table-row';
+
+}

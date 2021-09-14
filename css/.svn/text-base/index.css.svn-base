@@ -1,0 +1,85 @@
+#CFTI{
+	width: 100%;
+	height: 100%;
+}
+
+.InfoQuake {
+	width: 250px;
+	height: 150px;
+}
+
+#menu {
+	position: relative;
+	float: left;
+	width: 20%;
+}
+
+#menu .MenuBlock {
+	width: 98%;
+	border: 1px solid navy;
+	margin-bottom: 5px;
+}
+
+#menu .TitleMenu{
+	width: 80%;
+	color: white;
+	font-weight: bold;
+	background: navy;
+	padding-left: 3px;
+}
+
+#menu .OptionMenu{
+	color: navy;
+	font-weight: bold;
+	background: white;
+	padding-left: 5px;
+}
+
+#menu .OptionMenu label {
+	width: 30%;
+	display: block;
+	float: left;
+}
+
+
+#content{
+	position: relative;
+	float: left;
+	width: 60%;
+	height: 600px;
+}
+
+#log {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: navy;
+	font-size: 10px;
+	font-weight: bold;
+}
+
+#progressmeter {
+	margin-top: 2%;
+	background: #216110;
+	width: 0px;
+	color: yellow;
+	font-size: 10px;
+	font-weight: bold;
+}
+
+footer {
+	border-top: 1px dashed #1A386F;
+	clear: both;
+	color: navy;
+	display: block;
+	float: left;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	margin: 10px 0px 5px 0px;
+	padding: 3px 5px 3px 5px;
+	position: relative;
+	width: 99%;
+}
+
+footer p#license { width: 100%; text-align: center; font-size: 8pt; }
+footer p#credits { text-align: right; }
+
