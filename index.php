@@ -39,7 +39,12 @@
 
 	<link rel="stylesheet" type="text/css" href="css/cookies.css" />
 	<script src="js/cookieconsent.min.js"></script>
-
+    <!--sezione mappa OL begin-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.0.1/ol.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.0.1/ol.css" type="text/css">
+    <script src="js/mapOL.js"></script>
+    <!--sezione mappa OL end-->
 </head>
 
 <div id="loading" ><br><strong>Loading....</strong></div>
@@ -52,7 +57,7 @@
 <body onresize="resizeMapIndex()" onload="stateChange()">
 
 
-	<div id="content">
+	<div id="content" style="height: 50%; width:50%">
 		<div id="tdCursor"></div>
 		<div id="NumSel"></div>
 		<div id="FakeGraph">
@@ -74,7 +79,7 @@
 			<span id="clickOKsentence"></span>
 		</div>
 
-		<div id="leftside">
+		<div id="leftside" >
 			<div id="topcolor">
 				<div id="accessDIV" >
 					<abbr title="Accesso per" id ="abbracc"><select id="access" name="access" onchange="stateChange()"></abbr>
@@ -263,22 +268,159 @@
 		<?php include("html/legendEPI.html"); ?>
 
 
-
-
 		<div id = "legendmin">
 			<a href="#" id="bigger"></a>
 			<div id = "legendmintext"><b>Legenda</b></div>
 		</div>
 		<?php include("html/legendPQ.html"); ?>
 
-		<div id="map">
+		<div id="map" >
 		</div>
-
-
 	</div>
+    <?php include("html/MapLayers_Gsearch_Strum.html"); ?>
+    <?php include("html/dh.html"); ?>
+    <!--sezione mappa OL begin-->
+    <div id="mapOL" style="height: 50%; width:100%" >
+    </div>
+    <div id="popup"></div>
 
-	<?php include("html/MapLayers_Gsearch_Strum.html"); ?>
-	<?php include("html/dh.html"); ?>
+    <style>
+        #info {
+            position: absolute;
+            height: auto;
+            width: auto;
+            z-index: 100;
+
+        }
+
+        .info {
+            position: absolute;
+            height: auto;
+            width: auto;
+            z-index: 100;
+
+        }
+        .tooltip.in {
+            opacity: 1;
+        }
+        .tooltip.top .tooltip-arrow {
+            border-top-color: white;
+        }
+        .tooltip-inner {
+            max-width: 400px;
+            padding: 3px 8px;
+            color: #645959;
+            text-align: center;
+            background-color: #f8f5f5;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .tooltip {
+            top: 100px !important;
+        }
+        .popover-content
+        {
+            padding: 0px !important;
+        }
+
+        input[type=range] {
+
+            -webkit-appearance: none;
+            margin: 10px 0;
+            width: 100%;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 5px;
+            cursor: pointer;
+            animate: 0.2s;
+            box-shadow: 0px 0px 0px #000000;
+            background: #337AB7;
+            border-radius: 1px;
+            border: 0px solid #000000;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            box-shadow: 0px 0px 0px #000000;
+            border: 1px solid #337AB7;
+            height: 18px;
+            width: 18px;
+            border-radius: 25px;
+            background: #A1D0FF;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -7px;
+        }
+        input[type=range]:focus::-webkit-slider-runnable-track {
+            background: #337AB7;
+        }
+        input[type=range]::-moz-range-track {
+            width: 100%;
+            height: 5px;
+            cursor: pointer;
+            animate: 0.2s;
+            box-shadow: 0px 0px 0px #000000;
+            background: #337AB7;
+            border-radius: 1px;
+            border: 0px solid #000000;
+        }
+        input[type=range]::-moz-range-thumb {
+            box-shadow: 0px 0px 0px #000000;
+            border: 1px solid #337AB7;
+            height: 18px;
+            width: 18px;
+            border-radius: 25px;
+            background: #A1D0FF;
+            cursor: pointer;
+        }
+        input[type=range]::-ms-track {
+            width: 100%;
+            height: 5px;
+            cursor: pointer;
+            animate: 0.2s;
+            background: transparent;
+            border-color: transparent;
+            color: transparent;
+        }
+        input[type=range]::-ms-fill-lower {
+            background: #337AB7;
+            border: 0px solid #000000;
+            border-radius: 2px;
+            box-shadow: 0px 0px 0px #000000;
+        }
+        input[type=range]::-ms-fill-upper {
+            background: #337AB7;
+            border: 0px solid #000000;
+            border-radius: 2px;
+            box-shadow: 0px 0px 0px #000000;
+        }
+        input[type=range]::-ms-thumb {
+            margin-top: 1px;
+            box-shadow: 0px 0px 0px #000000;
+            border: 1px solid #337AB7;
+            height: 18px;
+            width: 18px;
+            border-radius: 25px;
+            background: #A1D0FF;
+            cursor: pointer;
+        }
+        input[type=range]:focus::-ms-fill-lower {
+            background: #337AB7;
+        }
+        input[type=range]:focus::-ms-fill-upper {
+            background: #337AB7;
+        }
+        .classBlue{
+            background: #dbe8fc !important;
+        }
+        .classBlue:nth-of-type(odd){
+            background: #c2d9fd !important;
+        }
+    </style>
+    <!--sezione mappa OL end-->
 
 </body>
 </html>
