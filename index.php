@@ -6,6 +6,14 @@
     <script src="/plugins/global/jquery.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.0.1/ol.js"></script>
+    <script src="/plugins/global/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/plugins/global/js.cookie.min.js" type="text/javascript"></script>
+    <script src="/plugins/global/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+    <script src="/plugins/global/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <script src="/plugins/global/jquery.blockui.min.js" type="text/javascript"></script>
+    <script src="/plugins/global/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
             var center = [12.6508, 42.5681];
@@ -13,20 +21,20 @@
             var markers = [];
 
             var markersCoords =
-            markersCoords = [
-              {
-                name: "Name A",
-                description: "Description A",
-                coordinates: [15.942361, 40.786657],
-                url: "http://google.it"
-              },
-              {
-                name: "Name B",
-                description: "Description B",
-                coordinates: [15.227715,37.256637],
-                url: "http://google.it"
-              },
-            ];
+                markersCoords = [
+                    {
+                        name: "Name A",
+                        description: "Description A",
+                        coordinates: [15.942361, 40.786657],
+                        url: "http://google.it"
+                    },
+                    {
+                        name: "Name B",
+                        description: "Description B",
+                        coordinates: [15.227715,37.256637],
+                        url: "http://google.it"
+                    },
+                ];
 
             markersCoords.map(function(item, index) {
 
@@ -125,7 +133,6 @@
 
         });
     </script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.0.1/ol.css" type="text/css">
 
     <style>
