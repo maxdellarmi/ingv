@@ -16,9 +16,9 @@
     $objXmlDocument = simplexml_load_file("QuakeList.xml");
 
     if ($objXmlDocument === FALSE) {
-        //echo "There were errors parsing the XML file.\n";
+        echo "There were errors parsing the XML file.\n";
         foreach(libxml_get_errors() as $error) {
-            //echo $error->message;
+            echo $error->message;
         }
         exit;
     }
@@ -29,8 +29,13 @@
     $arrOutput = json_decode($objJsonDocument, TRUE);
 
     function filter($item) {
-        return ($item['anno'] >= 1950 && $item['country'] == "Italy" );
+        return ($item['country'] == "Italy" );
     }
+    /*    //ESECUZIONE QUERY SULL XML dei terremoti dopo il 1950 e in italia
+    function filter($item) {
+        return ($item['anno'] >= 1950 && $item['country'] == "Italy" );
+    }*/
+
     $filteredQuake = array_filter($arrOutput["Quake"], 'filter');
     $elementArray = array();
 
@@ -38,11 +43,9 @@
     foreach ($filteredQuake as $key => $value) {
         //echo $key;
         $convertCoordinates = [];
-        //array_push($coordinates, $filteredQuake[$key]["lat"], $filteredQuake[$key]["lon"]);
-        array_push($convertCoordinates, (float)$value["lon"], (float)$value["lat"]);
-        //$coordinates = json_encode($convertCoordinates);
+        array_push($convertCoordinates, (float)$value["lon"], (float)$value["lat"]); //aggiunge 2 elementi all'array
+        //$coordinates = json_encode($convertCoordinates); //questa istruzione converte in stringa non andava bene.
 
-        //var_dump($coordinates);
 
         $element = new stdClass();
         $element->name = $value["earthquakelocation"];
@@ -81,6 +84,112 @@
             var map;
             console.log("carico i dati");
 
+            var markersCoords =JSON.parse('<?php echo json_encode($elementArray, true) ?>');
+
+            $.when(markersCoords).then(function( dummy ) {
+                //alert( "I fired immediately" );
+                console.log("prima esecuzione");
+                console.log(markersCoords);
+                markersCoords.map(function (item, index) {
+                    var marker = new ol.Feature({
+                        geometry: new ol.geom.Point(ol.proj.fromLonLat(item.coordinates)),
+                        name: item.name,
+                        description: item.description,
+                        url: item.url
+                    });
+
+                    marker.setStyle(new ol.style.Style({
+                        image: new ol.style.Icon(({
+                            color: '#ff5722',
+                            src: '/img/dot.png',
+                            // the real size of your icon
+                            size: [20, 20],
+                            // the scale factor
+                            scale: 0.5
+                        }))
+                    }));
+                    markers.push(marker);
+                })
+            }).then(  function (x) {
+                console.log("seconda esecuzione");
+                console.log(markers);
+                vectorLayer = new ol.layer.Vector({
+                    source: new ol.source.Vector({
+                        features: markers,
+                    })
+                });
+                console.log(vectorLayer);
+            }).done ( function (x)  {
+                console.log("terza esecuzione");
+                console.log(vectorLayer);
+                map = new ol.Map({
+                    controls: ol.control.defaults({
+                        attributionOptions: ({
+                            collapsible: false
+                        })
+                    }),
+                    layers: [
+                        new ol.layer.Tile({
+                            source: new ol.source.OSM()
+                        }), vectorLayer
+                    ],
+                    target: document.getElementById('map'),
+                    view: new ol.View({
+                        center: ol.proj.fromLonLat(center),
+                        zoom: 6,
+                    })
+                });
+
+                var element = document.getElementById('popup');
+                var popup = new ol.Overlay({
+                    element: element,
+                    positioning: 'bottom-center',
+                    stopEvent: true,
+                    offset: [0, -20],
+                    autoPan: true,
+                    autoPanAnimation: {
+                        duration: 250
+                    }
+                });
+                map.addOverlay(popup);
+
+                // display popup on click
+                map.on('click', function (evt) {
+                    var feature = map.forEachFeatureAtPixel(evt.pixel,
+                        function (feature) {
+                            return feature;
+                        });
+
+                    if (feature) {
+                        $(element).popover('destroy')
+                        var coordinates = feature.getGeometry().getCoordinates();
+                        popup.setPosition(coordinates);
+                        $(element).popover({
+                            'placement': 'top',
+                            'animation': false,
+                            'html': true,
+                            'trigger': 'manual',
+                            'content': '<div style="min-width:200px"><h4>' + feature.get('name') + '</h3>' + '<p>' + feature.get('description') + '</p>' + '<a href="' + feature.get('url') + '" class="details_lang" id="details">Details</a>'
+                        });
+                        $(element).popover('show');
+                    } else {
+                        $(element).popover('destroy');
+                        popup.setPosition(undefined);
+                    }
+
+                });
+                // change mouse cursor when over marker
+                map.on('pointermove', function (e) {
+                    if (e.dragging) {
+                        $(element).popover('hide');
+                        return;
+                    }
+                    var pixel = map.getEventPixel(e.originalEvent);
+                    var hit = map.hasFeatureAtPixel(pixel);
+                    map.getTarget().style.cursor = hit ? 'pointer' : '';
+                });
+            });
+
             /*var markersCoords = [
                 {
                     name: "Name A",
@@ -97,22 +206,7 @@
             ];*/
 
 
-            var markersCoords =JSON.parse('<?php echo json_encode($elementArray, true) ?>');
-
-            /*markersCoords = [
-                {
-                    name: "Name A",
-                    description: "Description A",
-                    coordinates: [15.942361, 40.786657],
-                    url: "http://google.it"
-                },
-                {
-                    name: "Name B",
-                    description: "Description B",
-                    coordinates: [15.227715,37.256637],
-                    url: "http://google.it"
-                },
-            ];
+            /*
 
             markersCoords.push(pippo);
 
@@ -208,125 +302,6 @@
                 var hit = map.hasFeatureAtPixel(pixel);
                 map.getTarget().style.cursor = hit ? 'pointer' : '';
             }); */
-
-            $.when(markersCoords).then(function( dummy ) {
-                //alert( "I fired immediately" );
-                console.log("prima esecuzione");
-                console.log(markersCoords);
-                markersCoords.map(function (item, index) {
-                    var marker = new ol.Feature({
-                        geometry: new ol.geom.Point(ol.proj.fromLonLat(item.coordinates)),
-                        name: item.name,
-                        description: item.description,
-                        url: item.url
-                    });
-
-                    marker.setStyle(new ol.style.Style({
-                        image: new ol.style.Icon(({
-                            color: '#ff5722',
-                            src: '/img/dot.png'
-                        }))
-                    }));
-                    markers.push(marker);
-                })
-            }).then(  function (x) {
-                console.log("seconda esecuzione");
-                console.log(markers);
-                vectorLayer = new ol.layer.Vector({
-                    source: new ol.source.Vector({
-                        features: markers,
-                    })
-                });
-                console.log(vectorLayer);
-            }).done ( function (x)  {
-                console.log("terza esecuzione");
-                console.log(vectorLayer);
-              map = new ol.Map({
-                    controls: ol.control.defaults({
-                        attributionOptions: ({
-                            collapsible: false
-                        })
-                    }),
-                    layers: [
-                        new ol.layer.Tile({
-                            source: new ol.source.OSM()
-                        }), vectorLayer
-                    ],
-                    target: document.getElementById('map'),
-                    view: new ol.View({
-                        center: ol.proj.fromLonLat(center),
-                        zoom: 6,
-                    })
-                });
-
-                var element = document.getElementById('popup');
-                var popup = new ol.Overlay({
-                    element: element,
-                    positioning: 'bottom-center',
-                    stopEvent: true,
-                    offset: [0, -20],
-                    autoPan: true,
-                    autoPanAnimation: {
-                        duration: 250
-                    }
-                });
-                map.addOverlay(popup);
-
-                // display popup on click
-                map.on('click', function (evt) {
-                    var feature = map.forEachFeatureAtPixel(evt.pixel,
-                        function (feature) {
-                            return feature;
-                        });
-
-                    if (feature) {
-                        $(element).popover('destroy')
-                        var coordinates = feature.getGeometry().getCoordinates();
-                        popup.setPosition(coordinates);
-                        $(element).popover({
-                            'placement': 'top',
-                            'animation': false,
-                            'html': true,
-                            'trigger': 'manual',
-                            'content': '<div style="min-width:200px"><h4>' + feature.get('name') + '</h3>' + '<p>' + feature.get('description') + '</p>' + '<a href="' + feature.get('url') + '" class="details_lang" id="details">Details</a>'
-                        });
-                        $(element).popover('show');
-                    } else {
-                        $(element).popover('destroy');
-                        popup.setPosition(undefined);
-                    }
-
-                });
-                // change mouse cursor when over marker
-                map.on('pointermove', function (e) {
-                    if (e.dragging) {
-                        $(element).popover('hide');
-                        return;
-                    }
-                    var pixel = map.getEventPixel(e.originalEvent);
-                    var hit = map.hasFeatureAtPixel(pixel);
-                    map.getTarget().style.cursor = hit ? 'pointer' : '';
-                });
-            });
-
-
-            /*var markersCoords =
-                markersCoords = [
-                    {
-                        name: "Name A",
-                        description: "Description A",
-                        coordinates: [15.942361, 40.786657],
-                        url: "http://google.it"
-                    },
-                    {
-                        name: "Name B",
-                        description: "Description B",
-                        coordinates: [15.227715,37.256637],
-                        url: "http://google.it"
-                    },
-                ];*/
-
-
 
 
         });
