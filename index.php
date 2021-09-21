@@ -3,9 +3,9 @@
 <head>
 
     <?php
-    use Illuminate\Support\Str;
+    /*use Illuminate\Support\Str;
     use Illuminate\Support\Arr;
-    use Illuminate\Support\Collection;
+    use Illuminate\Support\Collection;*/
 
     $site = new stdClass();
     $site->name = 'prova';
