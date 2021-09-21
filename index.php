@@ -17,8 +17,9 @@
     var_dump($markers_cross);
     $markers_subs = [12.6508, 42.5681];
     var_dump($markers_subs);
-    $arr1 = Collection::make($markers_strat);
-    var_dump(json_encode($arr1));
+    $out = array_values($markers_strat);
+    $varjvs= json_encode($out);
+    var_dump($varjvs);
     ?>
     <script type="text/javascript" >
         var center;
@@ -26,8 +27,8 @@
         //valorizza le variabili in javascript partendo dal php e le classi.
         //PS attenzione agli array che non possono essere assegnati direttamente
         <?php
-         echo "center2 = [$markers_strat[0], $markers_strat[1]];";
-         echo "center = [$site->longitude, $site->latitude];";
+         echo "center2 = $varjvs;";  //serializzazione array
+         echo "center = [$site->longitude, $site->latitude];"; //creazione dinamica oggetto js con elementi da pho
          ?>
 
     </script>
