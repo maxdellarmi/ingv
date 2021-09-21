@@ -1,36 +1,113 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <?php
-    /*use Illuminate\Support\Str;
-    use Illuminate\Support\Arr;
-    use Illuminate\Support\Collection;*/
-
     $site = new stdClass();
     $site->name = 'prova';
     $site->longitude = 12.6508;
     $site->latitude = 42.5681;
-    var_dump($site);
+//    var_dump($site);
     $markers_strat = [12.6508, 42.5681];
     $markers_cross = [ [12.4746484, 41.7660824],[12.4698199, 41.77023]];
-    var_dump($markers_cross);
+//    var_dump($markers_cross);
     $markers_subs = [12.6508, 42.5681];
-    var_dump($markers_subs);
+//    var_dump($markers_subs);
     $out = array_values($markers_strat);
     $varjvs= json_encode($out);
+
+
+    //legge file xml
+    $objXmlDocument = simplexml_load_file("QuakeList.xml");
+
+    if ($objXmlDocument === FALSE) {
+        echo "There were errors parsing the XML file.\n";
+        foreach(libxml_get_errors() as $error) {
+            echo $error->message;
+        }
+        exit;
+    }
+
+    //Convert the SimpleXMLElement Object Into Its JSON Representation
+    $objJsonDocument = json_encode($objXmlDocument);
+    //Decode the JSON String Into an Array
+    $arrOutput = json_decode($objJsonDocument, TRUE);
+
+    //PRINTA TUTTO
+    //echo "<pre>";
+    //print_r($arrOutput);
+    //DEBUG INFORMAZIONI
+    //print_r(array_values($arrOutput));
+    /*print_r(array_values($arrOutput["Quake"][0])); //stampa il primo elemento
+    print_r($arrOutput["Quake"][0]["anno"]); //stampa del primo elemento il campo anno
+    print_r($arrOutput["Quake"][0]["country"]); //stampa del primo elemento il campo country
+    var_dump(count($arrOutput["Quake"]));  //mi da il totale degli array*/
+    /***PREPARA IL FILTRO PER TUTTI I TERREMOTI DOPO IL 1950 e con PAESE ITALIA ***/
+    function filter($item) {
+        return ($item['anno'] >= 1950 && $item['country'] == "Italy" );
+    }
+    $filteredQuake = array_filter($arrOutput["Quake"], 'filter');
+    //DEBUG INFORMAZIONI
+    //print_r($filteredQuake);
+
+    //L'ARRAY ASSOCIATIVO HA COME CHIAVE L'INDICE E FILTRANDOLO RIMANE FISSO SERVER LA CHIAVE PER IL LOOP
+    //print_r($filteredQuake[913]["lat"]); //funziona
+
+    /*$site->name = 'prova';
+    $site->longitude = 12.6508;
+    $site->latitude = 42.5681;
+*/
+
+    $elementArray = array();
+
+    //LOOP ATTRAVERSO LA CHIAVE PER INDICE DI ARRAY ASSOCIATIVO
+    foreach ($filteredQuake as $key => $value) {
+        echo $key;
+        $convertCoordinates= [];
+        //array_push($coordinates, $filteredQuake[$key]["lat"], $filteredQuake[$key]["lon"]);
+        array_push($convertCoordinates, $value["lat"], $value["lon"]);
+        $coordinates= json_encode($out);
+
+        $element = new stdClass();
+        $element->name = $value["earthquakelocation"];
+        $element->description =$value["anno"];
+        $element->coordinates =$coordinates;
+        $element->url ="www.google.it";
+        $element->key = $key;
+        //aggiungo elemento nell'array
+        $elementArray[] = $element;
+        //DEBUG INFORMAZIONI
+        //print_r($elementArray);
+    }
+
+    //print_r($filteredQuake[0]["lat"]); //no
+    /*
+    $test= [];
+    array_push($test, $filteredQuake[913]["lat"], $filteredQuake[913]["lon"]);
+    $testCoordinates= json_encode($out);
+    print_r($testCoordinates);
+*/
+    //DEBUG_INFORMAZIONI
+//    var_dump($elementArray);
+//    print_r($elementArray);
+
+    //print_r(json_encode($elementArray[0]));
+
+    //var_dump(json_encode($elementArray[1] , TRUE ) );
+
     var_dump($varjvs);
+
     ?>
     <script type="text/javascript" >
         var center;
         var center2;
+        //var markersCoords
         //valorizza le variabili in javascript partendo dal php e le classi.
         //PS attenzione agli array che non possono essere assegnati direttamente
         <?php
          echo "center2 = $varjvs;";  //serializzazione array
          echo "center = [$site->longitude, $site->latitude];"; //creazione dinamica oggetto js con elementi da pho
+         //echo "var markersCoords = JSON.parse(" + json_encode($elementArray, true) + ");"
          ?>
-
     </script>
     <!--sezione mappa OL begin-->
     <script src="/plugins/global/jquery.min.js" type="text/javascript"></script>
@@ -51,8 +128,9 @@
             //var center =[12.6508, 42.5681];
 
             var markers = [];
+            var markersCoords = JSON.parse('<?php echo json_encode($elementArray, true) ?>');
 
-            var markersCoords =
+            /*var markersCoords =
                 markersCoords = [
                     {
                         name: "Name A",
@@ -66,7 +144,7 @@
                         coordinates: [15.227715,37.256637],
                         url: "http://google.it"
                     },
-                ];
+                ];*/
 
             markersCoords.map(function(item, index) {
 

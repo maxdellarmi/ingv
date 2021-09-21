@@ -10,7 +10,8 @@
     "laravelcollective/html": "5.2.*",
     "intervention/image": "^2.3",
     "intervention/imagecache": "^2.3",
-    "yajra/laravel-datatables-oracle": "^6.0"
+    "yajra/laravel-datatables-oracle": "^6.0",
+    "ext-simplexml": "*"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",
