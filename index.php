@@ -2,6 +2,35 @@
 <html>
 <head>
 
+    <?php
+    use Illuminate\Support\Str;
+    use Illuminate\Support\Arr;
+    use Illuminate\Support\Collection;
+
+    $site = new stdClass();
+    $site->name = 'prova';
+    $site->longitude = 12.6508;
+    $site->latitude = 42.5681;
+    var_dump($site);
+    $markers_strat = [12.6508, 42.5681];
+    $markers_cross = [ [12.4746484, 41.7660824],[12.4698199, 41.77023]];
+    var_dump($markers_cross);
+    $markers_subs = [12.6508, 42.5681];
+    var_dump($markers_subs);
+    $arr1 = Collection::make($markers_strat);
+    var_dump(json_encode($arr1));
+    ?>
+    <script type="text/javascript" >
+        var center;
+        var center2;
+        //valorizza le variabili in javascript partendo dal php e le classi.
+        //PS attenzione agli array che non possono essere assegnati direttamente
+        <?php
+         echo "center2 = [$markers_strat[0], $markers_strat[1]];";
+         echo "center = [$site->longitude, $site->latitude];";
+         ?>
+
+    </script>
     <!--sezione mappa OL begin-->
     <script src="/plugins/global/jquery.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
@@ -16,7 +45,9 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
-            var center = [12.6508, 42.5681];
+            console.log(center2);
+            console.log(center);
+            //var center =[12.6508, 42.5681];
 
             var markers = [];
 
@@ -189,6 +220,7 @@
 <!--       ==============    WMS-WMF LINKS   - CSW METADATA   =============         -->
 
 <body >
+
 
 
 
