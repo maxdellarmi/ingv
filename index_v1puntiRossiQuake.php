@@ -12,22 +12,8 @@
     $out = array_values($markers_strat);
     $varjvs= json_encode($out);
 
-    /*<Locs>
-  <Loc>
-    <nloc_cfti>080299.00</nloc_cfti>
-    <desloc_cfti>Aarau</desloc_cfti>
-    <provlet></provlet>
-    <nazione>Switzerland</nazione>
-    <risentimenti>2</risentimenti>
-    <ee>0</ee>
-    <maxint>4</maxint>
-    <lat_wgs84>47.3913</lat_wgs84>
-    <lon_wgs84>8.0359</lon_wgs84>
-    <notesito></notesito>
-  </Loc>*/
-
     //legge file xml
-    $objXmlDocument = simplexml_load_file("LocList.xml");
+    $objXmlDocument = simplexml_load_file("QuakeList.xml");
 
     if ($objXmlDocument === FALSE) {
         echo "There were errors parsing the XML file.\n";
@@ -47,109 +33,23 @@
     function filter($item) {
         return ($item['anno'] >= 1950 && $item['country'] == "Italy" );
     }*/
-    /*function filter($item) {
+    function filter($item) {
         return ($item['country'] == "Italy" );
-    }*/
-    function filter($item): bool
-    {
-        //return true; //ritorna sempre true //SEMBRA non funzionare!!! Serve sempre imporre una consizione nel filter....
-        //COSI FUNZIONA
-
-        //return ($item['maxint'] >= 0 && $item['maxint'] >= 4   );
-        return ($item['maxint'] >= 0 );
     }
-    $filteredLocality = array_filter($arrOutput["Loc"], 'filter');
+    $filteredQuake = array_filter($arrOutput["Quake"], 'filter');
     $elementArray = array();
 
     //LOOP ATTRAVERSO LA CHIAVE PER INDICE DI ARRAY ASSOCIATIVO
-    foreach ($filteredLocality as $key => $value) {
+    foreach ($filteredQuake as $key => $value) {
         //echo $key;
         $convertCoordinates = [];
-        array_push($convertCoordinates, (float)$value["lon_wgs84"], (float)$value["lat_wgs84"]); //aggiunge 2 elementi all'array
+        array_push($convertCoordinates, (float)$value["lon"], (float)$value["lat"]); //aggiunge 2 elementi all'array
         //$coordinates = json_encode($convertCoordinates); //questa istruzione converte in stringa non andava bene.
 
+
         $element = new stdClass();
-
-        //$element->maxintROM = "";
-        $element->ris=$value["risentimenti"];
-        $element->EEnum=(int)$value["ee"];
-        $element->maxint=(float) $value["maxint"];
-
-        if ($element->maxint == 11){
-            $element->maxintROM  = "XI";
-        } else if ($element->maxint == 10.5){
-            $element->maxintROM = "XI-X";
-        }else if ($element->maxint == 10){
-            $element->maxintROM = "X";
-        } else if ($element->maxint == 9.5){
-            $element->maxintROM = "IX-X";
-        }else if ($element->maxint == 9.1){
-            $element->maxint = 9;
-            $element->maxintROM = "IX";
-        } else if ( $element->maxint == 9){
-            $element->maxintROM = "IX";
-        } else if ( $element->maxint == 8.5){
-            $element->maxintROM = "VIII-IX";
-        } else if ($element->maxint == 8.2){
-            $element->maxint = 8;
-            $element->maxintROM = "VIII";
-        } else if ($element->maxint == 8.1){
-            $element->maxint = 8;
-            $element->maxintROM = "VIII";
-        } else if ($element->maxint == 8){
-            $element->maxintROM = "VIII";
-        } else if ($element->maxint == 7.5){
-            $element->maxintROM = "VII-VIII";
-        } else if ($element->maxint == 7){
-            $element->maxintROM = "VII";
-        } else if ($element->maxint == 6.5){
-            $element->maxintROM = "VI-VII";
-        } else if ($element->maxint == 6.1) {
-            $element->maxint = 6;
-            $element->maxintROM = "VI";
-        } else if ($element->maxint == 6.6) {
-            $element->maxint = 6.5;
-            $element->maxintROM = "VI-VII";
-        } else if ($element->maxint == 6){
-            $element->maxintROM = "VI";
-        } else if ($element->maxint == 5.5){
-            $element->maxintROM = "V-VI";
-        } else if ($element->maxint == 5.1) {
-            $element->maxint = 5;
-            $element->maxintROM = "V";
-        } else if ($element->maxint == 5){
-            $element->maxintROM = "V";
-        } else if ($element->maxint == 4.6) {
-            $element->maxint = 4.5;
-            $element->maxintROM = "IV-V";
-        } else if ($element->maxint == 4.5) {
-            $element->maxintROM = "IV-V";
-        } else if ($element->maxint == 4){
-            $element->maxintROM = "IV";
-        } else if ($element->maxint == 3.5){
-            $element->maxintROM = "III-IV";
-        } else if ($element->maxint == 3) {
-            $element->maxintROM = "III";
-        } else if ($element->maxint == 2.5) {
-            $element->maxintROM = "II-III";
-        } else if ($element->maxint == 2) {
-            $element->maxintROM = "II";
-        } else if ($element->maxint == 1) {
-            $element->maxintROM = "I";
-        } else if ($element->maxint == 0.2) {
-            $element->maxintROM = "G";
-        } else if ($element->maxint == 0) {
-            $element->maxintROM = "NF";
-        } else if ($element->maxint == 0.1) {
-            $element->maxintROM = "N";
-        } else if ($element->maxint == -1) {
-            $element->maxintROM = "NC";
-        } else if ($element->maxint == -2) {
-            $element->maxintROM = "-";
-        }
-
-        $element->name = $value["nazione"];
-        $element->description = $value["desloc_cfti"];
+        $element->name = $value["earthquakelocation"];
+        $element->description = $value["anno"];
         $element->coordinates = $convertCoordinates;//$coordinates;
         $element->url = "http://www.google.it";
         //$element->key = $key; //SE SI VUOLE AGGIUNGERE LA CHIAVE
@@ -197,48 +97,19 @@
                         description: item.description,
                         url: item.url
                     });
-                            //scale: 0.7})}));
-                            //scale: 0.7})}));
-                    //marker.setStyle(new ol.style.Style({image: new ol.style.Icon({
-                    //marker.setStyle(new ol.style.Style({image: new ol.style.Icon({
 
-                    //esempio ok //marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11.png', size: [13, 13], scale: 0.7})}));
-                    if (item.EEnum===0) {
-                        if (item.maxint >= 11) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 10.9 && item.maxint > 9.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/10.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 9.9 && item.maxint > 8.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/9.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 8.9 && item.maxint > 7.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/8.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 7.9 && item.maxint > 6.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/7.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 6.9 && item.maxint > 5.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/6.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 5.9 && item.maxint > 4.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/5.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 4.9 && item.maxint > 3.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/4.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 3.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/3.png', size: [13, 13], scale: 0.7})}));}
-                    } else if (item.EEnum >0 && item.ris>0){
-                        if (item.maxint >= 11) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 10.9 && item.maxint > 9.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/10EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 9.9 && item.maxint > 8.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/9EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 8.9 && item.maxint > 7.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/8EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 7.9 && item.maxint > 6.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/7EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 6.9 && item.maxint > 5.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/6EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 5.9 && item.maxint > 4.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/5EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 4.9 && item.maxint > 3.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/4EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 3.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/3EE.png', size: [13, 13], scale: 0.7})}));}
-                    } else {
-                        marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/EE.png', size: [13, 13], scale: 0.7})}));
-                    }
-                    /*marker.setStyle(new ol.style.Style({
+                    marker.setStyle(new ol.style.Style({
                         image: new ol.style.Icon(({
-                            color: '#fffb22',
+                            color: '#ff5722',
                             src: '/img/dot.png',
                             // the real size of your icon
                             size: [20, 20],
                             // the scale factor
                             scale: 0.5
                         }))
-                    }));*/
-
+                    }));
                     markers.push(marker);
-                }) //chiusura  markersCoords.map(function (item, index)
+                })
             }).then(  function (x) {
                 console.log("seconda esecuzione");
                 console.log(markers);
@@ -316,17 +187,6 @@
                     var pixel = map.getEventPixel(e.originalEvent);
                     var hit = map.hasFeatureAtPixel(pixel);
                     map.getTarget().style.cursor = hit ? 'pointer' : '';
-                });
-
-                /****solo con zoom maggiore o uguale a 8 faccio vedere i punti***/
-                map.on('moveend', function (event) {
-                    console.log(map.getView().getZoom());
-                        if (map.getView().getZoom() >= 7) {
-                            vectorLayer.setVisible(true);
-                        }
-                        else {
-                            vectorLayer.setVisible(false);
-                        }
                 });
             });
 
