@@ -152,6 +152,13 @@ body { top: 0px !important; }
     height: 100%;
 }
 
+#mapOL{
+	position:relative;
+	margin-left: 460px;
+	margin-top: 5px;
+	height: 100%;
+}
+
 #banner {
 	padding-top: 4px;
 	background-color: rgba(255,255,255,0.9);

@@ -153,4 +153,7 @@ $(document).ready(function () {
         map.getTarget().style.cursor = hit ? 'pointer' : '';
     });
     ///TODO: PRENDI UN ESEMPIO KML E CARICARE COME VECTOR LAYER.
+
+
+    resizeMapIndex();
 });

@@ -387,7 +387,7 @@ var GmapsTools = function(){
 
 				// -------     plot epicenters and add spider
 				RecTer['Marker'].setMap(map);
-				oms.addMarker(RecTer['Marker']);
+				//////oms.addMarker(RecTer['Marker']);
 
 				bounds.extend(RecTer['Marker'].getPosition());
 
@@ -585,7 +585,7 @@ var GmapsTools = function(){
 
 		//------- Set map bounds or zoom
 		if (EqMapFlag == 0) {
-			map.setZoom(6) //ZOOM FISSO INIZIALE
+		///////	map.setZoom(6) //ZOOM FISSO INIZIALE
 		}
 		// else {
 		// 	map.fitBounds(bounds); //ZOOM SUI DATI SELEZIONATI
@@ -638,7 +638,7 @@ var GmapsTools = function(){
 	this.clearMap = function(){
 		if (rectangle) rectangle.setMap(null);
 		// cancellazione dei marker di Spiderfier
-		oms.clearMarkers();
+		//////// oms.clearMarkers();
 
 		for (var i = 0; i < markersArray.length; i++) {
 			markersArray[i]['Marker'].setMap(null);
@@ -664,7 +664,7 @@ function onclickList(prog){
 
 	// center map on selected event (when selecting from table line)
 	var center = new google.maps.LatLng(markersArray[prog]['Lat'], markersArray[prog]['Lon']);
-    map.panTo(center);
+   //////// map.panTo(center);
 }
 
 // ============= Menu
@@ -817,7 +817,7 @@ function initializeEq(){
 	NumEqSel = document.getElementById("NumSel");
 	MenuPilot = new MenuTools();
 	GmapsPilot = new GmapsTools();
-	placeMap();
+	//////// placeMap();
 	GmapsPilot.requestData();
 
 	var FilterButton = document.getElementById('FilterByKindEvent');
@@ -834,7 +834,7 @@ function initializeEq(){
 		else FilterButton.addEventListener('click', xResetMap, false);
 	}
 	resizeMapIndex();
-	spiderfy();
+	//////// spiderfy();
 	createSliders();
 
 
@@ -948,6 +948,7 @@ function stateChange() {
 			document.getElementsByName("access")[0].dispatchEvent(event);
 		}, 500);	
 	};
+	resizeMap();
 }
 
 
@@ -1179,7 +1180,7 @@ function CreateRect() {
 	});
 
 	//   rectangle.setMap(null)
-	map.fitBounds(latLngBounds);
+	////////map.fitBounds(latLngBounds);
 
 
 	// Listener che monitora il cambiamento dei bounds del rettangolo in mappa e aggiorna i campi di testo del form

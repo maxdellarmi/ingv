@@ -131,32 +131,35 @@ $.get('listapdfR.txt', function(data){
            //console.log(pdflist);
 });
 
+
+
+/////////// tolto per ora
 // ===== MAP SETTINGS
-var mapOptions = {
-	center: new google.maps.LatLng(centerLat,centerLon),
-	mapTypeControlOptions: {
-		style:google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-		position:google.maps.ControlPosition.TOP_RIGHT,
-		mapTypeIds: ['emmamap',google.maps.MapTypeId.SATELLITE,google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.TERRAIN, google.maps.MapTypeId.HYBRID ]
-	},
-	streetViewControl:false,
-	clickableIcons: false,   //fa in modo che gli oggetti cliccabili sulla base google siano disattivati
-	maxZoom : 15,
-	minZoom : 4,
-	zoom: 6,
-	controlSize: 25,
-	scaleControl: true,
-	scrollwheel: true,
-	overviewMapControl:true,
-	overviewMapControlOptions : {opened: true},
-	fullscreenControl: true,
-	fullscreenControlOptions: {
-		position: google.maps.ControlPosition.RIGHT_BOTTOM
-	},
-	zoomControlOptions: {
-		position: google.maps.ControlPosition.RIGHT_BOTTOM
-	},
-};
+// var mapOptions = {
+// 	center: new google.maps.LatLng(centerLat,centerLon),
+// 	mapTypeControlOptions: {
+// 		style:google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+// 		position:google.maps.ControlPosition.TOP_RIGHT,
+// 		mapTypeIds: ['emmamap',google.maps.MapTypeId.SATELLITE,google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.TERRAIN, google.maps.MapTypeId.HYBRID ]
+// 	},
+// 	streetViewControl:false,
+// 	clickableIcons: false,   //fa in modo che gli oggetti cliccabili sulla base google siano disattivati
+// 	maxZoom : 15,
+// 	minZoom : 4,
+// 	zoom: 6,
+// 	controlSize: 25,
+// 	scaleControl: true,
+// 	scrollwheel: true,
+// 	overviewMapControl:true,
+// 	overviewMapControlOptions : {opened: true},
+// 	fullscreenControl: true,
+// 	fullscreenControlOptions: {
+// 		position: google.maps.ControlPosition.RIGHT_BOTTOM
+// 	},
+// 	zoomControlOptions: {
+// 		position: google.maps.ControlPosition.RIGHT_BOTTOM
+// 	},
+// };
 
 
 
@@ -189,165 +192,165 @@ var EMMAMapType = new google.maps.StyledMapType([
 	],
 	{name: 'Basemap'});
 
-
+//////// svuotata funzione placemap
 function placeMap() {
 
-	$("body").css("cursor", "wait");
-	map = new google.maps.Map(document.getElementById('map'), mapOptions);
-	map.mapTypes.set('emmamap', EMMAMapType);
-	map.setMapTypeId('emmamap');
-
-	google.maps.event.addListener(map, 'mousemove', function (event) {
-		displayCoordinates(event.latLng);
-	});
-	resizeMap();
-
-	google.maps.event.addListener(map,'tilesloaded',function(){
-		$("body").css("cursor", "default");
-	});
-
-	//--------- questo non serviva prima che google cambiasse le api ad agosto 2018. ora serve perchè non usiamo più la crocetta di chiusura IW creata
-	//------ da noi, ma quella automatica di google
-	google.maps.event.addListener(infowindow,'closeclick',function(){
-		turnoffRow();
-	});
-
-	//----------------------------     TUTTA LA ROBA COMMENTATA QUA SOTTO ERA PER LA GESTIONE DELLO STILE DELLE INFOWINDOW PRIMA CHE GOOGLE CAMBIASSE LE API AD AGOSTO 2019     --------------------------------
-	// google.maps.event.addListener(infowindow, 'domready', function() {
-	//
-	//    // Reference to the DIV which receives the contents of the infowindow using jQuery
-	//    var iwOuter = $('.gm-style-iw');
-	//    iwOuter.css({
-	// 	   'box-shadow': '0px 1px 6px rgba(178, 178, 178, 0.6)',
-	// 	   'border': '1px solid rgba(178, 178, 178, 0.8)'
-	//    });
-	//
-	//    // Moves the infowindow 10px to the right.
-	// //    iwOuter.parent().parent().css({left: '15px'});
-	//
-	//    /* The DIV we want to change is above the .gm-style-iw DIV.
-	//     * So, we use jQuery and create a iwBackground variable,
-	//     * and took advantage of the existing reference to .gm-style-iw for the previous DIV with .prev().
-	//     */
-	//    var iwBackground = iwOuter.prev();
-	//
-	//    // Remove the background shadow DIV
-	//    iwBackground.children(':nth-child(2)').css({'display' : 'none'});
-	// // iwBackground.children(':nth-child(2)').hide()
-	//
-	//    // Remove the white background DIV
-	//     iwBackground.children(':nth-child(4)').css({'backgroundColor' : 'rgbs(255,255,255,0)'});
-	//     iwBackground.children(':nth-child(4)').css({'display' : 'none'});
-	//
-	//
-	//    // Moves the shadow of the arrow 76px to the left margin
-	// 	// iwBackground.children(':nth-child(1)').attr('style', function(i,s){ return s + 'left: 205px !important;'});
-	//
-	// 	// Moves the arrow 76px to the left margin
-	// 	// iwBackground.children(':nth-child(3)').attr('style', function(i,s){ return s + 'left: 205px !important;'});
-	//
-	//    // Changes the desired color for the tail outline.
-	// 	// The outline of the tail is composed of two descendants of div which contains the tail.
-	// 	// The .find('div').children() method refers to all the div which are direct descendants of the previous div.
-	// 	iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(178, 178, 178, 0.8) 0px 1px 6px', 'z-index' : '2'});
-	//
-	// 	// Taking advantage of the already established reference to
-	// 	// div .gm-style-iw with iwOuter variable.
-	// 	// You must set a new variable iwCloseBtn.
-	// 	// Using the .next() method of JQuery you reference the following div to .gm-style-iw.
-	// 	// Is this div that groups the close button elements.
-	// 	var iwCloseBtn = iwOuter.next();
-	//
-	// 	// Apply the desired effect to the close button
-	// 	iwCloseBtn.css({
-	// 	  opacity: '1', // by default the close button has an opacity of 0.7
-	// 	  right: '40px', top: '20px', // button repositioning
-	// 	  'border-radius': '13px'
-	// 	});
-	// 	iwCloseBtn.hide() // nascondi closebutton perchè ci abbiamo messo una crocetta, per problemi di area clickabile sbagliata con il bottone di google
-	//
+	// $("body").css("cursor", "wait");
+	// map = new google.maps.Map(document.getElementById('map'), mapOptions);
+	// map.mapTypes.set('emmamap', EMMAMapType);
+	// map.setMapTypeId('emmamap');
+  //
+	// google.maps.event.addListener(map, 'mousemove', function (event) {
+	// 	displayCoordinates(event.latLng);
 	// });
-	//
-	// google.maps.event.addListener(infowindow2, 'domready', function() {
-	//
-	//    // Reference to the DIV which receives the contents of the infowindow using jQuery
-	//    var iwOuter = $('.gm-style-iw');
-	//    iwOuter.css({
-	// 	   'box-shadow': '0px 1px 6px rgba(178, 178, 178, 0.6)',
-	// 	   'border': '1px solid rgba(178, 178, 178, 0.8)'
-	//    });
-	//
-	//    // Moves the infowindow 10px to the right.
-	// //    iwOuter.parent().parent().css({left: '15px'});
-	//
-	//    /* The DIV we want to change is above the .gm-style-iw DIV.
-	//     * So, we use jQuery and create a iwBackground variable,
-	//     * and took advantage of the existing reference to .gm-style-iw for the previous DIV with .prev().
-	//     */
-	//    var iwBackground = iwOuter.prev();
-	//
-	//    // Remove the background shadow DIV
-	//    iwBackground.children(':nth-child(2)').css({'display' : 'none'});
-	// // iwBackground.children(':nth-child(2)').hide()
-	//
-	//    // Remove the white background DIV
-	//     iwBackground.children(':nth-child(4)').css({'backgroundColor' : 'rgbs(255,255,255,0)'});
-	//     iwBackground.children(':nth-child(4)').css({'display' : 'none'});
-	//
-	//
-	//    // Moves the shadow of the arrow 76px to the left margin
-	// 	// iwBackground.children(':nth-child(1)').attr('style', function(i,s){ return s + 'left: 205px !important;'});
-	//
-	// 	// Moves the arrow 76px to the left margin
-	// 	// iwBackground.children(':nth-child(3)').attr('style', function(i,s){ return s + 'left: 205px !important;'});
-	//
-	//    // Changes the desired color for the tail outline.
-	// 	// The outline of the tail is composed of two descendants of div which contains the tail.
-	// 	// The .find('div').children() method refers to all the div which are direct descendants of the previous div.
-	// 	iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(178, 178, 178, 0.8) 0px 1px 6px', 'z-index' : '2'});
-	//
-	// 	// Taking advantage of the already established reference to
-	// 	// div .gm-style-iw with iwOuter variable.
-	// 	// You must set a new variable iwCloseBtn.
-	// 	// Using the .next() method of JQuery you reference the following div to .gm-style-iw.
-	// 	// Is this div that groups the close button elements.
-	// 	var iwCloseBtn = iwOuter.next();
-	//
-	// 	// Apply the desired effect to the close button
-	// 	iwCloseBtn.css({
-	// 	  opacity: '1', // by default the close button has an opacity of 0.7
-	// 	  right: '40px', top: '20px', // button repositioning
-	// 	  'border-radius': '13px'
-	// 	});
-	// 	iwCloseBtn.hide() // nascondi closebutton perchè ci abbiamo messo una crocetta, per problemi di area clickabile sbagliata con il bottone di google
-	//
+	// resizeMap();
+  //
+	// google.maps.event.addListener(map,'tilesloaded',function(){
+	// 	$("body").css("cursor", "default");
 	// });
-	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-	// ------------------------         LISTENER PER MAP OVERLAYS
-  map.addListener('zoom_changed', function() {
-    // 3 seconds after the center of the map has changed, pan back to the
-    // marker.
-    if (map.getZoom() > 11) {
-		document.getElementById('IGM100').disabled = false; document.getElementById('TopoIGM100').style.color = "black";
-		document.getElementById('FL').disabled = false; document.getElementById('FraneLin').style.color = "black";
-		document.getElementById('FP').disabled = false; document.getElementById('FranePol').style.color = "black";
-		document.getElementById('FD').disabled = false; document.getElementById('FraneDiff').style.color = "black";
-		document.getElementById('DGPV').disabled = false; document.getElementById('FraneDGPV').style.color = "black";
-	}
-
-	if (map.getZoom() < 12) {
-		document.getElementById('IGM100').disabled = true; document.getElementById('TopoIGM100').style.color = "#909090"; document.getElementById('IGM100').checked = false; Toggle4 = "on"; ToggleLayer4();
-		document.getElementById('FL').disabled = true; document.getElementById('FraneLin').style.color = "#909090"; document.getElementById('FL').checked = false; Toggle11a = "on"; ToggleLayer11a();
-		document.getElementById('FP').disabled = true; document.getElementById('FranePol').style.color = "#909090"; document.getElementById('FP').checked = false; Toggle11b = "on"; ToggleLayer11b();
-		document.getElementById('FD').disabled = true; document.getElementById('FraneDiff').style.color = "#909090"; document.getElementById('FD').checked = false; Toggle11c = "on"; ToggleLayer11c();
-		document.getElementById('DGPV').disabled = true; document.getElementById('FraneDGPV').style.color = "#909090"; document.getElementById('DGPV').checked = false; Toggle11d = "on"; ToggleLayer11d();
-	}
-
-	if (map.getZoom() > 13) { document.getElementById('IGM25').disabled = false; document.getElementById('TopoIGM25').style.color = "black";}
-	if (map.getZoom() < 14) { document.getElementById('IGM25').disabled = true; document.getElementById('TopoIGM25').style.color = "#909090"; document.getElementById('IGM25').checked = false; Toggle3 = "on"; ToggleLayer3()}
-  });
+  //
+	// //--------- questo non serviva prima che google cambiasse le api ad agosto 2018. ora serve perchè non usiamo più la crocetta di chiusura IW creata
+	// //------ da noi, ma quella automatica di google
+	// google.maps.event.addListener(infowindow,'closeclick',function(){
+	// 	turnoffRow();
+	// });
+  //
+	// //----------------------------     TUTTA LA ROBA COMMENTATA QUA SOTTO ERA PER LA GESTIONE DELLO STILE DELLE INFOWINDOW PRIMA CHE GOOGLE CAMBIASSE LE API AD AGOSTO 2019     --------------------------------
+	// // google.maps.event.addListener(infowindow, 'domready', function() {
+	// //
+	// //    // Reference to the DIV which receives the contents of the infowindow using jQuery
+	// //    var iwOuter = $('.gm-style-iw');
+	// //    iwOuter.css({
+	// // 	   'box-shadow': '0px 1px 6px rgba(178, 178, 178, 0.6)',
+	// // 	   'border': '1px solid rgba(178, 178, 178, 0.8)'
+	// //    });
+	// //
+	// //    // Moves the infowindow 10px to the right.
+	// // //    iwOuter.parent().parent().css({left: '15px'});
+	// //
+	// //    /* The DIV we want to change is above the .gm-style-iw DIV.
+	// //     * So, we use jQuery and create a iwBackground variable,
+	// //     * and took advantage of the existing reference to .gm-style-iw for the previous DIV with .prev().
+	// //     */
+	// //    var iwBackground = iwOuter.prev();
+	// //
+	// //    // Remove the background shadow DIV
+	// //    iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+	// // // iwBackground.children(':nth-child(2)').hide()
+	// //
+	// //    // Remove the white background DIV
+	// //     iwBackground.children(':nth-child(4)').css({'backgroundColor' : 'rgbs(255,255,255,0)'});
+	// //     iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+	// //
+	// //
+	// //    // Moves the shadow of the arrow 76px to the left margin
+	// // 	// iwBackground.children(':nth-child(1)').attr('style', function(i,s){ return s + 'left: 205px !important;'});
+	// //
+	// // 	// Moves the arrow 76px to the left margin
+	// // 	// iwBackground.children(':nth-child(3)').attr('style', function(i,s){ return s + 'left: 205px !important;'});
+	// //
+	// //    // Changes the desired color for the tail outline.
+	// // 	// The outline of the tail is composed of two descendants of div which contains the tail.
+	// // 	// The .find('div').children() method refers to all the div which are direct descendants of the previous div.
+	// // 	iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(178, 178, 178, 0.8) 0px 1px 6px', 'z-index' : '2'});
+	// //
+	// // 	// Taking advantage of the already established reference to
+	// // 	// div .gm-style-iw with iwOuter variable.
+	// // 	// You must set a new variable iwCloseBtn.
+	// // 	// Using the .next() method of JQuery you reference the following div to .gm-style-iw.
+	// // 	// Is this div that groups the close button elements.
+	// // 	var iwCloseBtn = iwOuter.next();
+	// //
+	// // 	// Apply the desired effect to the close button
+	// // 	iwCloseBtn.css({
+	// // 	  opacity: '1', // by default the close button has an opacity of 0.7
+	// // 	  right: '40px', top: '20px', // button repositioning
+	// // 	  'border-radius': '13px'
+	// // 	});
+	// // 	iwCloseBtn.hide() // nascondi closebutton perchè ci abbiamo messo una crocetta, per problemi di area clickabile sbagliata con il bottone di google
+	// //
+	// // });
+	// //
+	// // google.maps.event.addListener(infowindow2, 'domready', function() {
+	// //
+	// //    // Reference to the DIV which receives the contents of the infowindow using jQuery
+	// //    var iwOuter = $('.gm-style-iw');
+	// //    iwOuter.css({
+	// // 	   'box-shadow': '0px 1px 6px rgba(178, 178, 178, 0.6)',
+	// // 	   'border': '1px solid rgba(178, 178, 178, 0.8)'
+	// //    });
+	// //
+	// //    // Moves the infowindow 10px to the right.
+	// // //    iwOuter.parent().parent().css({left: '15px'});
+	// //
+	// //    /* The DIV we want to change is above the .gm-style-iw DIV.
+	// //     * So, we use jQuery and create a iwBackground variable,
+	// //     * and took advantage of the existing reference to .gm-style-iw for the previous DIV with .prev().
+	// //     */
+	// //    var iwBackground = iwOuter.prev();
+	// //
+	// //    // Remove the background shadow DIV
+	// //    iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+	// // // iwBackground.children(':nth-child(2)').hide()
+	// //
+	// //    // Remove the white background DIV
+	// //     iwBackground.children(':nth-child(4)').css({'backgroundColor' : 'rgbs(255,255,255,0)'});
+	// //     iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+	// //
+	// //
+	// //    // Moves the shadow of the arrow 76px to the left margin
+	// // 	// iwBackground.children(':nth-child(1)').attr('style', function(i,s){ return s + 'left: 205px !important;'});
+	// //
+	// // 	// Moves the arrow 76px to the left margin
+	// // 	// iwBackground.children(':nth-child(3)').attr('style', function(i,s){ return s + 'left: 205px !important;'});
+	// //
+	// //    // Changes the desired color for the tail outline.
+	// // 	// The outline of the tail is composed of two descendants of div which contains the tail.
+	// // 	// The .find('div').children() method refers to all the div which are direct descendants of the previous div.
+	// // 	iwBackground.children(':nth-child(3)').find('div').children().css({'box-shadow': 'rgba(178, 178, 178, 0.8) 0px 1px 6px', 'z-index' : '2'});
+	// //
+	// // 	// Taking advantage of the already established reference to
+	// // 	// div .gm-style-iw with iwOuter variable.
+	// // 	// You must set a new variable iwCloseBtn.
+	// // 	// Using the .next() method of JQuery you reference the following div to .gm-style-iw.
+	// // 	// Is this div that groups the close button elements.
+	// // 	var iwCloseBtn = iwOuter.next();
+	// //
+	// // 	// Apply the desired effect to the close button
+	// // 	iwCloseBtn.css({
+	// // 	  opacity: '1', // by default the close button has an opacity of 0.7
+	// // 	  right: '40px', top: '20px', // button repositioning
+	// // 	  'border-radius': '13px'
+	// // 	});
+	// // 	iwCloseBtn.hide() // nascondi closebutton perchè ci abbiamo messo una crocetta, per problemi di area clickabile sbagliata con il bottone di google
+	// //
+	// // });
+	// //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  //
+  //
+	// // ------------------------         LISTENER PER MAP OVERLAYS
+  // map.addListener('zoom_changed', function() {
+  //   // 3 seconds after the center of the map has changed, pan back to the
+  //   // marker.
+  //   if (map.getZoom() > 11) {
+	// 	document.getElementById('IGM100').disabled = false; document.getElementById('TopoIGM100').style.color = "black";
+	// 	document.getElementById('FL').disabled = false; document.getElementById('FraneLin').style.color = "black";
+	// 	document.getElementById('FP').disabled = false; document.getElementById('FranePol').style.color = "black";
+	// 	document.getElementById('FD').disabled = false; document.getElementById('FraneDiff').style.color = "black";
+	// 	document.getElementById('DGPV').disabled = false; document.getElementById('FraneDGPV').style.color = "black";
+	// }
+  //
+	// if (map.getZoom() < 12) {
+	// 	document.getElementById('IGM100').disabled = true; document.getElementById('TopoIGM100').style.color = "#909090"; document.getElementById('IGM100').checked = false; Toggle4 = "on"; ToggleLayer4();
+	// 	document.getElementById('FL').disabled = true; document.getElementById('FraneLin').style.color = "#909090"; document.getElementById('FL').checked = false; Toggle11a = "on"; ToggleLayer11a();
+	// 	document.getElementById('FP').disabled = true; document.getElementById('FranePol').style.color = "#909090"; document.getElementById('FP').checked = false; Toggle11b = "on"; ToggleLayer11b();
+	// 	document.getElementById('FD').disabled = true; document.getElementById('FraneDiff').style.color = "#909090"; document.getElementById('FD').checked = false; Toggle11c = "on"; ToggleLayer11c();
+	// 	document.getElementById('DGPV').disabled = true; document.getElementById('FraneDGPV').style.color = "#909090"; document.getElementById('DGPV').checked = false; Toggle11d = "on"; ToggleLayer11d();
+	// }
+  //
+	// if (map.getZoom() > 13) { document.getElementById('IGM25').disabled = false; document.getElementById('TopoIGM25').style.color = "black";}
+	// if (map.getZoom() < 14) { document.getElementById('IGM25').disabled = true; document.getElementById('TopoIGM25').style.color = "#909090"; document.getElementById('IGM25').checked = false; Toggle3 = "on"; ToggleLayer3()}
+  // });
 
 
 
@@ -430,8 +433,11 @@ function resizeMap() {
 	h = v.innerHeight ? v.innerHeight : d.documentElement.clientHeight;
     s = d.getElementById('WSzPlgIn');
 
-	document.querySelector('#map').style.width = Math.round( w -480)+'px';
-    document.querySelector('#map').style.height = Math.round( h -10)+'px';
+	document.querySelector('#mapOL').style.width = Math.round( w -480)+'px';
+	document.querySelector('#mapOL').style.height = Math.round( h -10)+'px';
+
+	//////// document.querySelector('#map').style.width = Math.round( w -480)+'px';
+    //////// document.querySelector('#map').style.height = Math.round( h -10)+'px';
 	document.querySelector('#leftside').style.height = Math.round( h -55)+'px';
 
 
