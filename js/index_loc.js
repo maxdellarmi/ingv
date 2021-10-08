@@ -150,8 +150,9 @@ function parseLocData(XmlText){
 
 			 // se 0 risentimenti (solo EE), maxint = '-'
 
-			 locLat[i] = parseFloat(locs[i].getElementsByTagName("lat_wgs84")[0].childNodes[0].nodeValue).toFixed(3);
-			 locLon[i] = parseFloat(locs[i].getElementsByTagName("lon_wgs84")[0].childNodes[0].nodeValue).toFixed(3);
+			//COORDINATE DELL'ELEMENTO
+			 locLat[i] = parseFloat(locs[i].getElementsByTagName("lat_wgs84")[0].childNodes[0].nodeValue).toFixed(5);
+			 locLon[i] = parseFloat(locs[i].getElementsByTagName("lon_wgs84")[0].childNodes[0].nodeValue).toFixed(5);
 
 			var flagNote = locs[i].getElementsByTagName("notesito")[0].childNodes.length;
 			if (flagNote > 0) {
@@ -170,6 +171,12 @@ function parseLocData(XmlText){
 
 }
 
+/** RENDERIZZA LE LOCALITA
+ *  VIENE RICHIAMATA ANCHE QUANDO L'UTENTE FA IL FILTRO A SINISTRA SULLA PAGINA E PREME OK.
+ *  LOCMarkers = []; //reinizializza l'array delle localita
+ *  LOCMarkers variabile globale con tutti i dati delle localita.
+ */
+
 function createTableandPlot(Filters){
 
 	var IntFlag = false;
@@ -184,9 +191,50 @@ function createTableandPlot(Filters){
     arrayLoc = [];
 	ExportKmlR = '';
 
-	for (var i = 0; i < descloc.length; i++){
+	LOCMarkers = []; //reinizializza l'array delle localita
 
-		if (EEnum[i]==0) {
+	for (var i = 0; i < descloc.length; i++){
+		//TODO AGGIUNGERE LE PROPERTIES QUI PER VISUALIZZARLE NEL POPUP
+		var marker = new ol.Feature({
+			geometry: new ol.geom.Point(  [ locLon[i], locLat[i]  ] ),  //ol.proj.fromLonLat( [ locLat[i], locLon[i] ] )), //NB. ol.proj.fromLonLat  converte in metri
+			name: country[i],
+			description: descloc[i],
+			ExportKmlR: "",
+			url: "http://www.google.it"
+		});
+
+		//console.log(EEnum[i] + '-' + ris[i]);
+		if (EEnum[i]== 0) {
+			//console.log("colora eddaie");
+			//console.log(maxint[i]);
+			if (maxint[i] >= 11) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 10.9 && maxint[i] > 9.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/10.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 9.9 && maxint[i] > 8.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/9.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 8.9 && maxint[i] > 7.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/8.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 7.9 && maxint[i] > 6.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/7.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 6.9 && maxint[i] > 5.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/6.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 5.9 && maxint[i] > 4.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/5.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 4.9 && maxint[i] > 3.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/4.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 3.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/3.png', size: [13, 13], scale: 0.7})}));}
+		}
+		else if (EEnum[i]>0 && ris[i]>0)
+		{
+			if (maxint[i] >= 11) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11EE.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 10.9 && maxint[i] > 9.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/10EE.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 9.9 && maxint[i] > 8.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/9EE.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 8.9 && maxint[i] > 7.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/8EE.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 7.9 && maxint[i] > 6.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/7EE.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 6.9 && maxint[i] > 5.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/6EE.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 5.9 && maxint[i] > 4.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/5EE.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 4.9 && maxint[i] > 3.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/4EE.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] <= 3.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/3EE.png', size: [13, 13], scale: 0.7})}));}
+		}
+		else {
+			//console.log("verde");
+			marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/EE.png', size: [13, 13], scale: 0.7})}));
+		}
+		/* vecchia sezione google tradotta
+		  if (EEnum[i]==0) {
 			if (maxint[i] >= 11) {var icon = {url: "images/IS/11.png", scaledSize: new google.maps.Size(10, 10)}; IsIcon = "11"}
 			if (maxint[i] <= 10.9 && maxint[i] > 9.9) {var icon = {url: "images/IS/10.png", scaledSize: new google.maps.Size(10, 10)}; IsIcon = "10"}
 			if (maxint[i] <= 9.9 && maxint[i] > 8.9) {var icon = {url: "images/IS/9.png", scaledSize: new google.maps.Size(10, 10)}; IsIcon = "9"}
@@ -209,15 +257,14 @@ function createTableandPlot(Filters){
 		} else {
 			var icon = {url: "images/IS/EE.png", scaledSize: new google.maps.Size(10, 10)}
 			IsIcon = "EE"
-		}
+		}*/
 
-		var markerLOC = new google.maps.Marker({
+		/*var markerLOC = new google.maps.Marker({
 			position: new google.maps.LatLng(locLat[i], locLon[i]),
 			map: null,
 			icon: icon,
 
-		});
-		LOCMarkers.push(markerLOC);
+		});*/
 
 		// Information box that pops up on click (on marker or line of quakes table)
 		var titleIWloc = '<div class="iw-title localityColor"><b>' + descloc_prov[i] + '</b><br /><p><i>' + noteLoc[i] + '</i></p></div>'
@@ -246,32 +293,36 @@ function createTableandPlot(Filters){
 			'</div></div>'
 		].join('\n');
 
+		/*TODO VERIFICARE  SEZIONE POPUP CON COMPONENTI GOOGLE INFOWINDOW E EVENTO CLICK DELLA MAPPA
+		//markerLOC adesso contiene la singola feature e si chiama ora `marker`
 		openPopupLOC(markerLOC, OnClickTextEN, OnClickTextIT, nloc[i])
-
+*/
 
 		if(Filters['StartImax']==0) Filters['StartImax'] = -2
+		//TODO VERIFICARE I FILTERS
 		IntFlag = ( Filters['StartImax'] <= maxint[i] && Filters['StopImax'] >= maxint[i]) ? true : false;
 
 
-		if ( IntFlag ){
+		if ( IntFlag ) {
 
 			var row = document.createElement("tr");
 			row.setAttribute('id', nloc[i]);
 
 			var cell1 = document.createElement("td");
 			cell1.setAttribute('class', 'nameLOC');
-			if (descloc[i].length>24) cell1.innerHTML = '<abbr title= "'+ descloc[i] + '"><a onclick=onclickListLOC('+ i +') href="#">' + descloc[i].substring(0, 24) + '...' + '</a></abbr>'
-			else cell1.innerHTML =  '<a onclick=onclickListLOC('+ i +') href="#">' + descloc[i] + '</a>';
+			if (descloc[i].length > 24) cell1.innerHTML = '<abbr title= "' + descloc[i] + '"><a onclick=onclickListLOC(' + i + ') href="#">' + descloc[i].substring(0, 24) + '...' + '</a></abbr>'
+			else cell1.innerHTML = '<a onclick=onclickListLOC(' + i + ') href="#">' + descloc[i] + '</a>';
 
 			var cell2 = document.createElement('td');
 			cell2.setAttribute('class', 'provLOC');
 			// if (prov[i].length>6) prov[i] = '<abbr title= "'+ prov[i] + '">' + prov[i].substring(0, 6) + '...' + '</abbr>'
-			var provcoun ="";
+			var provcoun = "";
 			if (prov[i] != "") {
 				provcoun = prov[i];
 			} else {
 				provcoun = country[i];
-			};
+			}
+			;
 			cell2.innerHTML = provcoun;
 
 			var cell3 = document.createElement('td');
@@ -285,7 +336,7 @@ function createTableandPlot(Filters){
 			var cell5 = document.createElement('td');
 			cell5.setAttribute('class', 'imax');
 			cell5.setAttribute('data-text', maxint[i]);
-		 	cell5.innerHTML = maxintROM[i];
+			cell5.innerHTML = maxintROM[i];
 
 			var cell6 = document.createElement('td');
 			cell6.setAttribute('class', 'latLOC');
@@ -314,35 +365,43 @@ function createTableandPlot(Filters){
 			var maxintR;
 			switch (maxintROM[i]) {
 				case "NF":
-					maxintR ="NF (not felt)";
+					maxintR = "NF (not felt)";
 					break;
 				case "N":
-					maxintR ="N (no evidence found in contemporary sources)";
+					maxintR = "N (no evidence found in contemporary sources)";
 					break;
 				case "NC":
-					maxintR ="NC (unrated)";
+					maxintR = "NC (unrated)";
 					break;
 				case "-":
-					maxintR ="no macroseismic observations available";
+					maxintR = "no macroseismic observations available";
 					break;
 				default:
-					maxintR =maxintROM[i];
+					maxintR = maxintROM[i];
 			}
 
-			ExportText = ExportText + CarRet + descloc[i] + ';' + provcoun + ';' + ris[i] + ';' + EEnum[i] + ";" + maxintN + ';' + maxintR+ ";" + locLat[i] + ';' + locLon[i]
-
+			//"http://storing.ingv.it/cfti/cfti5/locality.php?"
+			//var server = "http://storing.ingv.it/cfti/cfti5/locality.php?";
+			var server = "http://cft5.test/locality.php?";
+			ExportText = ExportText + CarRet + descloc[i] + ';' + provcoun + ';' + ris[i] + ';' + EEnum[i] + ";" + maxintN + ';' + maxintR + ";" + locLat[i] + ';' + locLon[i]
 			ExportKmlR = ExportKmlR + "<Placemark> <name>" + descloc[i] + " (" + provcoun + ")</name>" + CarRet + "<description><![CDATA["
-			ExportKmlR = ExportKmlR + "<b>" +  descloc[i] + " (" + provcoun + ")</b><br><br>Latitude: <b>" + locLat[i] + "</b> <br>Longitude: <b>" + locLon[i] + "</b> <br><br>Maximum MCS Intensity reported: <b>" + maxintR + "</b> <br>Number of Macroseismic Observations: <b>" + ris[i] + "</b> <br>Number of Effects on natural environment: <b>" + EEnum[i] + "</b><br><br><b><a href=" + virg + "http://storing.ingv.it/cfti/cfti5/locality.php?" + nloc[i] + "EN" + virg + ">Locality page </a></b>"
-			ExportKmlR = ExportKmlR + "]]></description>" + CarRet + "<LookAt>" + CarRet + "<longitude>" + locLon[i] + "</longitude>" + CarRet + "<latitude>" + locLat[i] + "</latitude>" + CarRet + "<range></range>" + CarRet + "<tilt></tilt>" + CarRet + "<heading></heading>" + CarRet + "</LookAt>" + CarRet + "<styleUrl>" + IsIcon + "</styleUrl>" + CarRet + "<Point>" + CarRet + "<coordinates>"+ locLon[i] + ","+ locLat[i] + "</coordinates>" + CarRet + "</Point>" + CarRet + "</Placemark>"
-
-
+			ExportKmlR = ExportKmlR + "<b>" + descloc[i] + " (" + provcoun + ")</b><br><br>Latitude: <b>" + locLat[i] + "</b> <br>Longitude: <b>" + locLon[i] + "</b> <br><br>Maximum MCS Intensity reported: <b>" + maxintR + "</b> <br>Number of Macroseismic Observations: <b>" + ris[i] + "</b> <br>Number of Effects on natural environment: <b>" + EEnum[i] + "</b><br><br><b><a href=" + virg + server + nloc[i] + "EN" + virg + ">Locality page </a></b>"
+			ExportKmlR = ExportKmlR + "]]></description>" + CarRet + "<LookAt>" + CarRet + "<longitude>" + locLon[i] + "</longitude>" + CarRet + "<latitude>" + locLat[i] + "</latitude>" + CarRet + "<range></range>" + CarRet + "<tilt></tilt>" + CarRet + "<heading></heading>" + CarRet + "</LookAt>" + CarRet + "<styleUrl>" + IsIcon + "</styleUrl>" + CarRet + "<Point>" + CarRet + "<coordinates>" + locLon[i] + "," + locLat[i] + "</coordinates>" + CarRet + "</Point>" + CarRet + "</Placemark>"
 			//var per ricerca per località
 			arrayLoc[s] = descloc_prov[i];
 
-			markerLOC.setMap(map)
+			//assegna la variabile EXPORTKML nella feature
+			marker.ExportKmlR = ExportKmlR;
 
-			imarker ++
+			//TODO setMAP non presente sugli oggetti che non sono di google
+			//markerLOC.setMap(map)
+			/////////////////////////////////////////////////////
+			//TODO NB. PUSH delle feature nell array (NOTA BENE QUI FILTRA ANCHE!!!!) non spostare da qui!!!
+			/////////////////////////////////////////////////////
+			LOCMarkers.push(marker);
+			imarker++
 			s++
+
 		}
 	}
 
@@ -399,7 +458,12 @@ function createTableandPlot(Filters){
 		});
 	});
 	$('#loading').hide();
-
+	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
+	//////////CARICAMENTO DATI MAPPA CON INFO AGGIORNATE////////////////////////////
+	//indexLocalita();
+	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////
 }
 
 

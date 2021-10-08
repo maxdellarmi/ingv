@@ -62,11 +62,14 @@ var Manajax = function(xmlService){
 							? ajaxObj.responseText
 							: ajaxObj.responseText);
 					if (mySelf.URLString === "QuakeList.xml?output=xml") {  //caricamento stellette terremoti
-						console.log("CREAZIONE MAPPA CONDIZIONE TEST:");
-						// console.log(mySelf);
-						// console.log(mySelf.callBackFunc.toString());
+						console.log("CREAZIONE MAPPA TERREMOTI:");
 						creazioneMappa();
 					}
+					if (mySelf.URLString === "LocList.xml?output=xml") {
+						console.log("CREAZIONE MAPPA LOCALITA:");
+						indexLocalita();
+					}
+					//console.log(mySelf);
 				}
 				else{
 					alert("Aggiornamento informazioni fallito: " + ajaxObj.responseText);

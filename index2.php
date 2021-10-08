@@ -170,7 +170,7 @@
                     <input type="text" id="StopImax" name="StopImax" size="2" maxlength="4"/></div>
                 <div id="sliderI_loc"></div>
             </div>
-            <abbr class="OKbutton" title=""><input type="button" id="FilterByLOC" name="FilterLocality" size="20" value="OK" onclick="$('#loading').show(); setTimeout(function() {createTableandPlot({StartImax: parseFloat(document.getElementById('StartImax').value), StopImax: parseFloat(document.getElementById('StopImax').value),}) }, 10)"/></abbr>
+            <abbr class="OKbutton" title=""><input type="button" id="FilterByLOC" name="FilterLocality" size="20" value="OK" onclick="$('#loading').show(); setTimeout(function() {createTableandPlot({StartImax: parseFloat(document.getElementById('StartImax').value), StopImax: parseFloat(document.getElementById('StopImax').value),}); indexLocalita(); }, 10)"/></abbr>
             <!-- <div class="MenuBlockLocG">
                 <div class="TitleMenu" id="LocnameGOOSearch" name="LocnameGOOSearch">Ricerca (google)</div><br>
                 <input id="pac-input" type="text" placeholder="Search Box" class="SearchBox">

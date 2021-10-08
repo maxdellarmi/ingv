@@ -319,6 +319,8 @@
                 });
 
                 /****solo con zoom maggiore o uguale a 8 faccio vedere i punti***/
+               /*
+                Attualmente commentato
                 map.on('moveend', function (event) {
                     console.log(map.getView().getZoom());
                         if (map.getView().getZoom() >= 7) {
@@ -327,7 +329,7 @@
                         else {
                             vectorLayer.setVisible(false);
                         }
-                });
+                });*/
             });
 
             /*var markersCoords = [

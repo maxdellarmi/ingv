@@ -95,9 +95,6 @@ var GmapsTools = function(){
 		ajaxUpdater.requestAction();
 	}
 
-
-
-
 	// ============== Get data from XML and create data structure 'Markersarray' containing all information, including Gmap markers
 	this.parseQuakes = function(XmlText){
 		//new LogTools().addLog('....Parsing all quakes<br />', 80);
@@ -115,8 +112,6 @@ var GmapsTools = function(){
 				// not empty values needed!!!!
 				// obtain attribues of each marker
 				var Nterr = markers[i].getElementsByTagName("nterr")[0].childNodes[0].nodeValue;
-
-
 				var Location = XMLQuakeList.getElementsByTagName("earthquakelocation")[i].childNodes[0].nodeValue;
 				var Country = XMLQuakeList.getElementsByTagName("country")[i].childNodes[0].nodeValue;
 				var Zone = XMLQuakeList.getElementsByTagName("cat")[i].childNodes[0].nodeValue;
@@ -442,18 +437,6 @@ var GmapsTools = function(){
 				}
 				;
 
-				// Create data structure that stores all information of all earthquakes (and Gmap markers)
-				///***************************NEW  TRADUZIONE NELLA NUOVA VERSIONE OPEN LAYER*************************************************************************
-				//vecchie replace lasciate solo per logging informazioni NON USARE la replace non funziona
-				//const cerchio = `<svg width="4cm" height="4cm" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" version="1.1"><circle cx="50" cy="50" r="40" stroke="{strokeColor}" stroke-width="{strokeWeight}" fill="{fillColor}" /></svg>`;
-				//const stella = `<svg width="4cm" height="4cm" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" fill="{fillColor}" stroke="{strokeColor}" stroke-width="{strokeWeight}" /></svg>`;
-
-				// viewBox=\"0 0 100 100\" height=\"" + 8 * scale / 8 + "\" width=\"" + 8 * scale / 8 + "\"
-
-
-				//prima versione ok
-				// const cerchio = `<svg viewBox="0 0 400 400"   {height} {width} xmlns="http://www.w3.org/2000/svg" version="1.1"><circle cx="50" cy="50" r="40" {stroke} {widthS} {fill} /></svg>`;
-				// const stella = `<svg   width="4cm" height="4cm" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" {fill} {stroke} {widthS} /></svg>`;
 
 				//newtest
 				var cerchio = `<svg viewBox="0 0 250 250"   {height} {width} xmlns="http://www.w3.org/2000/svg" version="1.1"><circle cx="50" cy="50" r="40" {stroke} {widthS} {fill} /></svg>`;
@@ -532,7 +515,8 @@ var GmapsTools = function(){
 						width: String().concat("width=\"",'200px','\"')
 					});
 				}
-				console.log(compiled);
+				////VARIABILE DI LOG PER LEGGERE SVG DATA
+				//console.log(compiled);
 				//assegno la stringa svg parametrizzata
 				var workingSvg = compiled;
 				// console.log("STRINGA SVG PARAMETRIZZATA"+workingSvg);
@@ -1117,7 +1101,8 @@ function ResetMap(){
 function clearMap(){
 	GmapsPilot.clearMap();
 
-	if (LOCMarkers) {
+	console.log("clear map commentata dalla vecchia gestione oggetti google")
+	/*if (LOCMarkers) {
 		for (var i = 0; i < LOCMarkers.length; i++) {
 			LOCMarkers[i].setMap(null);
 			//if (Marker1) {
@@ -1130,7 +1115,7 @@ function clearMap(){
 		for (var i = 0; i < EEmarkersArray.length; i++) {
 			EEmarkersArray[i]['Marker'].setMap(null);
 		}
-	}
+	}*/
 
 }
 
