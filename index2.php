@@ -13,7 +13,7 @@
     <script src="jquery/jquery-ui.js"></script>
     <script type="text/javascript" src="js/manajax.js"> </script>
     <script src="js/oms.min.js"></script>
-
+    <script src="js/mapOL.js"></script>
     <script src="slider/nouislider.js"></script>
     <link rel="stylesheet" href="slider/nouislider.css" />
 
@@ -24,7 +24,9 @@
     <script type="text/javascript" src="js/index_loc.js"> </script>
 
     <script type="text/javascript" src="js/jquery.tablesorter.js"></script>
-    <script src="js/jquery.translator.js"></script>
+
+<!--    JQUERY TRANSLATOR LAVORA SUGLI OGGETTI DI GOOGLE CHE NON ESISTONO PIU-->
+<!--    <script src="js/jquery.translator.js"></script>-->
 
     <!--Script for windows-1252 encoding export  -->
     <script>
@@ -41,9 +43,10 @@
     <script src="js/cookieconsent.min.js"></script>
     <!--sezione mappa OL begin-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.0.1/ol.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.0.1/ol.css" type="text/css">
-    <script src="js/mapOL.js"></script>
+<!--    FINO ALLA VERSIONE 6.8.1 jsdelivr e una nuova cdn-->
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.2/build/ol.js"></script>
+    <link rel="stylesheet" href="https://openlayers.org/en/v6.4.2/css/ol.css" type="text/css">
+
     <!--sezione mappa OL end-->
 </head>
 
@@ -280,6 +283,7 @@
     <div id="mapOL" >
     </div>
     <div id="popup"></div>
+    <span id="status" >STATUS</span>
 
 <!--    <div id="map" >   </div>-->
 </div>

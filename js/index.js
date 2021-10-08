@@ -1,10 +1,10 @@
 // flags
 var flagAccessURL = 0;
+//jquery Deferred
 
 var flagPQ = 0;
 
 var param = "Io";
-
 // Google CHART
 var n = [];
 var d = [];
@@ -21,6 +21,8 @@ var MenuPilot = null;
 var LogPilot = null;
 var GmapsPilot = null;
 var markersArray = [];
+
+
 var markersArrayEE = [];
 
 var infowindow = new google.maps.InfoWindow();
@@ -72,7 +74,6 @@ var rectangle;
 var latLngBounds;
 
 
-
 var GmapsTools = function(){
 	var mySelf = this;
 	var itemName;
@@ -80,10 +81,9 @@ var GmapsTools = function(){
 	var FormReference;
 	var XMLData;
 	//var XMLDoc;
-
+	// var deferredEvent = $.Deferred;
 	this.itemName = 'maps';
 	this.callBackBlock = 'map';
-
 	this.requestData = function(){
 		//new LogTools().addLog('Requesting quakes<br />', 40);
 		var ajaxUpdater = new Manajax(xmlService);
@@ -95,6 +95,9 @@ var GmapsTools = function(){
 		ajaxUpdater.requestAction();
 	}
 
+
+
+
 	// ============== Get data from XML and create data structure 'Markersarray' containing all information, including Gmap markers
 	this.parseQuakes = function(XmlText){
 		//new LogTools().addLog('....Parsing all quakes<br />', 80);
@@ -102,8 +105,8 @@ var GmapsTools = function(){
 		XMLQuakeList = new DOMParser().parseFromString(XmlText.trim(), 'text/xml');
 		XMLQuakeListArrived = true;
 
-		console.log(XMLQuakeList);
-		console.log(XMLQuakeListArrived);
+		// console.log(XMLQuakeList);
+		// console.log(XMLQuakeListArrived);
 
 		var markers = XMLQuakeList.documentElement.getElementsByTagName("Quake");
 
@@ -173,8 +176,8 @@ var GmapsTools = function(){
 				else var EQlevel = XMLQuakeList.getElementsByTagName("level")[i].childNodes[0].nodeValue;
 
 
-				var Lat = parseFloat(XMLQuakeList.getElementsByTagName("lat")[i].childNodes[0].nodeValue).toFixed(3);
-				var Lon = parseFloat(XMLQuakeList.getElementsByTagName("lon")[i].childNodes[0].nodeValue).toFixed(3);
+				var Lat = parseFloat(XMLQuakeList.getElementsByTagName("lat")[i].childNodes[0].nodeValue).toFixed(5);
+				var Lon = parseFloat(XMLQuakeList.getElementsByTagName("lon")[i].childNodes[0].nodeValue).toFixed(5);
 
 
 				var DateLabel = XMLQuakeList.getElementsByTagName("data_label")[i].childNodes[0].nodeValue;
@@ -223,7 +226,7 @@ var GmapsTools = function(){
 					Star = {path: google.maps.SymbolPath.CIRCLE, strokeColor: "#000000", scale: 4, strokeWeight: 3};
 					EpiIcon = "F";
 					//   --------------------------------------------  Epincenter type: NOT PARAMETERIZED   ---------------------------------------------------------
-				} else if (Epicenter == "Not parameterized") {
+				} else if (Epicenter === "Not parameterized") {
 					var EpicenterITA = "Non parametrizzato";
 					var EpicenterENG = Epicenter;
 					Star = {
@@ -236,7 +239,7 @@ var GmapsTools = function(){
 					EpiIcon = "NP";
 					//   --------------------------------------------  Epincenter type: CALCULATED   ---------------------------------------------------------
 				} else {
-					if (Epicenter == "Calculated epicentre") {
+					if (Epicenter === "Calculated epicentre") {
 						var EpicenterITA = "Epicentro calcolato";
 						var EpicenterENG = Epicenter;
 
@@ -249,7 +252,7 @@ var GmapsTools = function(){
 								strokeWeight: 0.5,
 								scale: StarScale4
 							};
-							EpiIcon = "C_9.5"
+							EpiIcon = "C_9.5";
 						}
 						;
 						if (7.5 < Io && 9.5 >= Io) {
@@ -273,7 +276,7 @@ var GmapsTools = function(){
 								strokeWeight: 0.5,
 								scale: StarScale2
 							};
-							EpiIcon = "C_6"
+							EpiIcon = "C_6";
 						}
 						;
 						if (6 > Io) {
@@ -285,12 +288,12 @@ var GmapsTools = function(){
 								strokeWeight: 0.5,
 								scale: StarScale1
 							};
-							EpiIcon = "C_4"
+							EpiIcon = "C_4";
 						}
 						;
 
 						//   --------------------------------------------  Epincenter type: LOCAL EFFECTS  ---------------------------------------------------------
-					} else if (Epicenter == "Local effects") {
+					} else if (Epicenter === "Local effects") {
 						EpicenterITA = "Singola località";
 						EpicenterENG = Epicenter;
 
@@ -302,9 +305,8 @@ var GmapsTools = function(){
 								fillOpacity: 1,
 								strokeWeight: 0.5
 							};
-							EpiIcon = "L_9.5"
-						}
-						;
+							EpiIcon = "L_9.5";
+						};
 						if (7.5 < Io && 9.5 >= Io) {
 							Star = {
 								path: google.maps.SymbolPath.CIRCLE,
@@ -313,7 +315,7 @@ var GmapsTools = function(){
 								fillOpacity: 1,
 								strokeWeight: 0.5
 							};
-							EpiIcon = "L_8"
+							EpiIcon = "L_8";
 						}
 						;
 						if (5.9 < Io && 7.5 >= Io) {
@@ -324,7 +326,7 @@ var GmapsTools = function(){
 								fillOpacity: 1,
 								strokeWeight: 0.5
 							};
-							EpiIcon = "L_6"
+							EpiIcon = "L_6";
 						}
 						;
 						if (6 > Io) {
@@ -335,12 +337,10 @@ var GmapsTools = function(){
 								fillOpacity: 1,
 								strokeWeight: 0.5
 							};
-							EpiIcon = "L_4"
+							EpiIcon = "L_4";
 						}
-						;
-
 						//   --------------------------------------------  Epincenter type: AREA   ---------------------------------------------------------
-					} else if (Epicenter == "Region, area") {
+					} else if (Epicenter === "Region, area") {
 						EpicenterITA = "Regione, area";
 						EpicenterENG = Epicenter;
 
@@ -352,9 +352,8 @@ var GmapsTools = function(){
 								fillOpacity: 0,
 								strokeWeight: 3
 							};
-							EpiIcon = "R_9.5"
+							EpiIcon = "R_9.5";
 						}
-						;
 						if (7.5 < Io && 9.5 >= Io) {
 							Star = {
 								path: google.maps.SymbolPath.CIRCLE,
@@ -363,9 +362,8 @@ var GmapsTools = function(){
 								fillOpacity: 0,
 								strokeWeight: 3
 							};
-							EpiIcon = "R_8"
+							EpiIcon = "R_8";
 						}
-						;
 						if (5.9 < Io && 7.5 >= Io) {
 							Star = {
 								path: google.maps.SymbolPath.CIRCLE,
@@ -374,9 +372,8 @@ var GmapsTools = function(){
 								fillOpacity: 0,
 								strokeWeight: 3
 							};
-							EpiIcon = "R_6"
+							EpiIcon = "R_6";
 						}
-						;
 						if (6 > Io) {
 							Star = {
 								path: google.maps.SymbolPath.CIRCLE,
@@ -385,10 +382,8 @@ var GmapsTools = function(){
 								fillOpacity: 0,
 								strokeWeight: 3
 							};
-							EpiIcon = "R_4"
+							EpiIcon = "R_4";
 						}
-						;
-
 						//--------------------------------------------  Epincenter type: Hypothetical  ---------------------------------------------------------
 					} else if (Epicenter == "Hypothetical") {
 						EpicenterITA = "Ipotizzata";
@@ -403,7 +398,7 @@ var GmapsTools = function(){
 								strokeWeight: 2,
 								scale: StarScale4
 							};
-							EpiIcon = "H_9.5"
+							EpiIcon = "H_9.5";
 						}
 						;
 						if (7.5 < Io && 9.5 >= Io) {
@@ -415,7 +410,7 @@ var GmapsTools = function(){
 								strokeWeight: 2,
 								scale: StarScale3
 							};
-							EpiIcon = "H_8"
+							EpiIcon = "H_8";
 						}
 						;
 						if (5.9 < Io && 7.5 >= Io) {
@@ -427,7 +422,7 @@ var GmapsTools = function(){
 								strokeWeight: 2,
 								scale: StarScale2
 							};
-							EpiIcon = "H_6"
+							EpiIcon = "H_6";
 						}
 						;
 						if (6 > Io) {
@@ -439,7 +434,7 @@ var GmapsTools = function(){
 								strokeWeight: 2,
 								scale: StarScale1
 							};
-							EpiIcon = "H_4"
+							EpiIcon = "H_4";
 						}
 						;
 					}
@@ -449,11 +444,21 @@ var GmapsTools = function(){
 
 				// Create data structure that stores all information of all earthquakes (and Gmap markers)
 				///***************************NEW  TRADUZIONE NELLA NUOVA VERSIONE OPEN LAYER*************************************************************************
+				//vecchie replace lasciate solo per logging informazioni NON USARE la replace non funziona
 				//const cerchio = `<svg width="4cm" height="4cm" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" version="1.1"><circle cx="50" cy="50" r="40" stroke="{strokeColor}" stroke-width="{strokeWeight}" fill="{fillColor}" /></svg>`;
 				//const stella = `<svg width="4cm" height="4cm" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" fill="{fillColor}" stroke="{strokeColor}" stroke-width="{strokeWeight}" /></svg>`;
 
-				const cerchio = `<svg width="4cm" height="4cm" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" version="1.1"><circle cx="50" cy="50" r="40" {stroke} {widthS} {fill} /></svg>`;
-				const stella = `<svg width="4cm" height="4cm" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" {fill} {stroke} {widthS}" /></svg>`;
+				// viewBox=\"0 0 100 100\" height=\"" + 8 * scale / 8 + "\" width=\"" + 8 * scale / 8 + "\"
+
+
+				//prima versione ok
+				// const cerchio = `<svg viewBox="0 0 400 400"   {height} {width} xmlns="http://www.w3.org/2000/svg" version="1.1"><circle cx="50" cy="50" r="40" {stroke} {widthS} {fill} /></svg>`;
+				// const stella = `<svg   width="4cm" height="4cm" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" {fill} {stroke} {widthS} /></svg>`;
+
+				//newtest
+				var cerchio = `<svg viewBox="0 0 250 250"   {height} {width} xmlns="http://www.w3.org/2000/svg" version="1.1"><circle cx="50" cy="50" r="40" {stroke} {widthS} {fill} /></svg>`;
+				var stella = `<svg viewBox="0 0 250 250" {height} {width} xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" {fill} {stroke} {widthS} /></svg>`;
+
 
 				//stroke="{strokeColor}" stroke-width="{strokeWeight}" fill="{fillColor}
 				//{stroke} {stroke-width} {fill}
@@ -465,9 +470,36 @@ var GmapsTools = function(){
 
                 */
 				var compiled;
+				var coords = [];
+				coords.push(Lon);//parseFloat(Lon).toFixed(5));
+				coords.push(Lat);//parseFloat(Lat).toFixed(5));
+
+				//4326 is just the EPSG identifier of WGS84.
+				/* target: 'map',
+				  view: new View({
+					projection: 'EPSG:3857', //HERE IS THE VIEW PROJECTION
+					center: [0, 0],
+					zoom: 2
+				  }),
+				  layers: [
+					new TileLayer({
+					  source: new TileWMS({
+						projection: 'EPSG:4326', //HERE IS THE DATA SOURCE PROJECTION
+						url: 'https://ahocevar.com/geoserver/wms',
+						params: {
+						  'LAYERS': 'ne:NE1_HR_LC_SR_W_DR'
+						}
+					  })
+					})
+				  ]*/
+				///TODO: AGGIUNGI QUI LE PROPERTIES CHE DEVI VISUALIZZARE NEL POPUP
 				var singleFeature = new ol.Feature({
-					geometry: new ol.geom.Point([Lat, Lon])
+					geometry: new ol.geom.Point([Lon, Lat]),
+					title : onMouseOverText,
+					latlon : JSON.stringify(coords)
 				});
+				//TODO:VERIIFCARE ID DELLA FEATURE //
+				//singleFeature.setId(i);
 
 				//String //pippo.concat("stroke-width=\"","3","\"")
 				//String().concat()
@@ -478,35 +510,41 @@ var GmapsTools = function(){
 
 				//template replace dei parametri nella stringa svg
 				if  ( Star.path === google.maps.SymbolPath.CIRCLE ) {
+					px =8 * Star.scale / 8;
 					compiled = template(cerchio, {
-						stroke:  (Star.strokeColor!== undefined) ? String().concat("stroke=\"",Star.strokeColor,"\""): undefined ,
-						widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"",Star.strokeWeight,"\""): undefined,
-						fill:	(Star.fillColor!== undefined) ? String().concat("fill=\"",Star.fillColor,"\""): undefined
+						stroke:  (Star.strokeColor!== undefined) ? String().concat("stroke=\"",Star.strokeColor,'\"'): undefined ,
+						widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"",Star.strokeWeight,'\"'): undefined,
+						fill:	(Star.fillColor!== undefined) ? String().concat("fill=\"",Star.fillColor,'\"'): undefined,
+						height: String().concat("height=\"",'5px','\"'),
+						width: String().concat("width=\"",'5px','\"')
 					});
-
 				}
-				else if ( Star.path === EPIpathCALC)
+				else  if ( Star.path === EPIpathCALC)
 				{
+					//console.log("Star.path" + Star.path);
+					//px =8 * Star.scale / 8;
 					compiled = template(stella, {
-						stroke:  (Star.strokeColor!== undefined) ? String().concat("stroke=\"",Star.strokeColor,"\""): undefined ,
-						widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"",Star.strokeWeight,"\""): undefined,
-						fill:	(Star.fillColor!== undefined) ? String().concat("fill=\"",Star.fillColor,"\""): undefined
+						stroke:  (Star.strokeColor!== undefined) ? String().concat("stroke=\"",Star.strokeColor,'\"'): undefined ,
+						widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"",Star.strokeWeight,'\"'): undefined,
+						fill:	(Star.fillColor!== undefined) ? String().concat("fill=\"",Star.fillColor,'\"'): undefined,
+						height: String().concat("height=\"",'100px','\"'),
+						width: String().concat("width=\"",'100px','\"')
 					});
 				}
+				console.log(compiled);
 				//assegno la stringa svg parametrizzata
 				var workingSvg = compiled;
-
-				console.log("STRINGA SVG PARAMETRIZZATA"+workingSvg);
-
-				var featureStyle = new ol.style.Style({
+				// console.log("STRINGA SVG PARAMETRIZZATA"+workingSvg);
+				var stileIcone = new ol.style.Style({
 					image: new ol.style.Icon({
 						opacity: Star.opacity, //parametro opacity
 						src: 'data:image/svg+xml;utf8,' + escape(workingSvg),
-						scale: Star.scale //parametro scale
+						scale: Star.scale*1.15 //parametro scale moltiplicato per ingrandire le stelle
 					})
 				});
+				//"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2240%22%20stroke%3D%22%23000000%22%20stroke-width%3D%223%22%20%20/%3E%3C/svg%3E"
+				singleFeature.setStyle(stileIcone);
 
-				singleFeature.setStyle(featureStyle);
 
 				markersArray[i] = new Array();
 				markersArray[i]['Date'] =  parseInt(Year + Month + Day),
@@ -586,20 +624,25 @@ workingIconFeature.setStyle(workingStyle);*/
 				openPopupSpider(markersArray[i]['Marker'], OnClickTextEN, OnClickTextIT, markersArray[i]['Nterr'], markersArray[i]['Lat'], markersArray[i]['Lon']);
 			}
 		}
-		console.log(markersArray);
+		//console.log(markersArray);
+		console.log("Caricamento quakes finito" );
 	}
+
+
+
 
 	function template(string, obj){
 		var s = string;
 		for(var prop in obj) {
 			if (obj[prop] === undefined) {  //se la properties e' vuota toglie il tag
-				s = s.replace(new RegExp('{'+ prop +'}','g'), "");
+				s = s.replace(new RegExp('{'+ prop +'}','g'), '');
 			} else {
 				s = s.replace(new RegExp('{'+ prop +'}','g'), obj[prop]);
 			}
 		}
 		return s;
 	}
+
 
 	// ====================== Show quakes on table and map, based on filters selected by user
 	this.showQuakes = function(Filters){
@@ -661,11 +704,14 @@ workingIconFeature.setStyle(workingStyle);*/
 
 
 				// -------     plot epicenters and add spider
-				RecTer['Marker'].setMap(map);
+
+				//////TODO VERIFICARE COME TRADURRE IL VECCHIO SET MAP
+				//RecTer['Marker'].setMap(map);
+				// console.log('setMap rimosso');
 				//////oms.addMarker(RecTer['Marker']);
 
-				bounds.extend(RecTer['Marker'].getPosition());
-
+				//bounds.extend(RecTer['Marker'].getPosition());
+				// console.log("RecTer['Marker'].getPosition() rimosso");
 
 
 				// ------------------  CREATE QUAKE TABLE
@@ -911,19 +957,20 @@ workingIconFeature.setStyle(workingStyle);*/
 
 	// ============== Remove markers from map
 	this.clearMap = function(){
+		console.log("CLEAR MAP chiamata TODO implementare nuova pulizia della mappa" )
 		if (rectangle) rectangle.setMap(null);
 		// cancellazione dei marker di Spiderfier
 		//////// oms.clearMarkers();
 
-		for (var i = 0; i < markersArray.length; i++) {
+
+		/*for (var i = 0; i < markersArray.length; i++) {
 			markersArray[i]['Marker'].setMap(null);
 			//if (Marker1) {
 			//	Marker1.setIcon(StarCLICK);
 			//}
-		}
+		}*/
 	}
 }  // -- end GmapTools function
-
 
 
 // When clicking on table row, trigger event on Gmap marker (used to trigger popup window when clicking on table row)

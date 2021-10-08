@@ -8,6 +8,7 @@ const SHORT_SPONSOR_RESEARCH = 'Per ricercare lo sponsor occorrono almeno 3 cara
 
 var Manajax = function(xmlService){
 //alert(xmlService)
+
 	var mySelf = this;
 
 	
@@ -19,6 +20,7 @@ var Manajax = function(xmlService){
 	var callBackFunc;
 	var FormToSend;
 	var TxType;
+
 
 	this.setURL = function(key, value){
 		URL[key] = value;
@@ -48,6 +50,7 @@ var Manajax = function(xmlService){
 	}
 
 	this.MakeRequest = function(){
+
 		var dataToSend = null;
 		var ajaxObj = this.createXMLHttpRequest();
 
@@ -58,6 +61,12 @@ var Manajax = function(xmlService){
 						('text' == mySelf.responseType || 'html' == mySelf.responseType) 
 							? ajaxObj.responseText
 							: ajaxObj.responseText);
+					if (mySelf.URLString === "QuakeList.xml?output=xml") {  //caricamento stellette terremoti
+						console.log("CREAZIONE MAPPA CONDIZIONE TEST:");
+						// console.log(mySelf);
+						// console.log(mySelf.callBackFunc.toString());
+						creazioneMappa();
+					}
 				}
 				else{
 					alert("Aggiornamento informazioni fallito: " + ajaxObj.responseText);
@@ -120,6 +129,7 @@ var Manajax = function(xmlService){
 	}
 
 	this.requestAction = function(){
+
 		if(true == this.toScroll)
 			scroll(0,0);
 

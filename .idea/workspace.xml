@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="img">
-      <change afterPath="$PROJECT_DIR$/indexLOCALITAmagnitudo.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/index_v2Quake.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/js/index_ORIGINAL.js" afterDir="false" />
+    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="aggiornamento quake funzione parseQuakes in index.js">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index2.php" beforeDir="false" afterPath="$PROJECT_DIR$/index2.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index_v1puntiRossiQuake.php" beforeDir="false" afterPath="$PROJECT_DIR$/index_v1puntiRossiQuake.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/index_loc.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index_loc.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/language.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/language.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/manajax.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/manajax.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/mapOL.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/mapOL.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings">
+  <component name="ComposerSettings" doNotAsk="true">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
   </component>
@@ -154,7 +157,11 @@
       <updated>1631984073376</updated>
       <workItem from="1631984074431" duration="9521000" />
       <workItem from="1632315952891" duration="11751000" />
-      <workItem from="1633084322957" duration="8539000" />
+      <workItem from="1633084322957" duration="9249000" />
+      <workItem from="1633207941380" duration="18732000" />
+      <workItem from="1633252194086" duration="7421000" />
+      <workItem from="1633336377548" duration="617000" />
+      <workItem from="1633680324797" duration="12544000" />
     </task>
     <task id="LOCAL-00001" summary="img">
       <created>1631987175531</created>
@@ -170,7 +177,28 @@
       <option name="project" value="LOCAL" />
       <updated>1631987255190</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="aggiornamento quake funzione parseQuakes in index.js">
+      <created>1633108047694</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1633108047694</updated>
+    </task>
+    <task id="LOCAL-00004" summary="TEST PROGRESS STELLE NERE.">
+      <created>1633256455769</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1633256455769</updated>
+    </task>
+    <task id="LOCAL-00005" summary="terremoti a stella visualizzati OK">
+      <created>1633259261759</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1633259261759</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -189,18 +217,12 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="img" />
-    <option name="LAST_COMMIT_MESSAGE" value="img" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/js/index.js</url>
-          <line>1270</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="aggiornamento quake funzione parseQuakes in index.js" />
+    <MESSAGE value="TEST PROGRESS STELLE NERE." />
+    <MESSAGE value="terremoti a stella visualizzati OK" />
+    <option name="LAST_COMMIT_MESSAGE" value="terremoti a stella visualizzati OK" />
   </component>
 </project>

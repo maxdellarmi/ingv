@@ -63,7 +63,9 @@
     <!--sezione mappa OL begin-->
     <script src="/plugins/global/jquery.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.0.1/ol.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.2/build/ol.js"></script>
+
+
     <script src="/plugins/global/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="/plugins/global/js.cookie.min.js" type="text/javascript"></script>
     <script src="/plugins/global/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
@@ -306,7 +308,7 @@
 
         });
     </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.0.1/ol.css" type="text/css">
+    <link rel="stylesheet" href="https://openlayers.org/en/v6.4.2/css/ol.css" type="text/css">
 
     <style>
         .margins { margin-top: 5px; }

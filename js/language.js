@@ -964,13 +964,14 @@ var LanguageTools = function(){
 
 		}
 
-		$('section').translatable({
-		  contentNodeSelector     : 'span.gtranslate'
-		, translateButtonSelector : 'a[href="#translate"]'
-		//        , autoChangeButtonText    : false
-		//        , language                : 'en'
-		//        , debug                   : true
-		});
+		console.log('language.js  $(\'section\').translatable commentato perche lavora su oggetti google non piu presenti');
+		// $('section').translatable({
+		//   contentNodeSelector     : 'span.gtranslate'
+		// , translateButtonSelector : 'a[href="#translate"]'
+		// //        , autoChangeButtonText    : false
+		// //        , language                : 'en'
+		// //        , debug                   : true
+		// });
 	}
 
 
