@@ -524,11 +524,12 @@ var GmapsTools = function(){
 					//console.log("Star.path" + Star.path);
 					//px =8 * Star.scale / 8;
 					compiled = template(stella, {
-						stroke:  (Star.strokeColor!== undefined) ? String().concat("stroke=\"",Star.strokeColor,'\"'): undefined ,
-						widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"",Star.strokeWeight,'\"'): undefined,
+						stroke:  (Star.strokeColor!== undefined) ? String().concat("stroke=\"",Star.strokeColor,'\"'): String().concat("stroke=\"","#000000",'\"') ,
+						//widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"",Star.strokeWeight,'\"'): String().concat("stroke-width=\"","5",'\"'),
+						widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"","5",'\"'): String().concat("stroke-width=\"","5",'\"'),
 						fill:	(Star.fillColor!== undefined) ? String().concat("fill=\"",Star.fillColor,'\"'): undefined,
-						height: String().concat("height=\"",'100px','\"'),
-						width: String().concat("width=\"",'100px','\"')
+						height: String().concat("height=\"",'200px','\"'),
+						width: String().concat("width=\"",'200px','\"')
 					});
 				}
 				console.log(compiled);
