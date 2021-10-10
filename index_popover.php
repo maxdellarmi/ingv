@@ -25,6 +25,9 @@
 
     <script type="text/javascript" src="js/jquery.tablesorter.js"></script>
 
+    <link rel="stylesheet" href="css/popover.css" />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
 <!--    JQUERY TRANSLATOR LAVORA SUGLI OGGETTI DI GOOGLE CHE NON ESISTONO PIU-->
 <!--    <script src="js/jquery.translator.js"></script>-->
 
@@ -46,9 +49,6 @@
 <!--    FINO ALLA VERSIONE 6.8.1 jsdelivr e una nuova cdn-->
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.2/build/ol.js"></script>
     <link rel="stylesheet" href="https://openlayers.org/en/v6.4.2/css/ol.css" type="text/css">
-
-    <link rel="stylesheet" href="css/popover.css" />
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
     <!--sezione mappa OL end-->
 </head>

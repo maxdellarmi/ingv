@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="aggiornamento quake funzione parseQuakes in index.js">
+    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="gestione caricamento localita sulla pagina index2.php -- gestione filtro localita sulla pressione del tasto ok -- gestione layers attivi e disattivi tra quakes e locality.">
+      <change afterPath="$PROJECT_DIR$/css/popover.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/index_popover.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index2.php" beforeDir="false" afterPath="$PROJECT_DIR$/index2.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index_v1puntiRossiQuake.php" beforeDir="false" afterPath="$PROJECT_DIR$/index_v1puntiRossiQuake.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/index_loc.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index_loc.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/language.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/language.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/js.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/js.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/manajax.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/manajax.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/mapOL.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/mapOL.js" afterDir="false" />
     </list>
@@ -139,7 +140,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\INGV\cfti5" />
       <recent name="C:\Project_Laravel\CFTI5_NEW" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\INGV\cfti5\css" />
     </key>
   </component>
   <component name="RunManager">
@@ -161,7 +166,8 @@
       <workItem from="1633207941380" duration="18732000" />
       <workItem from="1633252194086" duration="7421000" />
       <workItem from="1633336377548" duration="617000" />
-      <workItem from="1633680324797" duration="12544000" />
+      <workItem from="1633680324797" duration="28254000" />
+      <workItem from="1633890731018" duration="14092000" />
     </task>
     <task id="LOCAL-00001" summary="img">
       <created>1631987175531</created>
@@ -198,11 +204,42 @@
       <option name="project" value="LOCAL" />
       <updated>1633259261759</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="aggiornamento files index.js index2.js index_loc.js(untouched) aggiornata versione openLayers per gestione SVG, manajax.js aggiornamento javascript per verificare punto di ingresso per inserire la gestione del caricamento dati su mappaOpenLayer, mapOL.js gestire il caricamento dei terremoti.">
+      <created>1633696277987</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1633696277987</updated>
+    </task>
+    <task id="LOCAL-00007" summary="aggiornamento forzatura contorno &quot;STROKE&quot; proprieta svg per il contorno delle icone stelle a valore 5. stroke-width=&quot;5&quot;">
+      <created>1633697377387</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1633697377387</updated>
+    </task>
+    <task id="LOCAL-00008" summary="gestione caricamento localita sulla pagina index2.php -- gestione filtro localita sulla pressione del tasto ok -- gestione layers attivi e disattivi tra quakes e locality.">
+      <created>1633713248315</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1633713248315</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -223,6 +260,9 @@
     <MESSAGE value="aggiornamento quake funzione parseQuakes in index.js" />
     <MESSAGE value="TEST PROGRESS STELLE NERE." />
     <MESSAGE value="terremoti a stella visualizzati OK" />
-    <option name="LAST_COMMIT_MESSAGE" value="terremoti a stella visualizzati OK" />
+    <MESSAGE value="aggiornamento files index.js index2.js index_loc.js(untouched) aggiornata versione openLayers per gestione SVG, manajax.js aggiornamento javascript per verificare punto di ingresso per inserire la gestione del caricamento dati su mappaOpenLayer, mapOL.js gestire il caricamento dei terremoti." />
+    <MESSAGE value="aggiornamento forzatura contorno &quot;STROKE&quot; proprieta svg per il contorno delle icone stelle a valore 5. stroke-width=&quot;5&quot;" />
+    <MESSAGE value="gestione caricamento localita sulla pagina index2.php -- gestione filtro localita sulla pressione del tasto ok -- gestione layers attivi e disattivi tra quakes e locality." />
+    <option name="LAST_COMMIT_MESSAGE" value="gestione caricamento localita sulla pagina index2.php -- gestione filtro localita sulla pressione del tasto ok -- gestione layers attivi e disattivi tra quakes e locality." />
   </component>
 </project>

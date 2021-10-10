@@ -200,6 +200,7 @@ function createTableandPlot(Filters){
 			name: country[i],
 			description: descloc[i],
 			ExportKmlR: "",
+			OnClickTextIT: "",
 			url: "http://www.google.it"
 		});
 
@@ -281,6 +282,7 @@ function createTableandPlot(Filters){
 		var nomEN = '<br /> Number of Macroseismic Observations: <b>' + ris[i] + '</b>';
 		var nomIT = '<br /> Numero di Osservazioni Macrosismiche: <b>' + ris[i] + '</b>';
 
+		//TODO: qui avviene la join delle stringhe che compongono il popup
 		var OnClickTextEN = [
 			// '<div class="IW"><div id = "IWclose"><a onclick="infowindow.close(); turnoffRow()" href="#"><img src="images/close.png" height="10px"></a></div>',    // VERSIONE PRECEDENTE DELLE IW!! PRIMA CHE GOOGLE CAMBIASSE API
 			titleIWloc, '<div class="commentsIW">', intEN, nomEN, eeEN + '<br /><br />', '<a href="locality.php?'+nloc[i]+'EN" target="_blank">Locality page </a>',
@@ -392,7 +394,8 @@ function createTableandPlot(Filters){
 
 			//assegna la variabile EXPORTKML nella feature
 			marker.ExportKmlR = ExportKmlR;
-
+			//NOTA: assegna i dati per il popup al marker
+			marker.OnClickTextIT = OnClickTextIT;
 			//TODO setMAP non presente sugli oggetti che non sono di google
 			//markerLOC.setMap(map)
 			/////////////////////////////////////////////////////

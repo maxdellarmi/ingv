@@ -31,7 +31,7 @@ var EqMapFlag = 0;
 var FlagScroll = 1;
 
 var sortEq = new Array();
-var Langsel;
+var Langsel; //LANGUAGE SELECTED DEI POPUP
 var iMarker;
 
 var map;

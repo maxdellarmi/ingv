@@ -454,8 +454,8 @@ var GmapsTools = function(){
                 */
 				var compiled;
 				var coords = [];
-				coords.push(Lon);//parseFloat(Lon).toFixed(5));
-				coords.push(Lat);//parseFloat(Lat).toFixed(5));
+				// coords.push(Lon);//parseFloat(Lon).toFixed(5));
+				// coords.push(Lat);//parseFloat(Lat).toFixed(5));
 
 				//4326 is just the EPSG identifier of WGS84.
 				/* target: 'map',
@@ -580,6 +580,8 @@ const workingStyle = new ol.style.Style({
 
 workingIconFeature.setStyle(workingStyle);*/
 
+
+				/////TODO: CON QUESTE DUE VARIABILI SI POSSONO GESTIRE I DATI DEL POPUP
 				var OnClickTextEN = [
 					// '<div class="IW"><div id = "IWclose"><a onclick="infowindow.close(); turnoffRow()" href="#"><img src="images/close.png" height="10px"></a></div>',  // VERSIONE PRECEDENTE DELLE IW!! PRIMA CHE GOOGLE CAMBIASSE API
 					'<div class="iw-title quakeColor">' + 'Date: <b>' + DateLabel + '</b> Time: <b>' + TimeLabel + '</b>' + ' Epicentral Area: <b>' +  Location + '</b></div>',
@@ -1126,7 +1128,11 @@ function initializeEq(){
 	MenuPilot = new MenuTools();
 	GmapsPilot = new GmapsTools();
 	//////// placeMap();
+	console.log("initializeEq..............");
+	console.log("DROPDOWN access VALUE initializeEq:");
+	console.log(document.getElementById("access").value);
 	GmapsPilot.requestData();
+	console.log("GmapsPilot.requestData() che chiama la classe GMAPSTOOLS");
 
 	var FilterButton = document.getElementById('FilterByKindEvent');
 	IntervalVar = setInterval(function(){
@@ -1236,6 +1242,10 @@ function stateChange() {
 	var url = window.location.href;
 	var AcTy = url.substr(-2,2);
 
+	console.log("stateChange DropDownlist Event...........")
+	console.log("URL:"+ url);
+	console.log("AcTy:"+ AcTy);
+
     setTimeout(function () {
             InitializeIndex();
     }, 10);
@@ -1296,7 +1306,18 @@ function InitializeIndex() {
 			ResetMap();
 		}
 		if (EqMapFlag == 0) {  // first time: complete process with XML parsing, ecc.
+			console.log("NOTA: ***********Richiesto il caricamento dei terremot  E' LA PRIMA VOLTA.... ***********")
 			initializeEq();
+		} else {
+			console.log("NOTA: ***********Richiesto il caricamento dei terremoti E NON E' LA PRIMA VOLTA.... TODO: effettuare lo switch di layer gia caricati per ora ricarica tutto***********");
+			GmapsPilot.requestData();
+			/*var ajaxUpdater = new Manajax('QuakeList.xml');
+			ajaxUpdater.TxType = 'GET';
+			ajaxUpdater.responseType = 'xml';
+			this.callBackBlock = 'map';
+			ajaxUpdater.callBackFunc =
+			ajaxUpdater.toScroll = false;
+			ajaxUpdater.requestAction();*/
 		}
 	}
 

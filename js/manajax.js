@@ -61,15 +61,23 @@ var Manajax = function(xmlService){
 						('text' == mySelf.responseType || 'html' == mySelf.responseType) 
 							? ajaxObj.responseText
 							: ajaxObj.responseText);
-					if (mySelf.URLString === "QuakeList.xml?output=xml") {  //caricamento stellette terremoti
+					console.log("DROPDOWN access VALUE:");
+					console.log(document.getElementById("access").value);
+					// <select id="access" name="access" onChange="stateChange()">
+					// 	<option value="EQ" id="EQ" name="EQ" selected="">Terremoti</option>
+					// 	<option value="LOC" id="LOC" name="LOC">Località</option>
+					// 	<option value="EE" id="EE" name="EE">Effetti sull'ambiente naturale</option>
+					// </select>
+					var dropdownElementSelected = document.getElementById("access").value;
+					if (dropdownElementSelected == "EQ") {  //caricamento stellette terremoti
 						console.log("CREAZIONE MAPPA TERREMOTI:");
 						creazioneMappa();
 					}
-					if (mySelf.URLString === "LocList.xml?output=xml") {
+					if (dropdownElementSelected == "LOC") {
 						console.log("CREAZIONE MAPPA LOCALITA:");
 						indexLocalita();
 					}
-					//console.log(mySelf);
+					console.log(mySelf);
 				}
 				else{
 					alert("Aggiornamento informazioni fallito: " + ajaxObj.responseText);

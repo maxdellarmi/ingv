@@ -29,7 +29,7 @@ function creazioneMappa () {
                 markers.push(markersArray[i]['Marker']);
             }
             console.log("carico i markers");
-            console.log(markers);
+            // console.log(markers);
 
             quakeVector = new ol.layer.Vector({
                 source: new ol.source.Vector({
@@ -40,20 +40,46 @@ function creazioneMappa () {
 
             quakeVector.setVisible(true);
 
-           mapOL = new ol.Map({
-            controls: ol.control.defaults({
-                attributionOptions: ({
-                    collapsible: false
-                })
-            }),
-           layers: [rasterLayer, quakeVector],
-            target: document.getElementById('mapOL'),
-            view: new ol.View({
-                projection: 'EPSG:4326',
-                center: center,
-                zoom: 6,
-            })
-        });
+
+           if (mapOL === undefined) {
+               mapOL = new ol.Map({
+                   controls: ol.control.defaults({
+                       attributionOptions: ({
+                           collapsible: false
+                       })
+                   }),
+                   layers: [rasterLayer, quakeVector],
+                   target: document.getElementById('mapOL'),
+                   view: new ol.View({
+                       projection: 'EPSG:4326',
+                       center: center,
+                       zoom: 6,
+                   })
+               });
+           }
+           else {
+               //TODO: CLEANUP degli altri layers dalle variabili globali
+               console.log("CLEANUP DEI LAYERS VARIABILI GLOBALI DICHIARATE");
+               //nascondo gli altri layer che non interessano anche se lo fa da solo e' piu veloce
+               if (localityVector!== undefined) {
+                   console.log("CLEANUP inizio pulizia di tutti gli altri layer presenti (tranne raster)");
+                   console.log("CLEANUP pulizia del layer Locality");
+                   // quakeVector.setVisible(false);
+                   mapOL.removeLayer(localityVector); //meglio rimuovere a mano i layers se rimane reference non li toglie
+                   // console.log("CLEANUP pulizia del layer Raster")
+                   // mapOL.removeLayer(rasterLayer);
+               }
+               //////////////////////////////////////////
+               /***forza la pulizia dei layer vecchi ***/
+                //////////////////////////////////////////
+               mapOL.getLayers().forEach(function (layer) {
+                   console.log("CLEANUP DEI LAYERS DAL CLICLO DELLA MAPPA");
+                   mapOL.removeLayer(layer);
+               });
+               console.log("ADDING NEW LAYERS");
+               mapOL.addLayer(rasterLayer);
+               mapOL.addLayer(quakeVector);
+           }
 
             /*
             https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html
@@ -129,7 +155,7 @@ function creazioneMappa () {
                 }
             });*/
             // change mouse cursor when over marker
-            console.log('popover su mapOL.js commentato perche andava in errore ');
+            console.log('popover su mapOL.js gestione terremoti commentato perche andava in errore ');
 
             resizeMapIndex();
         } catch (e) {
@@ -167,11 +193,6 @@ function indexLocalita () {
 
 
             if (mapOL === undefined) {
-               //nascondo gli altri layer che non interessano anche se lo fa da solo e' piu veloce
-                if (quakeVector!== undefined) {
-                    console.log("pulizia del layer Quakes")
-                    quakeVector.setVisible(false);
-                }
                 mapOL = new ol.Map({
                     controls: ol.control.defaults({
                         attributionOptions: ({
@@ -188,18 +209,25 @@ function indexLocalita () {
                 });
             }
             else {
+                //TODO: CLEANUP degli altri layers dalle variabili globali
+                console.log("CLEANUP DEI LAYERS VARIABILI GLOBALI DICHIARATE");
                 //nascondo gli altri layer che non interessano anche se lo fa da solo e' piu veloce
                 if (quakeVector!== undefined) {
-                    console.log("pulizia del layer Quakes")
-                    quakeVector.setVisible(false);
+                    console.log("CLEANUP inizio pulizia di tutti gli altri layer presenti (tranne raster)");
+                    console.log("CLEANUP pulizia del layer Quakes");
+                    // quakeVector.setVisible(false);
+                    mapOL.removeLayer(quakeVector); //meglio rimuovere a mano i layers se rimane reference non li toglie
+                    // console.log("CLEANUP pulizia del layer Raster")
+                    // mapOL.removeLayer(rasterLayer);
                 }
-                //////////////////////////////////////////
-                /***forza la pulizia dei layer vecchi ***/
-                //////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////
+                /***forza la pulizia dei layer vecchi anche se stesso vecchia versione***/
+                ////////////////////////////////////////////////////////////////////////
                 mapOL.getLayers().forEach(function (layer) {
+                    console.log("CLEANUP DEI LAYERS DAL CLICLO DELLA MAPPA");
                     mapOL.removeLayer(layer);
                 });
-
+                console.log("ADDING NEW LAYERS");
                 mapOL.addLayer(rasterLayer);
                 mapOL.addLayer(localityVector);
             }
@@ -229,13 +257,16 @@ function indexLocalita () {
                 if (feature) {
                     $(element).popover('destroy')
                     var coordinates = feature.getGeometry().getCoordinates();
+                    console.log("FEATURE ONCLICK:")
+                    console.log(feature.OnClickTextIT);
+                    var popupContent = feature.OnClickTextIT;
                     popup.setPosition(coordinates);
                     $(element).popover({
                         'placement': 'top',
                         'animation': false,
                         'html': true,
                         'trigger': 'manual',
-                        'content': '<div style="min-width:200px"><h4>' + feature.get('name') + '</h3>' + '<p>' + feature.get('description') + '</p>' + '<a href="' + feature.get('url') + '" class="details_lang" id="details">Details</a>'
+                        'content': popupContent // feature.OnClickTextIT;
                     });
                     $(element).popover('show');
                 } else {
