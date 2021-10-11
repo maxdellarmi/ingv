@@ -433,9 +433,10 @@ function resizeMap() {
 	h = v.innerHeight ? v.innerHeight : d.documentElement.clientHeight;
     s = d.getElementById('WSzPlgIn');
 
-	document.querySelector('#mapOL').style.width = Math.round( w -480)+'px';
-	document.querySelector('#mapOL').style.height = Math.round( h -10)+'px';
-
+    if (document.querySelector('#mapOL') !== null ) {
+		document.querySelector('#mapOL').style.width = Math.round(w - 480) + 'px';
+		document.querySelector('#mapOL').style.height = Math.round(h - 10) + 'px';
+	}
 	//////// document.querySelector('#map').style.width = Math.round( w -480)+'px';
     //////// document.querySelector('#map').style.height = Math.round( h -10)+'px';
 	document.querySelector('#leftside').style.height = Math.round( h -55)+'px';

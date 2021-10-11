@@ -87,33 +87,6 @@ function creazioneMappa () {
             Clear any existing layers and add layers to the map.
             */
 
-
-          /* //HOVER che on mouse over visualizza dati relativi alla feature
-            let selected = null;
-            const status = document.getElementById('status');
-
-            mapOL.on('pointermove', function (e) {
-                if (selected !== null) {
-                    //selected.setStyle(undefined);
-                    selected = null;
-                }
-
-                mapOL.forEachFeatureAtPixel(e.pixel, function (f) {
-                    selected = f;
-                    //f.setStyle(highlightStyle);
-                    return true;
-                });
-
-                if (selected) {
-                    //status.innerHTML = '&nbsp;Hovering: ' + selected.get('title');
-                    alert('Hovering: ' + selected.get('title') +  selected.get('latlon') );
-                } else {
-                    //alert('&nbsp;');
-                }
-            });*/
-
-          /*//overlay commentato
-
             var element = document.getElementById('popup');
             var popup = new ol.Overlay({
                 element: element,
@@ -125,11 +98,10 @@ function creazioneMappa () {
                     duration: 250
                 }
             });
-
-            mapOL.addOverlay(popup); */
+            mapOL.addOverlay(popup);
 
             // display popup on click
-            /*mapOL.on('click', function (evt) {
+            mapOL.on('click', function (evt) {
                 var feature = mapOL.forEachFeatureAtPixel(evt.pixel,
                     function (feature) {
                         return feature;
@@ -138,22 +110,35 @@ function creazioneMappa () {
                 if (feature) {
                     $(element).popover('destroy')
                     var coordinates = feature.getGeometry().getCoordinates();
+                    console.log("FEATURE ONCLICK:")
+                    console.log(feature.OnClickTextIT);
+                    var popupContent = feature.OnClickTextIT;
                     popup.setPosition(coordinates);
                     $(element).popover({
                         'placement': 'top',
                         'animation': false,
                         'html': true,
                         'trigger': 'manual',
-                        // 'content': '<div class = "tooltip-inner" style="min-width:200px"><h4>' + feature.get('name') + '</h3>' + '<p>' + feature.get('description') + '</p>' + '<a href="' + feature.get('url') + '">Details</a>'
-                        'content': '<div class = "tooltip-inner" style="min-width:200px"><h4>' + "CONTENUTO DETAILS"</a>'
-
+                        'content': popupContent // feature.OnClickTextIT;
                     });
                     $(element).popover('show');
                 } else {
                     $(element).popover('destroy');
                     popup.setPosition(undefined);
                 }
-            });*/
+
+            });
+            // change mouse cursor when over marker
+            mapOL.on('pointermove', function (e) {
+                if (e.dragging) {
+                    // $(element).popover('hide'); element popover non trovato andava in errore
+                    return;
+                }
+                var pixel = mapOL.getEventPixel(e.originalEvent);
+                var hit = mapOL.hasFeatureAtPixel(pixel);
+                mapOL.getTarget().style.cursor = hit ? 'pointer' : '';
+            });
+
             // change mouse cursor when over marker
             console.log('popover su mapOL.js gestione terremoti commentato perche andava in errore ');
 

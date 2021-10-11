@@ -479,7 +479,7 @@ var GmapsTools = function(){
 				var singleFeature = new ol.Feature({
 					geometry: new ol.geom.Point([Lon, Lat]),
 					title : onMouseOverText,
-					latlon : JSON.stringify(coords)
+					OnClickTextIT : ""
 				});
 				//TODO:VERIIFCARE ID DELLA FEATURE //
 				//singleFeature.setId(i);
@@ -527,59 +527,6 @@ var GmapsTools = function(){
 						scale: Star.scale*1.15 //parametro scale moltiplicato per ingrandire le stelle
 					})
 				});
-				//"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2240%22%20stroke%3D%22%23000000%22%20stroke-width%3D%223%22%20%20/%3E%3C/svg%3E"
-				singleFeature.setStyle(stileIcone);
-
-
-				markersArray[i] = new Array();
-				markersArray[i]['Date'] =  parseInt(Year + Month + Day),
-				markersArray[i]['DateLabel'] =  DateLabel,
-				markersArray[i]['TimeLabel'] =  TimeLabel,
-				markersArray[i]['Nterr'] =  Nterr,
-				markersArray[i]['Lat'] =  Lat,
-				markersArray[i]['Lon'] =  Lon,
-				markersArray[i]['Location'] =  Location,
-				markersArray[i]['Country'] =  Country,
-				markersArray[i]['Io'] =  Io,
-				markersArray[i]['Year'] =  Year,
-				markersArray[i]['Month'] =  Month,
-				markersArray[i]['Day'] =  Day,
-				markersArray[i]['Hour'] =  Hour,
-				markersArray[i]['Minu'] =  Minu,
-				markersArray[i]['Sec'] = Sec,
-				markersArray[i]['Me'] =  Me,
-				markersArray[i]['Imax'] =  Imax,
-				markersArray[i]['Zone'] =  Zone,
-				markersArray[i]['Npun'] =  Npun,
-				markersArray[i]['FlagFalse'] =  FlagFalse,
-				markersArray[i]['Level'] =  EQlevel,
-				markersArray[i]['Note'] =  Reliability,
-				markersArray[i]['EpiType'] =  Epicenter,
-				markersArray[i]['EpiIcon'] =  EpiIcon,
-				markersArray[i]['Marker'] = singleFeature
-				/*new google.maps.Marker({
-					position: new google.maps.LatLng(Lat, Lon),
-					map: null,
-					icon: Star,
-					title: onMouseOverText,
-				})*/
-
-			/*const workingIconFeature = new ol.Feature({
-  geometry: new ol.geom.Point([-1, -1])
-});
-
-const workingSvg = `<svg width="4cm" height="4cm" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" fill="white" stroke="black" stroke-width="3" /></svg>`;
-
-const workingStyle = new ol.style.Style({
-  image: new ol.style.Icon({
-    opacity: 1,
-    src: 'data:image/svg+xml;utf8,' + escape(workingSvg),
-    scale: 1
-  })
-});
-
-workingIconFeature.setStyle(workingStyle);*/
-
 
 				/////TODO: CON QUESTE DUE VARIABILI SI POSSONO GESTIRE I DATI DEL POPUP
 				var OnClickTextEN = [
@@ -605,6 +552,62 @@ workingIconFeature.setStyle(workingStyle);*/
 					'<a href="' + QuakePage + 'IT" target="_blank"> Pagina del terremoto </a> <br /><br /></div>',
 					'</div>'
 				].join('\n');
+
+				//ASSEGNA INFORMAZIONI CIRCA LO STYLE DELLA FEATURE E IL POPUP DICHIARATO VUOTO INIZIALMENTE.
+				//"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2240%22%20stroke%3D%22%23000000%22%20stroke-width%3D%223%22%20%20/%3E%3C/svg%3E"
+				singleFeature.setStyle(stileIcone);
+				singleFeature.OnClickTextIT = OnClickTextIT;
+
+				markersArray[i] = new Array();
+				markersArray[i]['Date'] =  parseInt(Year + Month + Day),
+					markersArray[i]['DateLabel'] =  DateLabel,
+					markersArray[i]['TimeLabel'] =  TimeLabel,
+					markersArray[i]['Nterr'] =  Nterr,
+					markersArray[i]['Lat'] =  Lat,
+					markersArray[i]['Lon'] =  Lon,
+					markersArray[i]['Location'] =  Location,
+					markersArray[i]['Country'] =  Country,
+					markersArray[i]['Io'] =  Io,
+					markersArray[i]['Year'] =  Year,
+					markersArray[i]['Month'] =  Month,
+					markersArray[i]['Day'] =  Day,
+					markersArray[i]['Hour'] =  Hour,
+					markersArray[i]['Minu'] =  Minu,
+					markersArray[i]['Sec'] = Sec,
+					markersArray[i]['Me'] =  Me,
+					markersArray[i]['Imax'] =  Imax,
+					markersArray[i]['Zone'] =  Zone,
+					markersArray[i]['Npun'] =  Npun,
+					markersArray[i]['FlagFalse'] =  FlagFalse,
+					markersArray[i]['Level'] =  EQlevel,
+					markersArray[i]['Note'] =  Reliability,
+					markersArray[i]['EpiType'] =  Epicenter,
+					markersArray[i]['EpiIcon'] =  EpiIcon,
+					markersArray[i]['Marker'] = singleFeature
+					/*new google.maps.Marker({
+						position: new google.maps.LatLng(Lat, Lon),
+						map: null,
+						icon: Star,
+						title: onMouseOverText,
+					})*/
+
+					/*const workingIconFeature = new ol.Feature({
+					geometry: new ol.geom.Point([-1, -1])
+					});
+
+					const workingSvg = `<svg width="4cm" height="4cm" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" fill="white" stroke="black" stroke-width="3" /></svg>`;
+
+					const workingStyle = new ol.style.Style({
+					  image: new ol.style.Icon({
+						opacity: 1,
+						src: 'data:image/svg+xml;utf8,' + escape(workingSvg),
+						scale: 1
+					  })
+					});
+
+					workingIconFeature.setStyle(workingStyle);*/
+
+
 
 
 				// Call function that opens pop up window with quake info
