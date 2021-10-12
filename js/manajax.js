@@ -80,6 +80,10 @@ var Manajax = function(xmlService){
 							console.log("CREAZIONE MAPPA LOCALITA:");
 							indexLocalita();
 						}
+						if (dropdownElementSelected == "EE") {
+							console.log("CREAZIONE MAPPA EFFETTI SULL'AMBIENTE:");
+							indexEEAmbiente();
+						}
 					}
 					console.log(mySelf);
 				}

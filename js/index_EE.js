@@ -13,6 +13,7 @@ var NumEESel;
 var EEmarkersArray = [];
 var GmapsPilotEE = null;
 
+
 var NlocOld;
 var infowindow = new google.maps.InfoWindow();
 
@@ -221,14 +222,18 @@ function parseEEData(XmlText){
 	}
 
 
+	EEmarkers = []; //reinizializza l'array degli effetti ambiente
+	var marker;
 	// --------------------------------    PARSE XML WITH ALL EE    ----------------------------------------------
 	var nlocXarray = [];
-	if(EEall.length > 0){
+	if(EEall.length > 0) {
 
 		// index for selected EE (based on toggles)
 		var seli = 0;
 
 		for (var i = 0; i < EEall.length; i++){ //EEall.length
+			marker = null;
+
 			var sNP = XMLEEList.getElementsByTagName("EE")[i].childNodes[0].nodeValue;
 			var EE_nterr = XMLEEList.getElementsByTagName("NTERR")[i].childNodes[0].nodeValue;
 			var EE_nperiod = XMLEEList.getElementsByTagName("NPERIOD")[i].childNodes[0].nodeValue;;
@@ -257,9 +262,9 @@ function parseEEData(XmlText){
 			if (EE_locNote == '-') EE_locNote = "";
 			var EE_codeff = XMLEEList.getElementsByTagName("CODICE_EFF")[i].childNodes[0].nodeValue;
 			var EE_Lat = XMLEEList.getElementsByTagName("LAT_WGS84")[i].childNodes[0].nodeValue;
-			var fEE_Lat = parseFloat(EE_Lat).toFixed(3);
+			var fEE_Lat = parseFloat(EE_Lat).toFixed(5);
 			var EE_Lon = XMLEEList.getElementsByTagName("LON_WGS84")[i].childNodes[0].nodeValue;
-			var fEE_Lon = parseFloat(EE_Lon[i]).toFixed(3);
+			var fEE_Lon = parseFloat(EE_Lon).toFixed(5);
 
 
 			// take effect only if in list of "on" toggles
@@ -343,10 +348,34 @@ function parseEEData(XmlText){
 				}
 
 				// --- set marker icon
-				var icon = {
+				//OLD GOOGLE STYLE ICON
+				/*var icon = {
 					url: 'images/EE/color/'+ EE_codeff + '.png',
 					scaledSize: new google.maps.Size(20, 20)
-				}
+				}*/
+
+				marker = new ol.Feature({
+					geometry: new ol.geom.Point([fEE_Lon, fEE_Lat]),
+					ExportKmlR: "",
+					OnClickTextIT: "",
+					ContentPopupText: ""
+				});
+
+				//var iconstring = new String().concat("images/EE/color/", EE_codeff.toString(), ".png").toString();
+
+				marker.setStyle(new ol.style.Style({
+					image: new ol.style.Icon(({
+						src:  'images/EE/color/'+ EE_codeff+ ".png",
+						// the real size of your icon
+						size: [34, 34], //era 20,20 su google
+						// the scale factor
+						scale: 0.7 // 34 * 0.59 = 20
+					}))
+				}));
+
+
+
+
 
 				//delete the final <br />
 				if (EEdate.endsWith("<br />")) EEdate = EEdate.slice(0,EEdate.length-6);
@@ -374,7 +403,6 @@ function parseEEData(XmlText){
 				EEmarkersArray[seli]['EE_codeff'] =  EE_codeff,
 				EEmarkersArray[seli]['EE_Lat'] =  EE_Lat,
 				EEmarkersArray[seli]['EE_Lon'] =  EE_Lon,
-
 				EEmarkersArray[seli]['EQdate'] =  EEdate,
 				EEmarkersArray[seli]['EQtime'] =  EEtime,
 				EEmarkersArray[seli]['EQlink'] =  EQlink,
@@ -388,14 +416,16 @@ function parseEEData(XmlText){
 				EEmarkersArray[seli]['abbrsymbol'] =  abbrsymbolEE,
 				EEmarkersArray[seli]['EE_ordernum'] =  orderEE[codeEE.indexOf(EE_codeff)],
 				EEmarkersArray[seli]['EE_orderdate'] = EEdatenum,
-				EEmarkersArray[seli]['Marker'] =  new google.maps.Marker({
+				EEmarkersArray[seli]['Marker'] = marker, //nuovo marker openlayer
+				EEmarkersArray[seli]['EEepAreaExp'] = EEepAreaExp,
+				EEmarkersArray[seli]['EEtypeExp'] = EEtypeExp
+				/*EEmarkersArray[seli]['Marker'] =  new google.maps.Marker({
 					position: new google.maps.LatLng(EE_Lat, EE_Lon),
 					map: map,
 					icon: icon,
 					// title: onMouseOverText,
-				}),
-				EEmarkersArray[seli]['EEepAreaExp'] = EEepAreaExp
-				EEmarkersArray[seli]['EEtypeExp'] = EEtypeExp
+				}),*/
+
 				seli += 1
 			}
 
@@ -516,12 +546,9 @@ function parseEEData(XmlText){
 		// close infowindow div when infowindow text is complete
 		// OnClickText = '<div class="IW"><div id = "IWclose"><a onclick="infowindow.close(); turnoffRow()" href="#"><img src="images/close.png" height="10px"></a></div>' + OnClickText + '</div></div>'   // VERSIONE PRECEDENTE DELLE IW!! PRIMA CHE GOOGLE CAMBIASSE API
  
-
-
+		//assegna un elemento della matrice ad una variabile RecEE
 		// -------------- TABLE
 		var RecEE = EEmarkersArray[i];
-
-
 
 		tbody = document.getElementById('EE_data');
 		row = document.createElement("tr");
@@ -579,11 +606,14 @@ function parseEEData(XmlText){
 
 
 		openPopupEE(RecEE['Marker'], OnClickText, RecEE['EE_nloc'], E1commIT, E1commEN)
+		// console.log("DUMP marker con info popup valorizate....");
+		// console.log(RecEE['Marker']);
+		// console.log(RecEE['Marker'].ContentPopupText);
 
-		//Export variable TXT
+		//TODO: Export variable TXT ADATTARE ALLA NUOVA GESTIONE
 		ExportText = ExportText + CarRet + class_titleEE_EN[class_codeEE.indexOf(RecEE['EE_codeff'])] + ';' + RecEE['EEtypeExp'] + ';' + RecEE['EE_loc'] + ';' + RecEE['EE_Lat'] + ';' + RecEE['EE_Lon'] + ';' + String.fromCharCode(34) + RecEE['EQdate'] + String.fromCharCode(34) + ';' + String.fromCharCode(34) + RecEE['EQtime'] + String.fromCharCode(34) + ';' + String.fromCharCode(34) + RecEE['EQIo'] + String.fromCharCode(34) + ';' + String.fromCharCode(34) + RecEE['EQMe'] + String.fromCharCode(34) + ';' + String.fromCharCode(34) + RecEE['EEepAreaExp'] + String.fromCharCode(34)
 
-		//Export variableKML
+		//TODO: Export variableKML  ADATTARE ALLA NUOVA GESTIONE
 		ExportKmlR = ExportKmlR + "<Placemark> <name>" + class_titleEE_EN[class_codeEE.indexOf(RecEE['EE_codeff'])]  + " - " + RecEE['EE_loc'] + "</name>" + CarRet + "<description><![CDATA["
 		ExportKmlR = ExportKmlR + "<b>" +  class_titleEE_EN[class_codeEE.indexOf(RecEE['EE_codeff'])] + "</b> <br> (" + RecEE['EEtypeExp'] + ")<br><br>Locality: <b>" + RecEE['EE_loc'] + "</b><br>Latitude: <b>" + RecEE['EE_Lat'] + "</b> <br>Longitude: <b>" + RecEE['EE_Lon'] + "</b><br><b><a href=" + virg + "http://storing.ingv.it/cfti/cfti5/locality.php?" + RecEE['EE_nloc'] + "EN" + virg + ">Locality page </a></b><br> <br><br>" + CarRet + "<table>" + CarRet + "<tr> <td><b>Date </b></td><td><b>Time </b></td> <td><b>Io</b></td> <td><b>Me</b></td><td><b>Epicentral Area</b></td> </tr>" + CarRet + "<tr><td>"+ RecEE['EQdate'] + "</td> <td>" + RecEE['EQtime'] + "</td> <td>" + RecEE['EQIo'] + "</td> <td>" + RecEE['EQMe'] + "</td> <td>" + RecEE['EEepAreaExp'] + "</td></tr>" + CarRet + "</table>" + CarRet
 		ExportKmlR = ExportKmlR + "]]></description>" + CarRet + "<LookAt>" + CarRet + "<longitude>" + RecEE['EE_Lon'] + "</longitude>" + CarRet + "<latitude>" + RecEE['EE_Lat'] + "</latitude>" + CarRet + "<range></range>" + CarRet + "</LookAt>" + CarRet + "<styleUrl>#" + RecEE['EE_codeff'] + "</styleUrl>" + CarRet + "<Point>" + CarRet + "<coordinates>"+ RecEE['EE_Lon'] + ","+ RecEE['EE_Lat'] + "</coordinates>" + CarRet + "</Point>" + CarRet + "</Placemark>"
@@ -594,6 +624,7 @@ function parseEEData(XmlText){
 		ExportText = ExportText.replace(regBR,String.fromCharCode(10));
 	}
 
+	///TODO: EXPORT KML e EXPORTTEXT sono da verificare/gestire
 	//Export variableKML
 	ExportKml = "";
 	jQuery.get('KML/EE_a.txt', function(data){
@@ -679,9 +710,10 @@ function hideE1(idname){
 
 function openPopupEE(marker, text, Nloc, E1textIT, E1textEN){
 
-	google.maps.event.addListener(marker, 'click', function() {
-
-		// specify language of popup window
+	//Vecchia gestione google map non piu presente
+	//google.maps.event.addListener(marker, 'click', function() {
+	   marker.OnClickTextIT = text;   //Testo popup iniziale
+	// specify language of popup window
 		if (Langsel == "EN") {
 			for (var i=0; i<class_codeEE.length; i++){
 				text = text.split(class_titleEE_IT[i]).join(class_titleEE_EN[i])
@@ -707,8 +739,14 @@ function openPopupEE(marker, text, Nloc, E1textIT, E1textEN){
 			text = text.split('EN').join('IT')
 		}
 
-		infowindow.setContent(text);
+		//assegna all'array gigante le info per il popup
 
+		marker.ContentPopupText = text; //Testo popup con logica applicata da visualizzare nella mappa
+
+		/***GESTIONE POPUP GOOGLE MAPS commentata ***/
+		//infowindow.setContent(text);
+
+/*     GESTIONE GOOGLE MAPS COMMENTATA
 		// open popup window
 		infowindow.open(map, marker);
 		var rows = [];
@@ -733,7 +771,7 @@ function openPopupEE(marker, text, Nloc, E1textIT, E1textEN){
 			rows[i].style.backgroundColor = "#ffffaa";
 		}
 		NlocOld = Nloc;
-	})
+	})*/
 }
 
 
