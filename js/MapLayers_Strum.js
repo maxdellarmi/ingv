@@ -15,114 +15,179 @@ var Toggle11c = "off";
 var Toggle11d = "off";
 var Toggle12 = "off";
 
-var COM = new google.maps.ImageMapType({
-                    getTileUrl: function (coord, zoom) {
-                        var proj = map.getProjection();
-                        var zfactor = Math.pow(2, zoom);
-                        // get Long Lat coordinates
-                        var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
-                        var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
+//chiamata vecchia:  http://services.seismofaults.eu/geoserver/CFTI/ows?
+// SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=Com01012019_WGS84&TRANSPARENT=TRUE&FORMAT=image/gif
+// &BBOX=11.25,35.979898069620134,22.5,48.922499263758255
 
-                        //corrections for the slight shift of the WMS LAYER
-                        var deltaX = 0.000;
-                        var deltaY = 0.0000;
+// la chiamata NEW si autotraduce da sola cosi:
+//https://services.seismofaults.eu/geoserver/CFTI/ows?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&FORMAT=image%2Fpng&TRANSPARENT=true&
+// LAYERS=Com01012019_WGS84&BOX=11.25%2C35.979898069620134%2C22.5%2C48.922499263758255&TILED=true&WIDTH=230&HEIGHT=230&CRS=EPSG%3A4326
+// &STYLES=&FORMAT_OPTIONS=dpi%3A81&BBOX=45%2C22.5%2C67.5%2C45
 
-                        //create the Bounding box string
-                        var bbox =     (top.lng() + deltaX) + "," +
-    	                               (bot.lat() + deltaY) + "," +
-    	                               (bot.lng() + deltaX) + "," +
-    	                               (top.lat() + deltaY);
-
-                        //base WMS URL
-
-
-                       var urlWMS = "http://services.seismofaults.eu:80/geoserver/CFTI/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=Com01012019_WGS84&TRANSPARENT=TRUE&FORMAT=image/gif&"
-
-                       urlWMS += "BBOX=" + bbox;      // set bounding box
-
-                        return urlWMS;                // return URL for the tile
+var COM =  new ol.layer.Tile({
+    opacity: 0.4,
+    visible: true,
+    //extent: [-13884991, 2870341, -7455066, 6338219],
+    source: new ol.source.TileWMS({
+        url: 'http://services.seismofaults.eu/geoserver/CFTI/ows',
+        params: {
+            'LAYERS': 'Com01012019_WGS84',
+            'TILED': true},
+        serverType: 'geoserver',
+        // Countries have transparency, so do not fade tiles:
+        transition: 0,
+    }),
+});
 
 
+// var COM = new google.maps.ImageMapType({
+//                     getTileUrl: function (coord, zoom) {
+//                         var proj = map.getProjection();
+//                         var zfactor = Math.pow(2, zoom);
+//                         // get Long Lat coordinates
+//                         var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
+//                         var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
+//
+//                         //corrections for the slight shift of the WMS LAYER
+//                         var deltaX = 0.000;
+//                         var deltaY = 0.0000;
+//
+//                         //create the Bounding box string
+//                         var bbox =     (top.lng() + deltaX) + "," +
+//     	                               (bot.lat() + deltaY) + "," +
+//     	                               (bot.lng() + deltaX) + "," +
+//     	                               (top.lat() + deltaY);
+//
+//                         //base WMS URL
+//
+//
+//                        var urlWMS = "http://services.seismofaults.eu:80/geoserver/CFTI/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=Com01012019_WGS84&TRANSPARENT=TRUE&FORMAT=image/gif&"
+//
+//                        urlWMS += "BBOX=" + bbox;      // set bounding box
+//
+//                        console
+//                        console.log(urlWMS);
+//
+//                         return urlWMS;                // return URL for the tile
+//
+//
+//
+//                    },
+//                    tileSize: new google.maps.Size(512, 512),
+// 					// minZoom: 1,
+// 					// maxZoom: 16,
+// 					opacity: 0.4,
+//  });
 
-                   },
-                   tileSize: new google.maps.Size(512, 512),
-					// minZoom: 1,
-					// maxZoom: 16,
-					opacity: 0.4,
- });
-
- var PROV = new google.maps.ImageMapType({
-                    getTileUrl: function (coord, zoom) {
-                        var proj = map.getProjection();
-                        var zfactor = Math.pow(2, zoom);
-                        // get Long Lat coordinates
-                        var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
-                        var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
-
-                        //corrections for the slight shift of the WMS LAYER
-                        var deltaX = 0.000;
-                        var deltaY = 0.0000;
-
-                        //create the Bounding box string
-                        var bbox =     (top.lng() + deltaX) + "," +
-    	                               (bot.lat() + deltaY) + "," +
-    	                               (bot.lng() + deltaX) + "," +
-    	                               (top.lat() + deltaY);
-
-                        //base WMS URL
-
-
-                       var urlWMS = "http://services.seismofaults.eu:80/geoserver/CFTI/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=ProvCM01012019_WGS84&TRANSPARENT=TRUE&FORMAT=image/gif&"
-
-                       urlWMS += "BBOX=" + bbox;      // set bounding box
-
-                        return urlWMS;                // return URL for the tile
-
-
-
-                   },
-                   tileSize: new google.maps.Size(512, 512),
-					// minZoom: 1,
-					// maxZoom: 16,
-					opacity: 0.6,
- });
-
-
- var REG = new google.maps.ImageMapType({
-                    getTileUrl: function (coord, zoom) {
-                        var proj = map.getProjection();
-                        var zfactor = Math.pow(2, zoom);
-                        // get Long Lat coordinates
-                        var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
-                        var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
-
-                        //corrections for the slight shift of the WMS LAYER
-                        var deltaX = 0.000;
-                        var deltaY = 0.0000;
-
-                        //create the Bounding box string
-                        var bbox =     (top.lng() + deltaX) + "," +
-    	                               (bot.lat() + deltaY) + "," +
-    	                               (bot.lng() + deltaX) + "," +
-    	                               (top.lat() + deltaY);
-
-                        //base WMS URL
+var PROV =  new ol.layer.Tile({
+    opacity: 0.6,
+    visible: true,
+    //extent: [-13884991, 2870341, -7455066, 6338219],
+    source: new ol.source.TileWMS({
+        url: 'http://services.seismofaults.eu/geoserver/CFTI/ows',
+        params: {
+            'LAYERS': 'ProvCM01012019_WGS84',
+            'TILED': true},
+        serverType: 'geoserver',
+        // Countries have transparency, so do not fade tiles:
+        transition: 0,
+    }),
+});
 
 
-                       var urlWMS = "http://services.seismofaults.eu:80/geoserver/CFTI/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=Reg01012019_WGS84&TRANSPARENT=TRUE&FORMAT=image/gif&"
+//<editor-fold defaultstate="expanded" desc="LAYER PROVINCE ISTAT ProvCM01012019_WGS84 vecchia gestione gmaps">
+//  var PROV = new google.maps.ImageMapType({
+//                     getTileUrl: function (coord, zoom) {
+//                         var proj = map.getProjection();
+//                         var zfactor = Math.pow(2, zoom);
+//                         // get Long Lat coordinates
+//                         var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
+//                         var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
+//
+//                         //corrections for the slight shift of the WMS LAYER
+//                         var deltaX = 0.000;
+//                         var deltaY = 0.0000;
+//
+//                         //create the Bounding box string
+//                         var bbox =     (top.lng() + deltaX) + "," +
+//     	                               (bot.lat() + deltaY) + "," +
+//     	                               (bot.lng() + deltaX) + "," +
+//     	                               (top.lat() + deltaY);
+//
+//                         //base WMS URL
+//
+//
+//                        var urlWMS = "http://services.seismofaults.eu:80/geoserver/CFTI/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=ProvCM01012019_WGS84&TRANSPARENT=TRUE&FORMAT=image/gif&"
+//
+//                        urlWMS += "BBOX=" + bbox;      // set bounding box
+//
+//                         return urlWMS;                // return URL for the tile
+//
+//
+//
+//                    },
+//                    tileSize: new google.maps.Size(512, 512),
+// 					// minZoom: 1,
+// 					// maxZoom: 16,
+// 					opacity: 0.6,
+//  });
+//</editor-fold>
 
-                       urlWMS += "BBOX=" + bbox;      // set bounding box
 
-                        return urlWMS;                // return URL for the tile
+var REG =  new ol.layer.Tile({
+    opacity: 0.8,
+    visible: true,
+    //extent: [-13884991, 2870341, -7455066, 6338219],
+    source: new ol.source.TileWMS({
+        url: 'http://services.seismofaults.eu/geoserver/CFTI/ows',
+        params: {
+            'LAYERS': 'Reg01012019_WGS84',
+            'TILED': true},
+        serverType: 'geoserver',
+        // Countries have transparency, so do not fade tiles:
+        transition: 0,
+    }),
+});
 
 
+//<editor-fold defaultstate="expanded" desc="LAYER REGIONI ISTAT Reg01012019_WGS84 vecchia gestione gmaps">
+//  var REG = new google.maps.ImageMapType({
+//                     getTileUrl: function (coord, zoom) {
+//                         var proj = map.getProjection();
+//                         var zfactor = Math.pow(2, zoom);
+//                         // get Long Lat coordinates
+//                         var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
+//                         var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
+//
+//                         //corrections for the slight shift of the WMS LAYER
+//                         var deltaX = 0.000;
+//                         var deltaY = 0.0000;
+//
+//                         //create the Bounding box string
+//                         var bbox =     (top.lng() + deltaX) + "," +
+//     	                               (bot.lat() + deltaY) + "," +
+//     	                               (bot.lng() + deltaX) + "," +
+//     	                               (top.lat() + deltaY);
+//
+//                         //base WMS URL
+//
+//
+//                        var urlWMS = "http://services.seismofaults.eu:80/geoserver/CFTI/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=Reg01012019_WGS84&TRANSPARENT=TRUE&FORMAT=image/gif&"
+//
+//                        urlWMS += "BBOX=" + bbox;      // set bounding box
+//
+//                         return urlWMS;                // return URL for the tile
+//
+//
+//
+//                    },
+//                    tileSize: new google.maps.Size(512, 512),
+// 					// minZoom: 1,
+// 					// maxZoom: 16,
+// 					opacity: 0.8,
+//  });
+//</editor-fold>
 
-                   },
-                   tileSize: new google.maps.Size(512, 512),
-					// minZoom: 1,
-					// maxZoom: 16,
-					opacity: 0.8,
- });
 
 var IGM25 = new google.maps.ImageMapType({
                     getTileUrl: function (coord, zoom) {

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="fix contolli su undefined e null degli elementi che potrebbero non essere presenti in fasi di caricamento diverse. Gestione popup del layer quakes.">
+    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="introdotto il layer effetti sull'ambiente gestito nel file index_EE.js.&#10;creata funzione in mapOL.js indexEEAmbiente.&#10;Visualizzazione maschera NOTA: il caricamento di tutte le icone puo' impiegare fino a 60 secondi ma funziona sembra ok. &#10;Gestione popup con la vecchia logica ricreata ok (TODO: verificare quantita info presenti con originale).&#10;IDEA-PERFORMANCE-1: ridurre le immagini a 8bit per diminuire 2500immaginiX4KB inviate&#10;IDEA-PERFORMANCE-2: creare le info nei popup solamente durante il click singolo al volo e verificare quanto impega nel caricamento senza i popup.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/index_EE.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index_EE.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/manajax.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/manajax.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/mapOL.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/mapOL.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LocList.xml" beforeDir="false" afterPath="$PROJECT_DIR$/LocList.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index2.php" beforeDir="false" afterPath="$PROJECT_DIR$/index2.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/MapLayers_Strum.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/MapLayers_Strum.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/cfr.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/cfr.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/index_loc.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index_loc.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/toggleWMS.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/toggleWMS.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,6 +125,7 @@
   </component>
   <component name="ProjectId" id="1yJydYiXnvMlfuZO3HfdVFvjYGx" />
   <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
@@ -129,7 +133,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../CRISP" />
     <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -164,7 +168,8 @@
       <workItem from="1633680324797" duration="28254000" />
       <workItem from="1633890731018" duration="14341000" />
       <workItem from="1633967734607" duration="2908000" />
-      <workItem from="1634059428535" duration="8817000" />
+      <workItem from="1634059428535" duration="9227000" />
+      <workItem from="1634197504260" duration="16710000" />
     </task>
     <task id="LOCAL-00001" summary="img">
       <created>1631987175531</created>
@@ -236,7 +241,14 @@
       <option name="project" value="LOCAL" />
       <updated>1633974341591</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="introdotto il layer effetti sull'ambiente gestito nel file index_EE.js.&#10;creata funzione in mapOL.js indexEEAmbiente.&#10;Visualizzazione maschera NOTA: il caricamento di tutte le icone puo' impiegare fino a 60 secondi ma funziona sembra ok. &#10;Gestione popup con la vecchia logica ricreata ok (TODO: verificare quantita info presenti con originale).&#10;IDEA-PERFORMANCE-1: ridurre le immagini a 8bit per diminuire 2500immaginiX4KB inviate&#10;IDEA-PERFORMANCE-2: creare le info nei popup solamente durante il click singolo al volo e verificare quanto impega nel caricamento senza i popup.">
+      <created>1634082652054</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1634082652054</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -276,6 +288,7 @@
     <MESSAGE value="gestione caricamento localita sulla pagina index2.php -- gestione filtro localita sulla pressione del tasto ok -- gestione layers attivi e disattivi tra quakes e locality." />
     <MESSAGE value="introduzione popover.css e bootstrap solo js. Introduzione popup sulle localita funzionante. BugFix sullo switch tra i layer e la pulizia dei layer precedentemente costruiti." />
     <MESSAGE value="fix contolli su undefined e null degli elementi che potrebbero non essere presenti in fasi di caricamento diverse. Gestione popup del layer quakes." />
-    <option name="LAST_COMMIT_MESSAGE" value="fix contolli su undefined e null degli elementi che potrebbero non essere presenti in fasi di caricamento diverse. Gestione popup del layer quakes." />
+    <MESSAGE value="introdotto il layer effetti sull'ambiente gestito nel file index_EE.js.&#10;creata funzione in mapOL.js indexEEAmbiente.&#10;Visualizzazione maschera NOTA: il caricamento di tutte le icone puo' impiegare fino a 60 secondi ma funziona sembra ok. &#10;Gestione popup con la vecchia logica ricreata ok (TODO: verificare quantita info presenti con originale).&#10;IDEA-PERFORMANCE-1: ridurre le immagini a 8bit per diminuire 2500immaginiX4KB inviate&#10;IDEA-PERFORMANCE-2: creare le info nei popup solamente durante il click singolo al volo e verificare quanto impega nel caricamento senza i popup." />
+    <option name="LAST_COMMIT_MESSAGE" value="introdotto il layer effetti sull'ambiente gestito nel file index_EE.js.&#10;creata funzione in mapOL.js indexEEAmbiente.&#10;Visualizzazione maschera NOTA: il caricamento di tutte le icone puo' impiegare fino a 60 secondi ma funziona sembra ok. &#10;Gestione popup con la vecchia logica ricreata ok (TODO: verificare quantita info presenti con originale).&#10;IDEA-PERFORMANCE-1: ridurre le immagini a 8bit per diminuire 2500immaginiX4KB inviate&#10;IDEA-PERFORMANCE-2: creare le info nei popup solamente durante il click singolo al volo e verificare quanto impega nel caricamento senza i popup." />
   </component>
 </project>

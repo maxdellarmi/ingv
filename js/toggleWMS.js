@@ -4,10 +4,17 @@ function displayWMSerror(){
 
 function ToggleLayer0() {
 if (Toggle0 == "off") {
-	map.overlayMapTypes.setAt(27, COM);
+	console.log("richiesta di Toggle0 == 'ON'");
+	//console.log(COM_NEW);
+	//COM_NEW.setZIndex(0); //zindex del layer
+	//inserisce alla posizione iesima il layer
+	mapOL.addLayer(COM);
+	//map.overlayMapTypes.setAt(27, COM);
 	Toggle0 = "on";
 } else {
-	map.overlayMapTypes.setAt(27, null);
+	console.log("richiesta di Toggle0 == 'OFF'");
+	(COM!== undefined)? mapOL.removeLayer(COM): null;
+	//map.overlayMapTypes.setAt(27, null);
 	Toggle0 = "off";
 }
 }
@@ -15,10 +22,12 @@ if (Toggle0 == "off") {
 
 function ToggleLayer1() {
 if (Toggle1 == "off") {
-	map.overlayMapTypes.setAt(26, PROV);
+	console.log("richiesta di Toggle1 == 'ON'");
+	mapOL.addLayer(PROV);
 	Toggle1 = "on";
 } else {
-	map.overlayMapTypes.setAt(26, null);
+	console.log("richiesta di Toggle1 == 'OFF'");
+	(PROV!== undefined)? mapOL.removeLayer(PROV): null;
 	Toggle1 = "off";
 }
 }
@@ -26,10 +35,14 @@ if (Toggle1 == "off") {
 
 function ToggleLayer2() {
 if (Toggle2 == "off") {
-	map.overlayMapTypes.setAt(25, REG);
+	console.log("richiesta di Toggle2 == 'ON'");
+//	map.overlayMapTypes.setAt(25, REG);
+	mapOL.addLayer(REG);
 	Toggle2 = "on";
 } else {
-	map.overlayMapTypes.setAt(25, null);
+	console.log("richiesta di Toggle2 == 'OFF'");
+	(REG!== undefined)? mapOL.removeLayer(REG): null;
+	//map.overlayMapTypes.setAt(25, null);
 	Toggle2 = "off";
 }
 }

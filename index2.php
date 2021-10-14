@@ -119,8 +119,6 @@
                 <div class="TitleMenu" id="Coord" name="Io">Area</div>
                 <br><div class="OptionMenu"> <label id="Lat" name="lat">Lat</label> <input type="text" id="LatS" name="LatS" size="5" maxlength="5" onchange="resizeRect()"> <label>-</label> <input type="text" id="LatN" name="LatN" size="5" maxlength="5" onchange="resizeRect()"> </div>
                 <div class="OptionMenu"> <label id="Lon" name="Lon">/ Lon</label> <input type="text" id="LonW" name="LonW" size="5" maxlength="5" onchange="resizeRect()"> <label>-</label> <input type="text" id="LonE" name="LonE" size="5" maxlength="5" onchange="resizeRect()"> </div>
-                    <br><div class="OptionMenu"> <label id="Lat" name="lat">Lat</label> <input type="text" id="LatS" name="LatS" size="5" maxlength="5" onchange=""> <label>-</label> <input type="text" id="LatN" name="LatN" size="5" maxlength="5" onchange=""> </div>
-                    <div class="OptionMenu"> <label id="Lon" name="Lon">/ Lon</label> <input type="text" id="LonW" name="LonW" size="5" maxlength="5" onchange=""> <label>-</label> <input type="text" id="LonE" name="LonE" size="5" maxlength="5" onchange=""> </div>
 
                 <br><select id="zoneQuake" name="zoneQuake" class="textBoxes">
                     <option value="BOTH" id="both" name="both">Tutti</option>

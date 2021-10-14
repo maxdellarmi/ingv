@@ -66,8 +66,8 @@ var GmapsTools = function(){
 	}
 
 	this.parseQuakes = function(XmlText){
-		
 
+		//type DOMParserSupportedType = "application/xhtml+xml" | "application/xml" | "image/svg+xml" | "text/html" | "text/xml";
 
 		XMLQuakeList = new DOMParser().parseFromString(XmlText.trim(), 'text/xml');
 		XMLQuakeListArrived = true;
