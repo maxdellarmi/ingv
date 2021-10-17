@@ -120,7 +120,10 @@ function InitializeLoc() {
 	placeMap();
 	//openEE();
 	resizeMapLoc();
-	spiderfy();
+	//TODO ATTUALMENTE SPIDERIFY COMMENTATO PERCHE VA IN ERRORE SENZA MAPPA GOOGLE
+	//GOOGLE MAPS SOLUTION https://github.com/jawj/OverlappingMarkerSpiderfier
+	//TODO OPEN LAYER SOLUTION https://github.com/alrocar/OLSpiderfy,  https://viglino.github.io/ol-ext/examples/animation/map.animatedcluster.html
+	//spiderfy();
 }
 
 function resizeMapLoc() {
@@ -144,10 +147,12 @@ function deleteEpi() {
 }
 
 function showQuakes() {
+	console.log(epiMarkers);
 	for (var i = 0; i < epiMarkers.length; i++) {
 		epiMarkers[i].setMap(map);
 		bounds.extend(epiMarkers[i].getPosition());
-		oms.addMarker(epiMarkers[i]);
+		//TODO variabile spider commentata
+		//oms.addMarker(epiMarkers[i]);
 	};
 }
 
@@ -253,6 +258,8 @@ function requestEQLISTData(){
 }
 
 function parseQuakeList(XmlText){
+	//console.log("1:parseQuakeList");
+	//console.log(XmlText);
 	XMLQuakeList = new DOMParser().parseFromString(XmlText.trim(), 'text/xml');
 	XMLQuakeListArrived = true;
 	var markers = XMLQuakeList.documentElement.getElementsByTagName("Quake");
@@ -269,6 +276,8 @@ function parseQuakeList(XmlText){
 
 
 			xmlServicePQ_ALLEQ[i] = './quakeSources/' + NterrALLEQ[i] + '.xml';
+			//console.log("xmlServicePQ_ALLEQ");
+			//console.log(xmlServicePQ_ALLEQ[i]);
 			DateLabelALLEQ[i] =  XMLQuakeList.getElementsByTagName("data_label")[i].childNodes[0].nodeValue;
 			YearALLEQ[i] = parseInt(XMLQuakeList.getElementsByTagName("anno")[i].childNodes[0].nodeValue);
 			var CheckMonth =  XMLQuakeList.getElementsByTagName("mese")[i];
@@ -293,8 +302,8 @@ function parseQuakeList(XmlText){
 			SecALLEQ[i] = CheckSec.childNodes.length ? CheckSec.childNodes[0].nodeValue : '';
 			if (SecALLEQ[i]=="-9" || SecALLEQ[i]=="" ) SecALLEQ[i] = 0;
 
-			LatALLEQ[i] = parseFloat(XMLQuakeList.getElementsByTagName("lat")[i].childNodes[0].nodeValue).toFixed(3);
-			LonALLEQ[i] = parseFloat(XMLQuakeList.getElementsByTagName("lon")[i].childNodes[0].nodeValue).toFixed(3);
+			LatALLEQ[i] = parseFloat(XMLQuakeList.getElementsByTagName("lat")[i].childNodes[0].nodeValue).toFixed(5);
+			LonALLEQ[i] = parseFloat(XMLQuakeList.getElementsByTagName("lon")[i].childNodes[0].nodeValue).toFixed(5);
 
 			ImaxALLEQ[i] = parseFloat(XMLQuakeList.getElementsByTagName("imax")[i].childNodes[0].nodeValue);
 
@@ -401,8 +410,8 @@ function parseLocData(XmlText){
 
 	// -----------------------------------------     LOCALITY PARAMETERS AND MARKER
 
-	locLat = parseFloat(XMLQuakeList.getElementsByTagName("lat_wgs84")[0].childNodes[0].nodeValue).toFixed(3);
-	locLon = parseFloat(XMLQuakeList.getElementsByTagName("lon_wgs84")[0].childNodes[0].nodeValue).toFixed(3);
+	locLat = parseFloat(XMLQuakeList.getElementsByTagName("lat_wgs84")[0].childNodes[0].nodeValue).toFixed(5);
+	locLon = parseFloat(XMLQuakeList.getElementsByTagName("lon_wgs84")[0].childNodes[0].nodeValue).toFixed(5);
 
 	desloc = XMLQuakeList.getElementsByTagName("desloc_cfti")[0].childNodes[0].nodeValue;
 	var flagProv = XMLQuakeList.getElementsByTagName("provlet")[0].childNodes.length;
@@ -434,6 +443,9 @@ function parseLocData(XmlText){
 	ExportText = ExportText + desloc + ";" + prov + ";" + locLat  + ";" + locLon  + ";" + noteexp + CarRet + CarRet;
 	ExportText = ExportText + 'Is (MCS intensity of the given earthquake at the locality);Is R. (MCS intensity of the given earthquake at the locality - Roman Numerals);Effects on natural environment;Date;Time;Io (Epicentral intensity - MCS scale);Imax (Maximum intensity - MCS scale);NMO (Number of Macroseismic Observations);Me (Equivalent magnitude based on macroseismic observations);Latitude;Longitude;Epicentral Area;'+ CarRet;
 
+
+
+	/******TODO SOSTITUIRE GLI OGGETTI GOOGLE CON OL inzia con marker finti poi metti quelli richiesti*****/
 	// --- add marker of locality
 	var iconLOC = {
 		path: LOCpath,
@@ -452,6 +464,7 @@ function parseLocData(XmlText){
 		title: sLoctot+'\n'+'lat: ' + locLat + ', lon: ' + locLon
 	});
 
+	/******TODO SOSTITUIRE GLI OGGETTI GOOGLE CON OL *****/
 	// -----------------------------------------     LOCALITY BIBLIOGRAPHY
 
 	var biblioList = readBiblio(XMLQuakeList, "Bibliography");
@@ -508,8 +521,8 @@ function parseLocData(XmlText){
 			Sec[i] = CheckSec.childNodes.length ? CheckSec.childNodes[0].nodeValue : '';
 			if (Sec[i]=="-9" || Sec[i]=="" ) Sec[i] = 0;
 
-			Lat[i] = parseFloat(XMLQuakeList.getElementsByTagName("lat")[i].childNodes[0].nodeValue).toFixed(3);
-			Lon[i] = parseFloat(XMLQuakeList.getElementsByTagName("lon")[i].childNodes[0].nodeValue).toFixed(3);
+			Lat[i] = parseFloat(XMLQuakeList.getElementsByTagName("lat")[i].childNodes[0].nodeValue).toFixed(5);
+			Lon[i] = parseFloat(XMLQuakeList.getElementsByTagName("lon")[i].childNodes[0].nodeValue).toFixed(5);
 			fIS[i] = parseFloat(XMLQuakeList.getElementsByTagName("intpqnum")[i].childNodes[0].nodeValue);
 			sISrom[i] = XMLQuakeList.getElementsByTagName("intpq")[i].childNodes[0].nodeValue;
 			// da decidere questo:
@@ -850,7 +863,10 @@ function parseLocData(XmlText){
 			}
 			NperiodMoreDone[s] = EE_nperiodLOC[k];
 			NterrMoreDone[s] = EE_nterrLOC[k];
+			console.log(NperiodMoreDone[s]);
+			console.log(NterrMoreDone[s]);
 			s++
+
 		}
 	}
 
@@ -919,7 +935,7 @@ function parseLocData(XmlText){
 			        if(6 > Io[i] ) {Star = {path: EPIpathCALC, strokeColor: color1, strokeOpacity: 1, anchor: new google.maps.Point(125,125), strokeWeight: 2, scale:StarScale1}; EpiIcon="H_4"};
 				};
 			};
-
+			/******TODO SOSTITUIRE GLI OGGETTI GOOGLE CON OL *****/
 			var marker = new google.maps.Marker({
 				position: new google.maps.LatLng(Lat[i], Lon[i]),
 				//map: map,
@@ -1063,7 +1079,27 @@ function parseLocData(XmlText){
 	createTable();
 
 	bounds.extend(markerLOC.getPosition());
-	map.fitBounds(bounds);
+	//TODO ALLA RIGA SOTTO va IN ERRORE SOSTITUIRE CON LA GESTIONE DELLA VIEW
+	/**I BOUNDS in OpenLayer sono gli EXTENT e si applica all'oggeto VIEW
+	 * //Questo funziona passando un extent dal vectorlayer
+	 var layerExtent = layer.getSource().getExtent();
+
+	 var map = new ol.Map({
+   target: 'map',
+   loadTilesWhileAnimating: true,
+   layers: [new ol.layer.Tile({source: new ol.source.OSM()})],
+   view: new ol.View({
+      center: ol.proj.transform([0, 0], 'EPSG:4326', 'EPSG:3857'),
+      zoom: 1
+   })
+	});
+
+	 var extent = ol.proj.transformExtent([-(360-112.67578), -49.42705, -125.85937, 45.78093], 'EPSG:4326', 'EPSG:3857');
+	 map.getView().fit( extent, map.getSize());
+	 *
+	 * **/
+//TODO ALLA RIGA SOTTO va IN ERRORE SOSTITUIRE CON LA GESTIONE DELLA VIEW
+	//map.fitBounds(bounds);
 
 	// set page title
 	document.getElementById('title').innerHTML = 'CFTI5Med ' + sLoctot;
@@ -1232,6 +1268,7 @@ function parsePQData2(XmlText){
 	var latEpiPQ = parseFloat(XMLLocList.getElementsByTagName("lat")[0].childNodes[0].nodeValue).toFixed(3);
 	var lonEpiPQ = parseFloat(XMLLocList.getElementsByTagName("lon")[0].childNodes[0].nodeValue).toFixed(3);
 	var StarBIG = {path: EPIpathCALC, fillColor: '#ffffff', fillOpacity: 0.6, anchor: new google.maps.Point(125,125), strokeWeight: 2, strokeColor:red, scale: 0.15};
+	/******TODO SOSTITUIRE GLI OGGETTI GOOGLE CON OL *****/
 	epiBIG = new google.maps.Marker({
 		position: new google.maps.LatLng(latEpiPQ, lonEpiPQ),
 		map: map,
@@ -1411,7 +1448,7 @@ function parsePQData2(XmlText){
 			}
 
 
-
+			/******TODO SOSTITUIRE GLI OGGETTI GOOGLE CON OL TRANNE SE E IL CHART*****/
 			// ----- plot PQ
 			var markerPQ = new google.maps.Marker({
 				position: new google.maps.LatLng(locPQlat[i], locPQlon[i]),

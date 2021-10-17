@@ -21,6 +21,7 @@
 		if (url.slice(-1) == '#') url =  url.substr(0,url.length-1);
 		var nloc = url.substr(url.indexOf('?')+1,url.length-url.indexOf('?')-3);
 		Langsel = url.substr(url.length-2, 2)
+        //alert("Langsel:"+Langsel); IT o EM
 	</script>
 
 	<script type="text/javascript" src="js/language.js"> </script>

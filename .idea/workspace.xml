@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="introdotto il layer effetti sull'ambiente gestito nel file index_EE.js.&#10;creata funzione in mapOL.js indexEEAmbiente.&#10;Visualizzazione maschera NOTA: il caricamento di tutte le icone puo' impiegare fino a 60 secondi ma funziona sembra ok. &#10;Gestione popup con la vecchia logica ricreata ok (TODO: verificare quantita info presenti con originale).&#10;IDEA-PERFORMANCE-1: ridurre le immagini a 8bit per diminuire 2500immaginiX4KB inviate&#10;IDEA-PERFORMANCE-2: creare le info nei popup solamente durante il click singolo al volo e verificare quanto impega nel caricamento senza i popup.">
+    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="- fix pagina filtri terremoti&#10;- introduzione selezione layer wms ISTAT regioni comuni province&#10;- LocList.xml codificato in UTF8 per corretta visualizzazione.&#10;NOTA: anche gli atri 3 file delle mappe base principali vanno ricodificati in UTF8">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LocList.xml" beforeDir="false" afterPath="$PROJECT_DIR$/LocList.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index2.php" beforeDir="false" afterPath="$PROJECT_DIR$/index2.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/MapLayers_Strum.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/MapLayers_Strum.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/cfr.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/cfr.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/index_loc.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index_loc.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/toggleWMS.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/toggleWMS.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/locality.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/locality.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/locality.php" beforeDir="false" afterPath="$PROJECT_DIR$/locality.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" doNotAsk="true">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
   </component>
@@ -169,7 +165,10 @@
       <workItem from="1633890731018" duration="14341000" />
       <workItem from="1633967734607" duration="2908000" />
       <workItem from="1634059428535" duration="9227000" />
-      <workItem from="1634197504260" duration="16710000" />
+      <workItem from="1634197504260" duration="16888000" />
+      <workItem from="1634312106392" duration="2156000" />
+      <workItem from="1634485260011" duration="6098000" />
+      <workItem from="1634498454003" duration="344000" />
     </task>
     <task id="LOCAL-00001" summary="img">
       <created>1631987175531</created>
@@ -248,7 +247,14 @@
       <option name="project" value="LOCAL" />
       <updated>1634082652054</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="- fix pagina filtri terremoti&#10;- introduzione selezione layer wms ISTAT regioni comuni province&#10;- LocList.xml codificato in UTF8 per corretta visualizzazione.&#10;NOTA: anche gli atri 3 file delle mappe base principali vanno ricodificati in UTF8">
+      <created>1634231219013</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1634231219013</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -289,6 +295,7 @@
     <MESSAGE value="introduzione popover.css e bootstrap solo js. Introduzione popup sulle localita funzionante. BugFix sullo switch tra i layer e la pulizia dei layer precedentemente costruiti." />
     <MESSAGE value="fix contolli su undefined e null degli elementi che potrebbero non essere presenti in fasi di caricamento diverse. Gestione popup del layer quakes." />
     <MESSAGE value="introdotto il layer effetti sull'ambiente gestito nel file index_EE.js.&#10;creata funzione in mapOL.js indexEEAmbiente.&#10;Visualizzazione maschera NOTA: il caricamento di tutte le icone puo' impiegare fino a 60 secondi ma funziona sembra ok. &#10;Gestione popup con la vecchia logica ricreata ok (TODO: verificare quantita info presenti con originale).&#10;IDEA-PERFORMANCE-1: ridurre le immagini a 8bit per diminuire 2500immaginiX4KB inviate&#10;IDEA-PERFORMANCE-2: creare le info nei popup solamente durante il click singolo al volo e verificare quanto impega nel caricamento senza i popup." />
-    <option name="LAST_COMMIT_MESSAGE" value="introdotto il layer effetti sull'ambiente gestito nel file index_EE.js.&#10;creata funzione in mapOL.js indexEEAmbiente.&#10;Visualizzazione maschera NOTA: il caricamento di tutte le icone puo' impiegare fino a 60 secondi ma funziona sembra ok. &#10;Gestione popup con la vecchia logica ricreata ok (TODO: verificare quantita info presenti con originale).&#10;IDEA-PERFORMANCE-1: ridurre le immagini a 8bit per diminuire 2500immaginiX4KB inviate&#10;IDEA-PERFORMANCE-2: creare le info nei popup solamente durante il click singolo al volo e verificare quanto impega nel caricamento senza i popup." />
+    <MESSAGE value="- fix pagina filtri terremoti&#10;- introduzione selezione layer wms ISTAT regioni comuni province&#10;- LocList.xml codificato in UTF8 per corretta visualizzazione.&#10;NOTA: anche gli atri 3 file delle mappe base principali vanno ricodificati in UTF8" />
+    <option name="LAST_COMMIT_MESSAGE" value="- fix pagina filtri terremoti&#10;- introduzione selezione layer wms ISTAT regioni comuni province&#10;- LocList.xml codificato in UTF8 per corretta visualizzazione.&#10;NOTA: anche gli atri 3 file delle mappe base principali vanno ricodificati in UTF8" />
   </component>
 </project>
