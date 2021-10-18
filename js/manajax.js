@@ -85,6 +85,11 @@ var Manajax = function(xmlService){
 							indexEEAmbiente();
 						}
 					}
+					//CONTROLLA SE E' STATO CHIAMATO UN LAYER DIRETTO LOCALITY.php o l'altro col dettaglio
+					if (mySelf.URLString.indexOf("localitySources") >0 ) {
+						//creazioneMappaLocalityPHP(epiMarkers);
+						creazioneMappaLocalityPHP(localityPHPmarkers);
+					}
 					console.log(mySelf);
 				}
 				else{

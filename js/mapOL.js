@@ -1,6 +1,8 @@
 // $(document).ready(function () {
 var markers = [];
 
+var localityPHPmarkers = [];
+
 //var EEmarkers = [];
 
 var mapOL;
@@ -12,6 +14,19 @@ var rasterLayer;
 var localityVector;
 
 var EEVector;
+
+function template(string, obj){
+    var s = string;
+    for(var prop in obj) {
+        if (obj[prop] === undefined) {  //se la properties e' vuota toglie il tag
+            s = s.replace(new RegExp('{'+ prop +'}','g'), '');
+        } else {
+            s = s.replace(new RegExp('{'+ prop +'}','g'), obj[prop]);
+        }
+    }
+    return s;
+}
+
 
 function creazioneMappa () {
     $(document).ready(function() {
@@ -66,7 +81,7 @@ function creazioneMappa () {
                console.log("CLEANUP DEI LAYERS VARIABILI GLOBALI DICHIARATE");
                //nascondo gli altri layer che non interessano anche se lo fa da solo e' piu veloce
                console.log("CLEANUP inizio pulizia di tutti gli altri layer presenti (tranne raster)");
-               console.log("CLEANUP pulizia del layer Locality");
+               console.log("CLEANUP pulizia del layer quakes");
                // quakeVector.setVisible(false);
                (quakeVector!== undefined)? mapOL.removeLayer(quakeVector): null; //meglio rimuovere a mano i layers se rimane reference non li toglie
                console.log("CLEANUP pulizia del layer Localita");
@@ -152,6 +167,157 @@ function creazioneMappa () {
     });
 
 }
+
+/**
+ * Terremoti quakes di dettaglio caricati: localityPHPmarkers.push(epiMarkers[i]);
+ * Pinpoint della location: localityPHPmarkers.push(markerLOC);
+ * vengono quindi inseriti tutti quanti su un unico array e visualizzati su mappa.
+ * Alla fine la mappa zomma e si posiziona in automatico nel range delle coordinate recuperando l'extent dal source del vectorLayer
+ *
+ * all'interno delle feature ci sono oggetti con tipo
+ * type: "pinpoint", oppure type: "quakes" per rendere piu facile la ricerca successiva
+ *
+ * mapOL.getView().fit(  quakeVector.getSource().getExtent(), mapOL.getSize());
+ * mapOL.getView().setZoom(9);
+ *
+ * @param quakes
+ */
+function creazioneMappaLocalityPHP (quakes) {
+    $(document).ready(function() {
+        try {
+            // do some crazy stuff
+            var center = [12.6508, 42.5681];
+
+            rasterLayer = new ol.layer.Tile({
+                source: new ol.source.OSM(),
+                projection: 'EPSG:4326'
+            });
+            console.log('caricamento dei terremoti in input quakes:');
+            console.log(quakes);
+
+            quakeVector = new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    features: quakes,
+                    projection: 'EPSG:4326'
+                })
+            });
+            quakeVector.setVisible(true);
+
+            if (mapOL === undefined) {
+                mapOL = new ol.Map({
+                    controls: ol.control.defaults({
+                        attributionOptions: ({
+                            collapsible: false
+                        })
+                    }),
+                    layers: [rasterLayer, quakeVector],
+                    target: document.getElementById('mapOL'),
+                    view: new ol.View({
+                        projection: 'EPSG:4326',
+                        center: center,
+                        zoom: 6,
+                    })
+                });
+            }
+            else {
+                //TODO: CLEANUP degli altri layers dalle variabili globali
+                console.log("CLEANUP DEI LAYERS VARIABILI GLOBALI DICHIARATE");
+                //nascondo gli altri layer che non interessano anche se lo fa da solo e' piu veloce
+                console.log("CLEANUP inizio pulizia di tutti gli altri layer presenti (tranne raster)");
+                console.log("CLEANUP pulizia del layer Quakes");
+                // quakeVector.setVisible(false);
+                (quakeVector!== undefined)? mapOL.removeLayer(quakeVector): null; //meglio rimuovere a mano i layers se rimane reference non li toglie
+                console.log("CLEANUP pulizia del layer Localita");
+                (localityVector!== undefined)? mapOL.removeLayer(localityVector): null;// console.log("CLEANUP pulizia del layer Raster")
+                console.log("CLEANUP pulizia del layer Eventi ambientali");
+                (EEVector!== undefined)? mapOL.removeLayer(EEVector): null;    // console.log("CLEANUP pulizia del layer Raster")
+                // mapOL.removeLayer(rasterLayer);
+                //////////////////////////////////////////
+                /***forza la pulizia dei layer vecchi ***/
+                //////////////////////////////////////////
+                mapOL.getLayers().forEach(function (layer) {
+                    console.log("CLEANUP DEI LAYERS DAL CLICLO DELLA MAPPA");
+                    mapOL.removeLayer(layer);
+                });
+                console.log("ADDING NEW LAYERS");
+                mapOL.addLayer(rasterLayer);
+                mapOL.addLayer(quakeVector);
+            }
+
+            /*
+            https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html
+            setLayers(layers) inherited
+            Clear any existing layers and add layers to the map.
+            */
+
+            var element = document.getElementById('popup');
+            var popup = new ol.Overlay({
+                element: element,
+                positioning: 'bottom-center',
+                stopEvent: true,
+                offset: [0, -20],
+                autoPan: true,
+                autoPanAnimation: {
+                    duration: 250
+                }
+            });
+            mapOL.addOverlay(popup);
+
+            // display popup on click
+            mapOL.on('click', function (evt) {
+                var feature = mapOL.forEachFeatureAtPixel(evt.pixel,
+                    function (feature) {
+                        return feature;
+                    });
+
+                if (feature) {
+                    $(element).popover('destroy')
+                    var coordinates = feature.getGeometry().getCoordinates();
+                    console.log("FEATURE ONCLICK popup data:")
+                    console.log(feature.OnClickTextIT);
+                    var popupContent = feature.OnClickTextIT;
+                    popup.setPosition(coordinates);
+                    $(element).popover({
+                        'placement': 'top',
+                        'animation': false,
+                        'html': true,
+                        'trigger': 'manual',
+                        'content': popupContent // feature.OnClickTextIT;
+                    });
+                    $(element).popover('show');
+                } else {
+                    $(element).popover('destroy');
+                    popup.setPosition(undefined);
+                }
+
+            });
+            // change mouse cursor when over marker
+            mapOL.on('pointermove', function (e) {
+                if (e.dragging) {
+                    // $(element).popover('hide'); element popover non trovato andava in errore
+                    return;
+                }
+                var pixel = mapOL.getEventPixel(e.originalEvent);
+                var hit = mapOL.hasFeatureAtPixel(pixel);
+                mapOL.getTarget().style.cursor = hit ? 'pointer' : '';
+            });
+
+            ///TODO AUTOPOSIZIONAMENTO AL CARICAMENTO DEL LAYER
+            // mapOL.getView().fit(  quakeVector.getSource().getExtent(), mapOL.getSize()); //versione senza padding
+            var padding = [500, 50, 500, 50]
+            mapOL.getView().fit(
+                quakeVector.getSource().getExtent(),
+                {
+                    size: mapOL.getSize(),
+                    padding: padding,
+                }
+            );
+        } catch (e) {
+            console.error(e, e.stack);
+        }
+    });
+}
+
 
 function indexLocalita () {
     $(document).ready(function() {

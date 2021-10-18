@@ -30,6 +30,9 @@ var EPIpathCALC = 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5
 var strokeLoc = 1.5;
 var scaleLoc = 2;
 var LOCpath = "M7.5,0C5.0676, 0,2.2297, 1.4865,2.2297, 5.2703 C2.2297,7.8378, 6.2838,13.5135, 7.5,15c1.0811-1.4865, 5.2703-7.027, 5.2703-9.7297C12.7703, 1.4865,9.9324, 0,7.5,0z";
+var pinpoint = `<svg viewBox="0 -1 15 18" height="18px" width="18px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M7.5,0C5.0676, 0,2.2297, 1.4865,2.2297, 5.2703 C2.2297,7.8378, 6.2838,13.5135, 7.5,15c1.0811-1.4865, 5.2703-7.027, 5.2703-9.7297C12.7703, 1.4865,9.9324, 0,7.5,0z" stroke="#000000" stroke-width="0.8" fill="#FFE51E" /></svg>`;
+//<svg viewBox="0 -1 15 18" height="20px" width="20px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M7.5,0C5.0676, 0,2.2297, 1.4865,2.2297, 5.2703 C2.2297,7.8378, 6.2838,13.5135, 7.5,15c1.0811-1.4865, 5.2703-7.027, 5.2703-9.7297C12.7703, 1.4865,9.9324, 0,7.5,0z" stroke="#000000" stroke-width="0.5px" fill="red" /></svg>
+
 
 // -------------      ALL quakes from quake list
 var xmlServicePQ_ALLEQ = [];
@@ -137,7 +140,7 @@ function resizeMapLoc() {
 function deleteEpi() {
 	if (epiMarkers.length>0){
 		for (var i = 0; i < epiMarkers.length; i++) {
-			epiMarkers[i].setMap(null);
+			// epiMarkers[i].setMap(null);
 	    };
 	}
 	if (epiBIG) {
@@ -148,12 +151,19 @@ function deleteEpi() {
 
 function showQuakes() {
 	console.log(epiMarkers);
+	//TODO setMap non presente in OL probabilmente e' necessario visualizzare il layer con i marker creati //VA CHIAMATO DENTRO IL RITORNO DI MANAJAX
+	//creazioneMappaTerremotiInput(epiMarkers);
+
 	for (var i = 0; i < epiMarkers.length; i++) {
-		epiMarkers[i].setMap(map);
-		bounds.extend(epiMarkers[i].getPosition());
+		console.log("aggiungo epiMarkers quakes al layerglobale localityPHPmarkers");
+		localityPHPmarkers.push(epiMarkers[i]);
+		//TODO setMap non presente in OL probabilmente e' necessario visualizzare il layer con i marker creati
+		//epiMarkers[i].setMap(map);
+		//todo: gestione bounds da fixare
+		//bounds.extend(epiMarkers[i].getPosition());
 		//TODO variabile spider commentata
 		//oms.addMarker(epiMarkers[i]);
-	};
+	}
 }
 
 // When clicking on table row, trigger event on Gmap marker (used to trigger popup window when clicking on table row)
@@ -194,8 +204,9 @@ function onclickList(prog){
 		FlagScroll = 0;
 
 		google.maps.event.trigger(epiMarkers[prog], 'click');
-		bounds.extend(markerLOC.getPosition());
-		map.fitBounds(bounds);
+		//TODO: gestione bounds da fixare con extent del pinpoint
+		// bounds.extend(markerLOC.getPosition());
+		//map.fitBounds(bounds);
 
 		// center map on selected event (when selecting from table line)
 		var center = new google.maps.LatLng(Lat[prog], Lon[prog]);
@@ -258,7 +269,7 @@ function requestEQLISTData(){
 }
 
 function parseQuakeList(XmlText){
-	//console.log("1:parseQuakeList");
+	console.log("parseQuakeList");
 	//console.log(XmlText);
 	XMLQuakeList = new DOMParser().parseFromString(XmlText.trim(), 'text/xml');
 	XMLQuakeListArrived = true;
@@ -345,6 +356,7 @@ function parseQuakeList(XmlText){
 // ==========================================================================================
 
 function openEE(){
+	console.log("openEE");
 	var mySelf = this;
 	var itemName;
 	var callBackBlock;
@@ -363,6 +375,7 @@ function openEE(){
 
 //  This function parses EE data only for the locality (nloc). When reading PQ, the parsing is done again, for nterr
 function parseEEData(XmlText){
+	console.log("parseEEData");
 	XMLEEList = new DOMParser().parseFromString(XmlText.trim(), 'text/xml');
 	XMLEEListArrived = true;
 	EEall = XMLEEList.documentElement.getElementsByTagName("EE");
@@ -404,6 +417,8 @@ function requestLocData(){
 }
 
 function parseLocData(XmlText){
+	console.log("parseLocData");
+	console.log(XmlText.trim());
 	XMLQuakeList = new DOMParser().parseFromString(XmlText.trim(), 'text/xml');
 	XMLQuakeListArrived = true;
 	var quakes = XMLQuakeList.documentElement.getElementsByTagName("Quake");
@@ -447,22 +462,45 @@ function parseLocData(XmlText){
 
 	/******TODO SOSTITUIRE GLI OGGETTI GOOGLE CON OL inzia con marker finti poi metti quelli richiesti*****/
 	// --- add marker of locality
-	var iconLOC = {
+	/*var iconLOC = {
 		path: LOCpath,
 		fillColor: '#FFE51E',
 		fillOpacity: 1,
 		anchor: new google.maps.Point(7 , 15),
-		strokeWeight: strokeLoc,
-		scale: scaleLoc
-	}
-	bounds = new google.maps.LatLngBounds();
-	markerLOC = new google.maps.Marker({
+		strokeWeight: strokeLoc,  //1.5
+		scale: scaleLoc //2
+	}*/
+
+	//TODO: gestione bounds da fixare
+	// bounds = new google.maps.LatLngBounds();
+	/*markerLOC = new google.maps.Marker({
 		position: new google.maps.LatLng(locLat, locLon),
 		map: map,
 		icon: iconLOC,
 		zIndex: google.maps.Marker.MAX_ZINDEX + 1,  // doesn't work
 		title: sLoctot+'\n'+'lat: ' + locLat + ', lon: ' + locLon
+	});*/
+
+	var stilePinPoint = new ol.style.Style({
+			image: new ol.style.Icon({
+				opacity: 1,
+				src: 'data:image/svg+xml;utf8,' + escape(pinpoint),
+				scale: scaleLoc //2
+			})
+		});
+
+	var markerLOC = new ol.Feature({
+		geometry: new ol.geom.Point([locLon, locLat]),
+		type: "pinpoint",
+		title : sLoctot+'\n'+'lat: ' + locLat + ', lon: ' + locLon,
+		OnClickTextIT : ""
 	});
+	/******TODO GESTIONE VISUALIZZAZIONE PINPOINT CON OL*****/
+	markerLOC.setStyle(stilePinPoint);
+
+	/******TODO variabile di appoggio per tutto quello che bisogna visualizzare sul layer*****/
+	console.log('aggiungo markerLOC al layer globale localityPHPmarkers');
+	localityPHPmarkers.push(markerLOC);
 
 	/******TODO SOSTITUIRE GLI OGGETTI GOOGLE CON OL *****/
 	// -----------------------------------------     LOCALITY BIBLIOGRAPHY
@@ -935,20 +973,70 @@ function parseLocData(XmlText){
 			        if(6 > Io[i] ) {Star = {path: EPIpathCALC, strokeColor: color1, strokeOpacity: 1, anchor: new google.maps.Point(125,125), strokeWeight: 2, scale:StarScale1}; EpiIcon="H_4"};
 				};
 			};
-			/******TODO SOSTITUIRE GLI OGGETTI GOOGLE CON OL *****/
-			var marker = new google.maps.Marker({
-				position: new google.maps.LatLng(Lat[i], Lon[i]),
-				//map: map,
+
+			//Star = {path: EPIpathCALC,
+			// 		  strokeColor: color1,
+			// 		  strokeOpacity: 1, anchor: new google.maps.Point(125,125),
+			// 		  strokeWeight: 2,
+			// 		  scale:StarScale1}
+			var cerchio = `<svg viewBox="0 0 250 250"   {height} {width} xmlns="http://www.w3.org/2000/svg" version="1.1"><circle cx="50" cy="50" r="40" {stroke} {widthS} {fill} /></svg>`;
+			var stella = `<svg viewBox="0 0 250 250" {height} {width} xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" {fill} {stroke} {widthS} /></svg>`;
+			var compiled;
+
+			var singleFeature = new ol.Feature({
+				geometry: new ol.geom.Point([ Lon[i], Lat[i]]),
+				type: "quakes",
 				title: DateLabel[i],
-				icon: Star
+				OnClickTextIT : ""
 			});
-			epiMarkers.push(marker);
+			var strokeString = new String();
+			var strokeWidthString = new String();
+			var fillString = new String()
+
+			//template replace dei parametri nella stringa svg
+			if  ( Star.path === google.maps.SymbolPath.CIRCLE ) {
+				px =8 * Star.scale / 8;
+				compiled = template(cerchio, {
+					stroke:  (Star.strokeColor!== undefined) ? String().concat("stroke=\"",Star.strokeColor,'\"'): undefined ,
+					widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"",Star.strokeWeight,'\"'): undefined,
+					fill:	(Star.fillColor!== undefined) ? String().concat("fill=\"",Star.fillColor,'\"'): undefined,
+					height: String().concat("height=\"",'5px','\"'),
+					width: String().concat("width=\"",'5px','\"')
+				});
+			}
+			else  if ( Star.path === EPIpathCALC)
+			{
+				//console.log("Star.path" + Star.path);
+				//px =8 * Star.scale / 8;
+				compiled = template(stella, {
+					stroke:  (Star.strokeColor!== undefined) ? String().concat("stroke=\"",Star.strokeColor,'\"'): String().concat("stroke=\"","#000000",'\"') ,
+					//widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"",Star.strokeWeight,'\"'): String().concat("stroke-width=\"","5",'\"'),
+					widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"","5",'\"'): String().concat("stroke-width=\"","5",'\"'),
+					fill:	(Star.fillColor!== undefined) ? String().concat("fill=\"",Star.fillColor,'\"'): undefined,
+					height: String().concat("height=\"",'200px','\"'),
+					width: String().concat("width=\"",'200px','\"')
+				});
+			}
+			////VARIABILE DI LOG PER LEGGERE SVG DATA
+			//console.log(compiled);
+			//assegno la stringa svg parametrizzata
+			var workingSvg = compiled;
+			// console.log("STRINGA SVG PARAMETRIZZATA"+workingSvg);
+			var stileIcone = new ol.style.Style({
+				image: new ol.style.Icon({
+					opacity: Star.strokeOpacity, //parametro opacity
+					src: 'data:image/svg+xml;utf8,' + escape(workingSvg),
+					scale: Star.scale*1.15 //parametro scale moltiplicato per ingrandire le stelle
+				})
+			});
+			singleFeature.setStyle(stileIcone);
+			/******TODO GESTIONE VISUALIZZAZIONE STELLE TERREMOTI CON OL*****/
+			epiMarkers.push(singleFeature);
 
 			//replace in KML file after definition of icon
 			ExportKmlR = ExportKmlR.replace('#' + Nterr[i],'#' + EpiIcon);
 
 			var QuakePage = createQuakePageLink(window.location.href, Nterr[i], 'locality')
-
 
 			// =================   INFOWINDOWS FOR ALL EPICENTERS  =========================
 			// Information box that pops up on click (on marker or line of quakes table)
@@ -1045,8 +1133,11 @@ function parseLocData(XmlText){
 
 			indexEQ[i] = i;
 			// l'ordine di openPopup e oms.addmarker (ora in showquakes) decide chi parte prima tra openpopup e spiderfy!!
-			openPopupSpider(marker, OnClickTextEN, OnClickTextIT, Nterr[i], Lat[i], Lon[i])
-			onClickMarker(indexEQ[i], marker)
+
+			/////TODO GESTIONE POPUP PASSA INFORMAZIONI OnClickTextEN e OnClickTextIT poi aggiunge delle info e infine il text assegnato e' nella variabile textIT
+			/////TODO infowindow.setContent(textIT);
+			/*openPopupSpider(marker, OnClickTextEN, OnClickTextIT, Nterr[i], Lat[i], Lon[i])
+			onClickMarker(indexEQ[i], marker)*/
 		}
 	}
 
@@ -1077,29 +1168,6 @@ function parseLocData(XmlText){
 
 	showQuakes();
 	createTable();
-
-	bounds.extend(markerLOC.getPosition());
-	//TODO ALLA RIGA SOTTO va IN ERRORE SOSTITUIRE CON LA GESTIONE DELLA VIEW
-	/**I BOUNDS in OpenLayer sono gli EXTENT e si applica all'oggeto VIEW
-	 * //Questo funziona passando un extent dal vectorlayer
-	 var layerExtent = layer.getSource().getExtent();
-
-	 var map = new ol.Map({
-   target: 'map',
-   loadTilesWhileAnimating: true,
-   layers: [new ol.layer.Tile({source: new ol.source.OSM()})],
-   view: new ol.View({
-      center: ol.proj.transform([0, 0], 'EPSG:4326', 'EPSG:3857'),
-      zoom: 1
-   })
-	});
-
-	 var extent = ol.proj.transformExtent([-(360-112.67578), -49.42705, -125.85937, 45.78093], 'EPSG:4326', 'EPSG:3857');
-	 map.getView().fit( extent, map.getSize());
-	 *
-	 * **/
-//TODO ALLA RIGA SOTTO va IN ERRORE SOSTITUIRE CON LA GESTIONE DELLA VIEW
-	//map.fitBounds(bounds);
 
 	// set page title
 	document.getElementById('title').innerHTML = 'CFTI5Med ' + sLoctot;
@@ -1414,7 +1482,7 @@ function parsePQData2(XmlText){
 			// }
 
 			// -----------------    PQ MARKERS FOR LOCALITIES  - PNG (per località sempre svg per goccia)   ----------------------------
-
+////////////////////////////TODO GESTIONE LOCALITA DOPO AVER CLICCATO SULLA TABELLA /////////////////////
 			if (nlocPQ[i] == nloc) {
 				if (fISPQ[i] >= 11) var fillCol = '#3c0a63';
 				if (fISPQ[i] <= 10.9 && fISPQ[i] > 9.9) var fillCol = '#7413c1';

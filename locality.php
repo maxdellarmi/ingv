@@ -9,12 +9,12 @@
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTBYMJIfb4DMSGHl1681W0jLOOQSjP7MA&libraries=geometry,places"> </script>
 	<script type="text/javascript" src="jquery/jquery.min.js"> </script>
 	<link rel="stylesheet" href="jquery/jquery-ui.css">
-	<script src="jquery/jquery-ui.min.js"></script>
-
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
+    <script src="jquery/jquery-1.12.4.js"></script>
+    <script src="jquery/jquery-ui.js"></script>
 	<script type="text/javascript" src="js/manajax.js"> </script>
 	<script src="js/oms.min.js"></script>
+    <script src="js/mapOL.js"></script>
 
 	<script type="text/javascript">
 		var url = window.location.href;
@@ -42,7 +42,15 @@
 
 	<link rel="stylesheet" type="text/css" href="css/cookies.css" />
 	<script src="js/cookieconsent.min.js"></script>
+    <!--sezione mappa OL begin-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+<!--    FINO ALLA VERSIONE 6.8.1 jsdelivr e una nuova cdn-->
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.2/build/ol.js"></script>
+    <link rel="stylesheet" href="https://openlayers.org/en/v6.4.2/css/ol.css" type="text/css">
 
+    <link rel="stylesheet" href="css/popover.css" />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!--sezione mappa OL end-->
 </head>
 
 <div id="loading" ><br><strong>Loading....</strong></div>
@@ -129,11 +137,146 @@
 		</div>
 
 
-		<div id="map"></div>
+    <div id="mapOL" >
+    </div>
+    <div id="popup"></div>
+    <span id="status" >STATUS</span>
 
 		<div id="legend"></div>
 	</div>
 	<?php include("html/MapLayers_Gsearch_Strum.html"); ?>
 	<?php include("html/dh.html"); ?>
+<!--sezione mappa OL begin-->
+<style>
+    #info {
+        position: absolute;
+        height: auto;
+        width: auto;
+        z-index: 100;
+    }
+    .info {
+        position: absolute;
+        height: auto;
+        width: auto;
+        z-index: 100;
+    }
+    .tooltip.in {
+        opacity: 1;
+    }
+    .tooltip.top .tooltip-arrow {
+        border-top-color: white;
+    }
+    .tooltip-inner {
+        max-width: 400px;
+        padding: 3px 8px;
+        color: #645959;
+        text-align: center;
+        background-color: #f8f5f5;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+    .tooltip {
+        top: 100px !important;
+    }
+    .popover-content
+    {
+        padding: 0px !important;
+    }
+    input[type=range] {
+        -webkit-appearance: none;
+        margin: 10px 0;
+        width: 100%;
+    }
+    input[type=range]:focus {
+        outline: none;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 5px;
+        cursor: pointer;
+        animate: 0.2s;
+        box-shadow: 0px 0px 0px #000000;
+        background: #337AB7;
+        border-radius: 1px;
+        border: 0px solid #000000;
+    }
+    input[type=range]::-webkit-slider-thumb {
+        box-shadow: 0px 0px 0px #000000;
+        border: 1px solid #337AB7;
+        height: 18px;
+        width: 18px;
+        border-radius: 25px;
+        background: #A1D0FF;
+        cursor: pointer;
+        -webkit-appearance: none;
+        margin-top: -7px;
+    }
+    input[type=range]:focus::-webkit-slider-runnable-track {
+        background: #337AB7;
+    }
+    input[type=range]::-moz-range-track {
+        width: 100%;
+        height: 5px;
+        cursor: pointer;
+        animate: 0.2s;
+        box-shadow: 0px 0px 0px #000000;
+        background: #337AB7;
+        border-radius: 1px;
+        border: 0px solid #000000;
+    }
+    input[type=range]::-moz-range-thumb {
+        box-shadow: 0px 0px 0px #000000;
+        border: 1px solid #337AB7;
+        height: 18px;
+        width: 18px;
+        border-radius: 25px;
+        background: #A1D0FF;
+        cursor: pointer;
+    }
+    input[type=range]::-ms-track {
+        width: 100%;
+        height: 5px;
+        cursor: pointer;
+        animate: 0.2s;
+        background: transparent;
+        border-color: transparent;
+        color: transparent;
+    }
+    input[type=range]::-ms-fill-lower {
+        background: #337AB7;
+        border: 0px solid #000000;
+        border-radius: 2px;
+        box-shadow: 0px 0px 0px #000000;
+    }
+    input[type=range]::-ms-fill-upper {
+        background: #337AB7;
+        border: 0px solid #000000;
+        border-radius: 2px;
+        box-shadow: 0px 0px 0px #000000;
+    }
+    input[type=range]::-ms-thumb {
+        margin-top: 1px;
+        box-shadow: 0px 0px 0px #000000;
+        border: 1px solid #337AB7;
+        height: 18px;
+        width: 18px;
+        border-radius: 25px;
+        background: #A1D0FF;
+        cursor: pointer;
+    }
+    input[type=range]:focus::-ms-fill-lower {
+        background: #337AB7;
+    }
+    input[type=range]:focus::-ms-fill-upper {
+        background: #337AB7;
+    }
+    .classBlue{
+        background: #dbe8fc !important;
+    }
+    .classBlue:nth-of-type(odd){
+        background: #c2d9fd !important;
+    }
+</style>
+<!--sezione mappa OL end-->
 </body>
 </html>
