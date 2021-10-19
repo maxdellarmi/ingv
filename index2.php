@@ -284,6 +284,7 @@
     <div id="mapOL" >
     </div>
     <div id="popup"></div>
+<!--    <div id="mouse-position" class="custom-mouse-position" style="color: red;"></div>-->
     <span id="status" >STATUS</span>
 
 <!--    <div id="map" >   </div>-->

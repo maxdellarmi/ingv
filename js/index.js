@@ -1898,3 +1898,15 @@ function createSliders(){
 		}
 	});
 }
+function template(string, obj){
+	var s = string;
+	for(var prop in obj) {
+		if (obj[prop] === undefined) {  //se la properties e' vuota toglie il tag
+			s = s.replace(new RegExp('{'+ prop +'}','g'), '');
+		} else {
+			s = s.replace(new RegExp('{'+ prop +'}','g'), obj[prop]);
+		}
+	}
+	return s;
+}
+

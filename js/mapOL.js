@@ -15,6 +15,10 @@ var localityVector;
 
 var EEVector;
 
+var templateStr = 'Lat:{y}, Lon:{x}';
+
+var mousePositionControl;
+
 function template(string, obj){
     var s = string;
     for(var prop in obj) {
@@ -28,10 +32,33 @@ function template(string, obj){
 }
 
 
+function calculateMousePosition() {
+   return  new ol.control.MousePosition({
+        coordinateFormat: function(coord) {
+            //console.log(coord);
+            //console.log(ol.coordinate.format(coord, templateStr, 3).toString());
+            return ol.coordinate.format(coord, templateStr, 3);},
+        projection: 'EPSG:4326',
+        className: 'custom-mouse-position',
+        target: document.getElementById('tdCursor'),
+        undefinedHTML: '&nbsp;',
+    });
+}
+
 function creazioneMappa () {
     $(document).ready(function() {
         try {
-            // do some crazy stuff
+            //setting mousePositionControl
+            /* mousePositionControl = new ol.control.MousePosition({
+                coordinateFormat: function(coord) {
+                    //console.log(coord);
+                    //console.log(ol.coordinate.format(coord, templateStr, 3).toString());
+                    return ol.coordinate.format(coord, templateStr, 3);},
+                projection: 'EPSG:4326',
+                className: 'custom-mouse-position',
+                target: document.getElementById('tdCursor'),
+                undefinedHTML: '&nbsp;',
+            });*/
             var center = [12.6508, 42.5681];
 
 
@@ -39,8 +66,6 @@ function creazioneMappa () {
                 source: new ol.source.OSM(),
                 projection: 'EPSG:4326'
             });
-
-
 
             console.log('caricati i terremoti test')
 
@@ -62,11 +87,15 @@ function creazioneMappa () {
 
            if (mapOL === undefined) {
                mapOL = new ol.Map({
-                   controls: ol.control.defaults({
+                   /*controls: ol.control.defaults({
                        attributionOptions: ({
                            collapsible: false
                        })
-                   }),
+                   }),*/
+                   //settings maps control
+                   controls: ol.control.defaults({
+                       attributionOptions: ({
+                           collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
                    layers: [rasterLayer, quakeVector],
                    target: document.getElementById('mapOL'),
                    view: new ol.View({
@@ -168,6 +197,8 @@ function creazioneMappa () {
 
 }
 
+
+
 /**
  * Terremoti quakes di dettaglio caricati: localityPHPmarkers.push(epiMarkers[i]);
  * Pinpoint della location: localityPHPmarkers.push(markerLOC);
@@ -205,11 +236,14 @@ function creazioneMappaLocalityPHP (quakes) {
 
             if (mapOL === undefined) {
                 mapOL = new ol.Map({
+                    // controls: ol.control.defaults({
+                    //     attributionOptions: ({
+                    //         collapsible: false
+                    //     })
+                    // }),
                     controls: ol.control.defaults({
                         attributionOptions: ({
-                            collapsible: false
-                        })
-                    }),
+                            collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
                     layers: [rasterLayer, quakeVector],
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
@@ -348,11 +382,14 @@ function indexLocalita () {
 
             if (mapOL === undefined) {
                 mapOL = new ol.Map({
+                    // controls: ol.control.defaults({
+                    //     attributionOptions: ({
+                    //         collapsible: false
+                    //     })
+                    // }),
                     controls: ol.control.defaults({
                         attributionOptions: ({
-                            collapsible: false
-                        })
-                    }),
+                            collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
                     layers: [rasterLayer, localityVector],
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
@@ -492,11 +529,14 @@ function indexEEAmbiente() {
 
             if (mapOL === undefined) {
                 mapOL = new ol.Map({
+                    // controls: ol.control.defaults({
+                    //     attributionOptions: ({
+                    //         collapsible: false
+                    //     })
+                    // }),
                     controls: ol.control.defaults({
                         attributionOptions: ({
-                            collapsible: false
-                        })
-                    }),
+                            collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
                     layers: [rasterLayer, EEVector],
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
