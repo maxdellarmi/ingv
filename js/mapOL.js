@@ -137,10 +137,10 @@ function creazioneMappa () {
             var element = document.getElementById('popup');
             var popup = new ol.Overlay({
                 element: element,
-                positioning: 'center-center',
-                stopEvent: false,
+                positioning: 'bottom-center',
+                stopEvent: true,
                 offset: [0, -20],
-                autoPan: false,
+                autoPan: true,
                 autoPanAnimation: {
                     duration: 250
                 }
@@ -287,10 +287,10 @@ function creazioneMappaLocalityPHP (quakes) {
             var element = document.getElementById('popup');
             var popup = new ol.Overlay({
                 element: element,
-                positioning: 'center-center',
-                stopEvent: false,
+                positioning: 'bottom-center',
+                stopEvent: true,
                 offset: [0, -20],
-                autoPan: false,
+                autoPan: true,
                 autoPanAnimation: {
                     duration: 250
                 }
@@ -427,10 +427,10 @@ function indexLocalita () {
             var element = document.getElementById('popup');
             var popup = new ol.Overlay({
                 element: element,
-                positioning: 'center-center',
-                stopEvent: false,
+                positioning: 'bottom-center',
+                stopEvent: true,
                 offset: [0, -20],
-                autoPan: false,
+                autoPan: true,
                 autoPanAnimation: {
                     duration: 250
                 }
@@ -576,10 +576,10 @@ function indexEEAmbiente() {
             var element = document.getElementById('popup');
             var popup = new ol.Overlay({
                 element: element,
-                positioning: 'center-center',
-                stopEvent: false,
+                positioning: 'bottom-center',
+                stopEvent: true,
                 offset: [0, -20],
-                autoPan: false,
+                autoPan: true,
                 autoPanAnimation: {
                     duration: 250
                 }
