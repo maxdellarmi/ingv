@@ -1300,7 +1300,12 @@ function checkEE(){
 	parsePQData2();
 }
 
+/**
+ * Funzione invocata al click delle singole locality nella tabella di sinistra.
+ * @param XmlText
+ */
 function parsePQData2(XmlText){
+	console.log("parsePQData2" + XmlText);
 	flagPQ = 0
 	var boundsPQ = new google.maps.LatLngBounds();
 

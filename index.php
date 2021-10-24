@@ -1,500 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php
-    $site = new stdClass();
-    $site->name = 'prova';
-    $site->longitude = 12.6508;
-    $site->latitude = 42.5681;
-    $markers_strat = [12.6508, 42.5681];
-    $markers_cross = [ [12.4746484, 41.7660824],[12.4698199, 41.77023]];
-    $markers_subs = [12.6508, 42.5681];
-    $out = array_values($markers_strat);
-    $varjvs= json_encode($out);
+    <meta charset="UTF-8">
+    <title> CFTI5Med </title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/css.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="jquery/jquery-ui.css">
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTBYMJIfb4DMSGHl1681W0jLOOQSjP7MA&libraries=geometry,places"> </script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="jquery/jquery-1.12.4.js"></script>
+    <script src="jquery/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/manajax.js"> </script>
+    <script src="js/oms.min.js"></script>
+    <script src="js/mapOL.js"></script>
+    <script src="slider/nouislider.js"></script>
+    <link rel="stylesheet" href="slider/nouislider.css" />
 
-    /*<Locs>
-  <Loc>
-    <nloc_cfti>080299.00</nloc_cfti>
-    <desloc_cfti>Aarau</desloc_cfti>
-    <provlet></provlet>
-    <nazione>Switzerland</nazione>
-    <risentimenti>2</risentimenti>
-    <ee>0</ee>
-    <maxint>4</maxint>
-    <lat_wgs84>47.3913</lat_wgs84>
-    <lon_wgs84>8.0359</lon_wgs84>
-    <notesito></notesito>
-  </Loc>*/
+    <script type="text/javascript" src="js/language.js"> </script>
+    <script type="text/javascript" src="js/js.js"> </script>
+    <script type="text/javascript" src="js/index.js"> </script>
+    <script type="text/javascript" src="js/index_EE.js"> </script>
+    <script type="text/javascript" src="js/index_loc.js"> </script>
 
-    //legge file xml
-    $objXmlDocument = simplexml_load_file("LocList.xml");
+    <script type="text/javascript" src="js/jquery.tablesorter.js"></script>
 
-    if ($objXmlDocument === FALSE) {
-        echo "There were errors parsing the XML file.\n";
-        foreach(libxml_get_errors() as $error) {
-            echo $error->message;
-        }
-        exit;
-    }
+<!--    JQUERY TRANSLATOR LAVORA SUGLI OGGETTI DI GOOGLE CHE NON ESISTONO PIU-->
+<!--    <script src="js/jquery.translator.js"></script>-->
 
-    //Convert the SimpleXMLElement Object Into Its JSON Representation
-    $objJsonDocument = json_encode($objXmlDocument);
-    //Decode the JSON String Into an Array
-    $arrOutput = json_decode($objJsonDocument, TRUE);
-
-
-    /*    //ESECUZIONE QUERY SULL XML dei terremoti dopo il 1950 e in italia
-    function filter($item) {
-        return ($item['anno'] >= 1950 && $item['country'] == "Italy" );
-    }*/
-    /*function filter($item) {
-        return ($item['country'] == "Italy" );
-    }*/
-    function filter($item): bool
-    {
-        //return true; //ritorna sempre true //SEMBRA non funzionare!!! Serve sempre imporre una consizione nel filter....
-        //COSI FUNZIONA
-
-        //return ($item['maxint'] >= 0 && $item['maxint'] >= 4   );
-        return ($item['maxint'] >= 0 );
-    }
-    $filteredLocality = array_filter($arrOutput["Loc"], 'filter');
-    $elementArray = array();
-
-    //LOOP ATTRAVERSO LA CHIAVE PER INDICE DI ARRAY ASSOCIATIVO
-    foreach ($filteredLocality as $key => $value) {
-        //echo $key;
-        $convertCoordinates = [];
-        array_push($convertCoordinates, (float)$value["lon_wgs84"], (float)$value["lat_wgs84"]); //aggiunge 2 elementi all'array
-        //$coordinates = json_encode($convertCoordinates); //questa istruzione converte in stringa non andava bene.
-
-        $element = new stdClass();
-
-        //$element->maxintROM = "";
-        $element->ris=$value["risentimenti"];
-        $element->EEnum=(int)$value["ee"];
-        $element->maxint=(float) $value["maxint"];
-
-        if ($element->maxint == 11){
-            $element->maxintROM  = "XI";
-        } else if ($element->maxint == 10.5){
-            $element->maxintROM = "XI-X";
-        }else if ($element->maxint == 10){
-            $element->maxintROM = "X";
-        } else if ($element->maxint == 9.5){
-            $element->maxintROM = "IX-X";
-        }else if ($element->maxint == 9.1){
-            $element->maxint = 9;
-            $element->maxintROM = "IX";
-        } else if ( $element->maxint == 9){
-            $element->maxintROM = "IX";
-        } else if ( $element->maxint == 8.5){
-            $element->maxintROM = "VIII-IX";
-        } else if ($element->maxint == 8.2){
-            $element->maxint = 8;
-            $element->maxintROM = "VIII";
-        } else if ($element->maxint == 8.1){
-            $element->maxint = 8;
-            $element->maxintROM = "VIII";
-        } else if ($element->maxint == 8){
-            $element->maxintROM = "VIII";
-        } else if ($element->maxint == 7.5){
-            $element->maxintROM = "VII-VIII";
-        } else if ($element->maxint == 7){
-            $element->maxintROM = "VII";
-        } else if ($element->maxint == 6.5){
-            $element->maxintROM = "VI-VII";
-        } else if ($element->maxint == 6.1) {
-            $element->maxint = 6;
-            $element->maxintROM = "VI";
-        } else if ($element->maxint == 6.6) {
-            $element->maxint = 6.5;
-            $element->maxintROM = "VI-VII";
-        } else if ($element->maxint == 6){
-            $element->maxintROM = "VI";
-        } else if ($element->maxint == 5.5){
-            $element->maxintROM = "V-VI";
-        } else if ($element->maxint == 5.1) {
-            $element->maxint = 5;
-            $element->maxintROM = "V";
-        } else if ($element->maxint == 5){
-            $element->maxintROM = "V";
-        } else if ($element->maxint == 4.6) {
-            $element->maxint = 4.5;
-            $element->maxintROM = "IV-V";
-        } else if ($element->maxint == 4.5) {
-            $element->maxintROM = "IV-V";
-        } else if ($element->maxint == 4){
-            $element->maxintROM = "IV";
-        } else if ($element->maxint == 3.5){
-            $element->maxintROM = "III-IV";
-        } else if ($element->maxint == 3) {
-            $element->maxintROM = "III";
-        } else if ($element->maxint == 2.5) {
-            $element->maxintROM = "II-III";
-        } else if ($element->maxint == 2) {
-            $element->maxintROM = "II";
-        } else if ($element->maxint == 1) {
-            $element->maxintROM = "I";
-        } else if ($element->maxint == 0.2) {
-            $element->maxintROM = "G";
-        } else if ($element->maxint == 0) {
-            $element->maxintROM = "NF";
-        } else if ($element->maxint == 0.1) {
-            $element->maxintROM = "N";
-        } else if ($element->maxint == -1) {
-            $element->maxintROM = "NC";
-        } else if ($element->maxint == -2) {
-            $element->maxintROM = "-";
-        }
-
-        $element->name = $value["nazione"];
-        $element->description = $value["desloc_cfti"];
-        $element->coordinates = $convertCoordinates;//$coordinates;
-        $element->url = "http://www.google.it";
-        //$element->key = $key; //SE SI VUOLE AGGIUNGERE LA CHIAVE
-        //aggiungo elemento nell'array
-        $elementArray[] = $element;
-        //DEBUG INFORMAZIONI
-        //print_r($elementArray);
-    }
-
-    ?>
-    <!--sezione mappa OL begin-->
-    <script src="/plugins/global/jquery.min.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.0.1/ol.js"></script>
-    <script src="/plugins/global/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="/plugins/global/js.cookie.min.js" type="text/javascript"></script>
-    <script src="/plugins/global/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
-    <script src="/plugins/global/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-    <script src="/plugins/global/jquery.blockui.min.js" type="text/javascript"></script>
-    <script src="/plugins/global/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!--Script for windows-1252 encoding export  -->
     <script>
-        $(document).ready(function() {
-            console.log(center);
-
-            var center =[12.6508, 42.5681];
-
-            var markers = [];
-            var markersCoords;
-            var vectorLayer;
-            var map;
-            console.log("carico i dati");
-
-            var markersCoords =JSON.parse('<?php echo json_encode($elementArray, true) ?>');
-
-            $.when(markersCoords).then(function( dummy ) {
-                //alert( "I fired immediately" );
-                console.log("prima esecuzione");
-                console.log(markersCoords);
-                markersCoords.map(function (item, index) {
-                    var marker = new ol.Feature({
-                        geometry: new ol.geom.Point(ol.proj.fromLonLat(item.coordinates)),
-                        name: item.name,
-                        description: item.description,
-                        url: item.url
-                    });
-                            //scale: 0.7})}));
-                            //scale: 0.7})}));
-                    //marker.setStyle(new ol.style.Style({image: new ol.style.Icon({
-                    //marker.setStyle(new ol.style.Style({image: new ol.style.Icon({
-
-                    //esempio ok //marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11.png', size: [13, 13], scale: 0.7})}));
-                    if (item.EEnum===0) {
-                        if (item.maxint >= 11) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 10.9 && item.maxint > 9.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/10.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 9.9 && item.maxint > 8.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/9.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 8.9 && item.maxint > 7.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/8.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 7.9 && item.maxint > 6.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/7.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 6.9 && item.maxint > 5.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/6.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 5.9 && item.maxint > 4.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/5.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 4.9 && item.maxint > 3.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/4.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 3.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/3.png', size: [13, 13], scale: 0.7})}));}
-                    } else if (item.EEnum >0 && item.ris>0){
-                        if (item.maxint >= 11) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 10.9 && item.maxint > 9.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/10EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 9.9 && item.maxint > 8.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/9EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 8.9 && item.maxint > 7.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/8EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 7.9 && item.maxint > 6.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/7EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 6.9 && item.maxint > 5.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/6EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 5.9 && item.maxint > 4.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/5EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 4.9 && item.maxint > 3.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/4EE.png', size: [13, 13], scale: 0.7})}));}
-                        if (item.maxint <= 3.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/3EE.png', size: [13, 13], scale: 0.7})}));}
-                    } else {
-                        marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/EE.png', size: [13, 13], scale: 0.7})}));
-                    }
-                    /*marker.setStyle(new ol.style.Style({
-                        image: new ol.style.Icon(({
-                            color: '#fffb22',
-                            src: '/img/dot.png',
-                            // the real size of your icon
-                            size: [20, 20],
-                            // the scale factor
-                            scale: 0.5
-                        }))
-                    }));*/
-
-                    markers.push(marker);
-                }) //chiusura  markersCoords.map(function (item, index)
-            }).then(  function (x) {
-                console.log("seconda esecuzione");
-                console.log(markers);
-                vectorLayer = new ol.layer.Vector({
-                    source: new ol.source.Vector({
-                        features: markers,
-                    })
-                });
-                console.log(vectorLayer);
-            }).done ( function (x)  {
-                console.log("terza esecuzione");
-                console.log(vectorLayer);
-                map = new ol.Map({
-                    controls: ol.control.defaults({
-                        attributionOptions: ({
-                            collapsible: false
-                        })
-                    }),
-                    layers: [
-                        new ol.layer.Tile({
-                            source: new ol.source.OSM()
-                        }), vectorLayer
-                    ],
-                    target: document.getElementById('map'),
-                    view: new ol.View({
-                        center: ol.proj.fromLonLat(center),
-                        zoom: 6,
-                    })
-                });
-
-                var element = document.getElementById('popup');
-                var popup = new ol.Overlay({
-                    element: element,
-                    positioning: 'bottom-center',
-                    stopEvent: true,
-                    offset: [0, -20],
-                    autoPan: true,
-                    autoPanAnimation: {
-                        duration: 250
-                    }
-                });
-                map.addOverlay(popup);
-
-                // display popup on click
-                map.on('click', function (evt) {
-                    var feature = map.forEachFeatureAtPixel(evt.pixel,
-                        function (feature) {
-                            return feature;
-                        });
-
-                    if (feature) {
-                        $(element).popover('destroy')
-                        var coordinates = feature.getGeometry().getCoordinates();
-                        popup.setPosition(coordinates);
-                        $(element).popover({
-                            'placement': 'top',
-                            'animation': false,
-                            'html': true,
-                            'trigger': 'manual',
-                            'content': '<div style="min-width:200px"><h4>' + feature.get('name') + '</h3>' + '<p>' + feature.get('description') + '</p>' + '<a href="' + feature.get('url') + '" class="details_lang" id="details">Details</a>'
-                        });
-                        $(element).popover('show');
-                    } else {
-                        $(element).popover('destroy');
-                        popup.setPosition(undefined);
-                    }
-
-                });
-                // change mouse cursor when over marker
-                map.on('pointermove', function (e) {
-                    if (e.dragging) {
-                        $(element).popover('hide');
-                        return;
-                    }
-                    var pixel = map.getEventPixel(e.originalEvent);
-                    var hit = map.hasFeatureAtPixel(pixel);
-                    map.getTarget().style.cursor = hit ? 'pointer' : '';
-                });
-
-                /****solo con zoom maggiore o uguale a 8 faccio vedere i punti***/
-               /*
-                Attualmente commentato
-                map.on('moveend', function (event) {
-                    console.log(map.getView().getZoom());
-                        if (map.getView().getZoom() >= 7) {
-                            vectorLayer.setVisible(true);
-                        }
-                        else {
-                            vectorLayer.setVisible(false);
-                        }
-                });*/
-            });
-
-            /*var markersCoords = [
-                {
-                    name: "Name A",
-                    description: "Description A",
-                    coordinates: [15.942361, 40.786657],
-                    url: "http://google.it"
-                },
-                {
-                    name: "Name B",
-                    description: "Description B",
-                    coordinates: [15.227715,37.256637],
-                    url: "http://google.it"
-                },
-            ];*/
-
-
-            /*
-
-            markersCoords.push(pippo);
-
-            console.log("prima esecuzione");
-            markersCoords.map(function (item, index) {
-                var marker = new ol.Feature({
-                    geometry: new ol.geom.Point(ol.proj.fromLonLat(item.coordinates)),
-                    name: item.name,
-                    description: item.description,
-                    url: item.url
-                });
-
-                marker.setStyle(new ol.style.Style({
-                    image: new ol.style.Icon(({
-                        color: '#ff5722',
-                        src: '/img/dot.png'
-                    }))
-                }));
-                markers.push(marker);
-            });
-            vectorLayer = new ol.layer.Vector({
-                source: new ol.source.Vector({
-                    features: markers,
-                })
-            });
-
-            vectorLayer.visible=true;
-            console.log(vectorLayer);
-
-            map = new ol.Map({
-                controls: ol.control.defaults({
-                    attributionOptions: ({
-                        collapsible: false
-                    })
-                }),
-                layers: [
-                    new ol.layer.Tile({
-                        source: new ol.source.OSM()
-                    }), vectorLayer
-                ],
-                target: document.getElementById('map'),
-                view: new ol.View({
-                    center: ol.proj.fromLonLat(center),
-                    zoom: 6,
-                })
-            });
-
-            var element = document.getElementById('popup');
-            var popup = new ol.Overlay({
-                element: element,
-                positioning: 'bottom-center',
-                stopEvent: true,
-                offset: [0, -20],
-                autoPan: true,
-                autoPanAnimation: {
-                    duration: 250
-                }
-            });
-            map.addOverlay(popup);
-
-            // display popup on click
-            map.on('click', function (evt) {
-                var feature = map.forEachFeatureAtPixel(evt.pixel,
-                    function (feature) {
-                        return feature;
-                    });
-
-                if (feature) {
-                    $(element).popover('destroy')
-                    var coordinates = feature.getGeometry().getCoordinates();
-                    popup.setPosition(coordinates);
-                    $(element).popover({
-                        'placement': 'top',
-                        'animation': false,
-                        'html': true,
-                        'trigger': 'manual',
-                        'content': '<div style="min-width:200px"><h4>' + feature.get('name') + '</h3>' + '<p>' + feature.get('description') + '</p>' + '<a href="' + feature.get('url') + '" class="details_lang" id="details">Details</a>'
-                    });
-                    $(element).popover('show');
-                } else {
-                    $(element).popover('destroy');
-                    popup.setPosition(undefined);
-                }
-
-            });
-            // change mouse cursor when over marker
-            map.on('pointermove', function (e) {
-                if (e.dragging) {
-                    $(element).popover('hide');
-                    return;
-                }
-                var pixel = map.getEventPixel(e.originalEvent);
-                var hit = map.hasFeatureAtPixel(pixel);
-                map.getTarget().style.cursor = hit ? 'pointer' : '';
-            }); */
-
-
-        });
+        // 'Copy' browser build in TextEncoder function to TextEncoderOrg (because it can NOT encode windows-1252, but so you can still use it as TextEncoderOrg()  )
+        var TextEncoderOrg = window.TextEncoder;
+        // ... and deactivate it, to make sure only the polyfill encoder script that follows will be used
+        window.TextEncoder = null;
     </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.0.1/ol.css" type="text/css">
 
-    <style>
-        .margins { margin-top: 5px; }
-        .margins_bottom { margin-bottom: 0px !important; }
-        .fontsize {font-size: 10px; }
-        .form-control {
+    <script src="lib/encoding-indexes.js"></script>
+    <script src="lib/encoding.js"></script>
 
-            font-size: 12px !important;
-            border: 1px solid #c2cad8 !important;
-        }
-        .control-label {
-            margin-top: 1px;
-            font-weight: 400;
-            font-size: 12px !important;
-        }
-        .help-block
-        {
-            color: red;
-            opacity: 100 !important;
-            font-weight: 400;
-            font-size: 10px !important;
-        }
-        .width_auto
-        {
-            width: auto;
-        }
-        .width_fixed
-        {
-            width: 65px;
-        }
-        .has-error
-        {
-            height: 66px;
-        }
-        .collapse.in {
-            display: block;
-            margin-top: 10px;
-        }
+    <link rel="stylesheet" type="text/css" href="css/cookies.css" />
+    <script src="js/cookieconsent.min.js"></script>
+    <!--sezione mappa OL begin-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+<!--    FINO ALLA VERSIONE 6.8.1 jsdelivr e una nuova cdn-->
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.2/build/ol.js"></script>
+    <link rel="stylesheet" href="https://openlayers.org/en/v6.4.2/css/ol.css" type="text/css">
 
-        .button_search
-        {
-
-        }
-
-    </style>
-
+    <link rel="stylesheet" href="css/popover.css" />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
     <!--sezione mappa OL end-->
 </head>
@@ -502,34 +56,380 @@
 <div id="loading" ><br><strong>Loading....</strong></div>
 
 <!--       ==============    WMS-WMF LINKS   - CSW METADATA   =============         -->
+<div id="WMSdiv" class="URLdiv"><input type="text" value="http://services-storing.ingv.it/CFTI/wms?service=WMS&request=getCapabilities" id="WMStext"></div>
+<div id="WFSdiv" class="URLdiv"><input type="text" value="http://services-storing.ingv.it/CFTI/wfs?service=WFS&request=getCapabilities" id="WFStext"></div>
+<div id="METAdiv" class="URLdiv"><input type="text" value="http://services.seismofaults.eu/geonetwork/srv/eng/csw-cfti?SERVICE=CSW&VERSION=2.0.2&REQUEST=GetCapabilities" id="METAtext"></div>
 
-<body >
+<!--<body onresize="resizeMapIndex()" onload="stateChange()">-->
+<body onload="stateChange()" onresize="resizeMapIndex()">
 
-
-
-
-<!--sezione mappa OL begin-->
-<div class="col-lg-12">
-    <!-- portlet -->
-    <div class="portlet light ">
-        <div class="portlet-title">
-            <div class="caption">
-                <i class="fa fa-map"></i>
-                <span class="caption-subject bold uppercase" id="geolocalization">Geolocalization</span>
-            </div>
-        </div>
-        <div class="portlet-body">
-
-            <div id="map" style="height: 713px">
-
-            </div>
-            <div id="popup"></div>
-        </div>
+<div id="content" style="height: 50%; width:50%">
+    <div id="tdCursor"></div>
+    <div id="NumSel"></div>
+    <div id="FakeGraph">
     </div>
-    <!-- /portlet -->
-</div>
-<!--sezione mappa OL end-->
+    <div id="IntGraphINDEX">
+    </div>
+    <div id="SaveIcon">
+    </div>
 
+    <div id="IntGraphRed">
+        <a href="#" id="ReduceGraph"></a>
+    </div>
+    <div id="IntGraphEnl">
+        <a href="#" id="EnlargeGraph"></a>
+    </div>
+
+    <div id="clickOK">
+        <a href="#" id="closeOKwarning"></a>
+        <span id="clickOKsentence"></span>
+    </div>
+
+    <div id="leftside" >
+        <div id="topcolor">
+            <div id="accessDIV" >
+                <abbr title="Accesso per" id ="abbracc"><select id="access" name="access" onchange="stateChange()"></abbr>
+                <option value="EQ" id="EQ" name="EQ" selected>Terremoti</option>
+                <option value="LOC" id="LOC" name="LOC">Località</option>
+                <option value="EE" id="EE" name="EE">Effetti ambientali</option>
+                </select>
+            </div>
+            <?php include("html/topmenu.html"); ?>
+        </div>
+        <?php include("html/export.html"); ?>
+
+        <div id="WMSWFS">
+            <abbr title="metadata info"><a href="http://services.seismofaults.eu/geonetwork/srv/eng/catalog.search#/metadata/65aeb520-c4a2-430c-bac9-8098580d721e" target = "_blank"><img src="images/metadata.png" height="24px" /></a></abbr>&nbsp&nbsp
+            <abbr title="metadata CSW"><input class="METAbutton" type="image" src="images/metadata_CSW.png" border="0" height="24px"/></abbr>&nbsp&nbsp&nbsp&nbsp
+            <abbr title="" id ="abbrWMSlink"><input class="WMSbutton" type="image" src="images/WMS.png" border="0" height="28px"/></abbr>
+            <abbr title="" id ="abbrWFSlink"><input class="WFSbutton" type="image" src="images/WFS.png" border="0" height="28px"/></abbr>
+        </div>
+
+
+        <nav id="menuEQ" class="menu">
+            <div class="MenuBlockPeriod">
+                <div class="TitleMenu" id="period" name="period">Periodo</div>
+                <br><div class="OptionMenu"> <label for="StartDate" id="fromDate" name="fromDate"> Dal&nbsp </label> <input type=	"text" id="StartDate" name="StartDate" size="4" maxlength="4"/>
+                    <label for="StopDate" id="toDate" name="toDate">Al</label> <input type="text" id="StopDate" name="StopDate" size="4" maxlength="4"/> </div>
+                <br><br><div id="sliderT"></div>
+            </div>
+
+
+            <div class="MenuBlockCoord">
+                <div class="TitleMenu" id="Coord" name="Io">Area</div>
+                <br><div class="OptionMenu"> <label id="Lat" name="lat">Lat</label> <input type="text" id="LatS" name="LatS" size="5" maxlength="5" onchange="resizeRect()"> <label>-</label> <input type="text" id="LatN" name="LatN" size="5" maxlength="5" onchange="resizeRect()"> </div>
+                <div class="OptionMenu"> <label id="Lon" name="Lon">/ Lon</label> <input type="text" id="LonW" name="LonW" size="5" maxlength="5" onchange="resizeRect()"> <label>-</label> <input type="text" id="LonE" name="LonE" size="5" maxlength="5" onchange="resizeRect()"> </div>
+
+                <br><select id="zoneQuake" name="zoneQuake" class="textBoxes">
+                    <option value="BOTH" id="both" name="both">Tutti</option>
+                    <option value="ITA" id="italian" name="italian" selected>Terremoti Italiani</option>
+                    <option value="MED" id="mediterranean" name="mediterranean">Terremoti Mediterranei</option>
+                </select>
+
+                <div id="selArea" onclick="CreateRect();"><abbr id="selAreaAbbr" title="Seleziona area"><img src="./images/area_selection.png" width = "25px" ></abbr></div>
+
+                <div id="NoselArea"><img src="./images/area_selection_gray.png" width = "25px" ></div>
+            </div>
+
+
+            <div class="MenuBlockInt">
+                <div class="TitleMenuA" id="Io" name="Io" onclick="SwitchIoMM('Io');"></div>
+                <div class="TitleMenuB" id="MM" name="MM" onclick="SwitchIoMM('MM');"></div>
+                <br><br><div class="OptionMenu">
+                    <div id="IoDIV">
+                        <label for="StartIo" id="fromIo" name="fromIo">Da</label> <input type="text" id="StartIo" name="StartIo" size="2" maxlength="4"/>
+                        <label for="StopIo" id="toIo" name="toIo">a</label>
+                        <input type="text" id="StopIo" name="StopIo" size="2" maxlength="4"/>
+                        <div id="sliderI"></div>
+                    </div>
+
+                    <div id="MMDIV">
+                        <label for="StartMM" id="fromMM" name="fromMM">Da</label> <input type="text" id="StartMM" name="StartMM" size="2" maxlength="4"/>
+                        <label for="StopMM" id="toMM" name="toMM">a</label>
+                        <input type="text" id="StopMM" name="StopMM" size="2" maxlength="4"/>
+                        <div id="sliderM"></div>
+                    </div>
+                </div>
+                <div id="Fa">
+                    <input type="checkbox" id="flagfalseeq" name="flagfalseeq" /><span id="false" name="false"></span>
+                </div>
+            </div>
+
+            <abbr class="OKbutton" title=""><input type="button" id="FilterByKindEvent" name="FilterByKindEvent" size="20" value="OK"/></abbr>
+        </nav>
+
+        <nav id="menuLOC" class="menu">
+            <div class="MenuBlockLoc">
+                <div class="TitleMenu" id="LocnameSearch" name="LocnameSearch"></div><br>
+                <label for="tags"> </label>
+                <input id="tags" type="text" placeholder="Search Locality" class="SearchBox">
+            </div>
+            <div class="MenuBlockint_loc">
+                <div class="TitleMenuIsmax" id="Imax" name="Imax"></div><br>
+                <div class= "OptionMenu"><label for="StartImax" id="fromImax" name="fromImax">Da</label> <input type="text" id="StartImax" name="StartImax" size="2" maxlength="4"/>
+                    <label for="StopImax" id="toImax" name="toImax">a</label>
+                    <input type="text" id="StopImax" name="StopImax" size="2" maxlength="4"/></div>
+                <div id="sliderI_loc"></div>
+            </div>
+            <abbr class="OKbutton" title=""><input type="button" id="FilterByLOC" name="FilterLocality" size="20" value="OK" onclick="$('#loading').show(); setTimeout(function() {createTableandPlot({StartImax: parseFloat(document.getElementById('StartImax').value), StopImax: parseFloat(document.getElementById('StopImax').value),}); indexLocalita(); }, 10)"/></abbr>
+            <!-- <div class="MenuBlockLocG">
+                <div class="TitleMenu" id="LocnameGOOSearch" name="LocnameGOOSearch">Ricerca (google)</div><br>
+                <input id="pac-input" type="text" placeholder="Search Box" class="SearchBox">
+            </div> -->
+        </nav>
+
+        <nav id="menuEE" class="menu">
+            <!-- <table id="EEmenuTable"> -->
+            <div id='paesaggioEEmenu' class="MenuBlockEE">
+                <div class="TitleMenu"><span id="TitleMenuEE_paes">Paesaggio &nbsp </span><input type="checkbox" id="TogglePaesALL" name="TogglePaesALL" value="TogglePaesALL" onclick="ShowPaesaggioALL(); " checked class="boxes"></div><br />
+                <div id='paesaggio'></div>
+                <br />
+            </div>
+            <div id='acquesupEEmenu' class="MenuBlockEE" >
+                <div class="TitleMenu"><span id="TitleMenuEE_acsup">Acque superficiali &nbsp </span><input type="checkbox" id="ToggleAcqueSupALL" name="ToggleAcqueSupALL" value="ToggleAcqueSupALL" onclick="ShowAcqueSupALL(); " checked class="boxes"></div><br />
+                <div id='acquesup' style="line-height:27px;"></div>
+                <br />
+            </div>
+            <div id='acquesotEEmenu' class="MenuBlockEE">
+                <div class="TitleMenu"><span id="TitleMenuEE_acsot">Acque sotterranee &nbsp </span><input type="checkbox" id="ToggleAcqueSotALL" name="ToggleAcqueSotALL" value="ToggleAcqueSotALL" onclick="ShowAcqueSotALL(); " checked class="boxes"></div><br />
+                <div id='acquesot'></div>
+                <br />
+            </div>
+            <div id='costeEEmenu' class="MenuBlockEE">
+                <div class="TitleMenu"><span id="TitleMenuEE_coste">Coste &nbsp </span><input type="checkbox" id="ToggleCosteALL" name="ToggleCosteALL" value="ToggleCosteALL" onclick="ShowCosteALL(); " checked class="boxes"></div><br />
+                <div id='coste'></div>
+                <br />
+            </div>
+            <div id='gasEEmenu' class="MenuBlockEE">
+                <div class="TitleMenu"><span id="TitleMenuEE_gas">Esalazioni / altro &nbsp </span><input type="checkbox" id="ToggleGasALL" name="ToggleGasALL" value="ToggleGasALL" onclick="ShowGasALL(); " checked class="boxes"></div><br />
+                <div id='gas'></div>
+                <br />
+            </div>
+            <!-- <input id="search">
+            <button type="button" id="FilterByEE" name="FilterByEE" size="20" onclick="initializeEE()"> OK </button> -->
+            <abbr class="OKbutton" title=""><input type="button" id="FilterByEE" name="FilterByEE" size="20" value="OK" onclick="$('#loading').show(); setTimeout(function() {initializeEE()}, 10)"/></abbr>
+        </nav>
+
+        <div id="resultsEQ" class="results">
+            <table id="Eq_info">
+                <thead>
+                <tr>
+                    <th class="date" id="date"></th>
+                    <th class="time" id="time"></th>
+                    <th class="io" id="io"></th>
+                    <th class="imax" id="imax"></th>
+                    <th class="sites" id="sites"></th>
+                    <th class="me" id="me"></th>
+                    <th class="location" id="location"></th>
+                    <th class="rel" id="relEQ"></th>
+                    <th class="level" id="levelIndex"></th>
+                </tr>
+                </thead>
+                <tbody id="eq_data" class = "tbodyblock">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="resultsLOC" class="results">
+            <table id="Loc_info">
+                <thead>
+                <tr>
+                    <th class="nameLOC" id="locname"></th>
+                    <th class="provLOC" id="provLOC"></th>
+                    <th class="sites" id="sitesLOC"></th>
+                    <th class="EEnum" id="EEnumLOC"></th>
+                    <th class="imax" id="ismax"></th>
+                    <th class="latLOC" id="latLOC"></th>
+                    <th class="lonLOC" id="lonLOC"></th>
+                </tr>
+                </thead>
+                <tbody id="Loc_data" class = "tbodyblock">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="resultsEE" class="results">
+            <table id="EE_info">
+                <thead>
+                <tr>
+
+                    <!-- <th class="prov" id="prov"><abbr title="Provincia">Prov</abbr></th> -->
+                    <th class="eetype" id="eeType"></th>
+                    <th class="natEE" id="dotEE"></th>
+                    <th class="locEE" id="locnameEE"></th>
+                    <th class="dateEE" id="dateEE"></th>
+                    <th class="timeEE" id="timeEE"></th>
+                    <th class="io" id="ioEE"></th>
+                    <th class="meEE" id="meEE"></th>
+                    <th class="locationEE" id="locationEE"></th>
+                </tr>
+                </thead>
+                <tbody id="EE_data" class = "tbodyblock">
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <?php include("html/banlic.html"); ?>
+
+    <?php include("html/legendEPI.html"); ?>
+
+
+    <div id = "legendmin">
+        <a href="#" id="bigger"></a>
+        <div id = "legendmintext"><b>Legenda</b></div>
+    </div>
+    <?php include("html/legendPQ.html"); ?>
+
+    <div id="mapOL" >
+    </div>
+    <div id="popup"></div>
+<!--    <div id="mouse-position" class="custom-mouse-position" style="color: red;"></div>-->
+    <span id="status" >STATUS</span>
+
+<!--    <div id="map" >   </div>-->
+</div>
+<?php include("html/MapLayers_Gsearch_Strum.html"); ?>
+<?php include("html/dh.html"); ?>
+<!--sezione mappa OL begin-->
+
+<style>
+    #info {
+        position: absolute;
+        height: auto;
+        width: auto;
+        z-index: 100;
+
+    }
+
+    .info {
+        position: absolute;
+        height: auto;
+        width: auto;
+        z-index: 100;
+
+    }
+    .tooltip.in {
+        opacity: 1;
+    }
+    .tooltip.top .tooltip-arrow {
+        border-top-color: white;
+    }
+    .tooltip-inner {
+        max-width: 400px;
+        padding: 3px 8px;
+        color: #645959;
+        text-align: center;
+        background-color: #f8f5f5;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+
+    .tooltip {
+        top: 100px !important;
+    }
+    .popover-content
+    {
+        padding: 0px !important;
+    }
+
+    input[type=range] {
+
+        -webkit-appearance: none;
+        margin: 10px 0;
+        width: 100%;
+    }
+    input[type=range]:focus {
+        outline: none;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 5px;
+        cursor: pointer;
+        animate: 0.2s;
+        box-shadow: 0px 0px 0px #000000;
+        background: #337AB7;
+        border-radius: 1px;
+        border: 0px solid #000000;
+    }
+    input[type=range]::-webkit-slider-thumb {
+        box-shadow: 0px 0px 0px #000000;
+        border: 1px solid #337AB7;
+        height: 18px;
+        width: 18px;
+        border-radius: 25px;
+        background: #A1D0FF;
+        cursor: pointer;
+        -webkit-appearance: none;
+        margin-top: -7px;
+    }
+    input[type=range]:focus::-webkit-slider-runnable-track {
+        background: #337AB7;
+    }
+    input[type=range]::-moz-range-track {
+        width: 100%;
+        height: 5px;
+        cursor: pointer;
+        animate: 0.2s;
+        box-shadow: 0px 0px 0px #000000;
+        background: #337AB7;
+        border-radius: 1px;
+        border: 0px solid #000000;
+    }
+    input[type=range]::-moz-range-thumb {
+        box-shadow: 0px 0px 0px #000000;
+        border: 1px solid #337AB7;
+        height: 18px;
+        width: 18px;
+        border-radius: 25px;
+        background: #A1D0FF;
+        cursor: pointer;
+    }
+    input[type=range]::-ms-track {
+        width: 100%;
+        height: 5px;
+        cursor: pointer;
+        animate: 0.2s;
+        background: transparent;
+        border-color: transparent;
+        color: transparent;
+    }
+    input[type=range]::-ms-fill-lower {
+        background: #337AB7;
+        border: 0px solid #000000;
+        border-radius: 2px;
+        box-shadow: 0px 0px 0px #000000;
+    }
+    input[type=range]::-ms-fill-upper {
+        background: #337AB7;
+        border: 0px solid #000000;
+        border-radius: 2px;
+        box-shadow: 0px 0px 0px #000000;
+    }
+    input[type=range]::-ms-thumb {
+        margin-top: 1px;
+        box-shadow: 0px 0px 0px #000000;
+        border: 1px solid #337AB7;
+        height: 18px;
+        width: 18px;
+        border-radius: 25px;
+        background: #A1D0FF;
+        cursor: pointer;
+    }
+    input[type=range]:focus::-ms-fill-lower {
+        background: #337AB7;
+    }
+    input[type=range]:focus::-ms-fill-upper {
+        background: #337AB7;
+    }
+    .classBlue{
+        background: #dbe8fc !important;
+    }
+    .classBlue:nth-of-type(odd){
+        background: #c2d9fd !important;
+    }
+</style>
+<!--sezione mappa OL end-->
 
 </body>
 </html>

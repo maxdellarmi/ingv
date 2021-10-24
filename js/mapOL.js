@@ -3,6 +3,8 @@ var markers = [];
 
 var localityPHPmarkers = [];
 
+var quakesPQMarkers = [];
+
 //var EEmarkers = [];
 
 var mapOL;
@@ -198,7 +200,6 @@ function creazioneMappa () {
 }
 
 
-
 /**
  * Terremoti quakes di dettaglio caricati: localityPHPmarkers.push(epiMarkers[i]);
  * Pinpoint della location: localityPHPmarkers.push(markerLOC);
@@ -350,6 +351,11 @@ function creazioneMappaLocalityPHP (quakes) {
             console.error(e, e.stack);
         }
     });
+}
+
+function creazioneMappaQuakesPHP (quakes) {
+    console.log("creazioneMappaQuakesPHP");
+    console.log(quakes);
 }
 
 

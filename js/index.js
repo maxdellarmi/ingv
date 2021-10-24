@@ -557,6 +557,7 @@ var GmapsTools = function(){
 				//"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20version%3D%221.1%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2240%22%20stroke%3D%22%23000000%22%20stroke-width%3D%223%22%20%20/%3E%3C/svg%3E"
 				singleFeature.setStyle(stileIcone);
 				singleFeature.OnClickTextIT = OnClickTextIT;
+				console.log(OnClickTextIT);
 
 				markersArray[i] = new Array();
 				markersArray[i]['Date'] =  parseInt(Year + Month + Day),

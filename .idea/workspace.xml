@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="Caricamento iniziale e visibilita layer locality.php e locality.js completata.&#10;Gestione google maps rimossa e introdotta gestion OPENLAYER.&#10;File manajax.js adattato per il caricamento della funzione creazioneMappaLocalityPHP dopo il caricamento dell'XML di dettaglio del layer.&#10;TODO: vanno implementati gli altri eventi, gestione informazioni popup, click degli elementi in tabella (a sinistra).">
+    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="autopan impostato a false">
+      <change afterPath="$PROJECT_DIR$/index3.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index2.php" beforeDir="false" afterPath="$PROJECT_DIR$/index2.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index2.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/js.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/js.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/locality.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/locality.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/manajax.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/manajax.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/mapOL.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/mapOL.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/quake.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/quake.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quake.php" beforeDir="false" afterPath="$PROJECT_DIR$/quake.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +178,11 @@
       <workItem from="1634485260011" duration="6098000" />
       <workItem from="1634498454003" duration="385000" />
       <workItem from="1634541169775" duration="13359000" />
-      <workItem from="1634661532017" duration="1746000" />
+      <workItem from="1634661532017" duration="1997000" />
+      <workItem from="1634828526831" duration="172000" />
+      <workItem from="1634828796993" duration="756000" />
+      <workItem from="1634834600485" duration="1608000" />
+      <workItem from="1635068218028" duration="12936000" />
     </task>
     <task id="LOCAL-00001" summary="img">
       <created>1631987175531</created>
@@ -271,7 +282,21 @@
       <option name="project" value="LOCAL" />
       <updated>1634594587536</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="introdotti i controlli di mappa FullScreen e LATLONG nella sezione in basso a destra che segue i movimenti del mouse sulla mappa.">
+      <created>1634663368249</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1634663368249</updated>
+    </task>
+    <task id="LOCAL-00016" summary="autopan impostato a false">
+      <created>1634835203978</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1634835203978</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -315,6 +340,8 @@
     <MESSAGE value="- fix pagina filtri terremoti&#10;- introduzione selezione layer wms ISTAT regioni comuni province&#10;- LocList.xml codificato in UTF8 per corretta visualizzazione.&#10;NOTA: anche gli atri 3 file delle mappe base principali vanno ricodificati in UTF8" />
     <MESSAGE value="analisi e valutazione comportamento pagina locality.js e locality.php.&#10;Individuati punti di impatto per trasformazione in oggetti OpenLayer (dalla creazione marker alla creazione oggetti feature).&#10;Commentate chiamate google maps (tranne i grafici ora fixati correttamente)&#10;Commentata gestione spider. &#10;Individuata sezione PQ al click degli elementi in tabella (la cui implementazione sara effettuata successivamente).&#10;TODO: modificare locality.php per gestire la nuova mappaOL." />
     <MESSAGE value="Caricamento iniziale e visibilita layer locality.php e locality.js completata.&#10;Gestione google maps rimossa e introdotta gestion OPENLAYER.&#10;File manajax.js adattato per il caricamento della funzione creazioneMappaLocalityPHP dopo il caricamento dell'XML di dettaglio del layer.&#10;TODO: vanno implementati gli altri eventi, gestione informazioni popup, click degli elementi in tabella (a sinistra)." />
-    <option name="LAST_COMMIT_MESSAGE" value="Caricamento iniziale e visibilita layer locality.php e locality.js completata.&#10;Gestione google maps rimossa e introdotta gestion OPENLAYER.&#10;File manajax.js adattato per il caricamento della funzione creazioneMappaLocalityPHP dopo il caricamento dell'XML di dettaglio del layer.&#10;TODO: vanno implementati gli altri eventi, gestione informazioni popup, click degli elementi in tabella (a sinistra)." />
+    <MESSAGE value="introdotti i controlli di mappa FullScreen e LATLONG nella sezione in basso a destra che segue i movimenti del mouse sulla mappa." />
+    <MESSAGE value="autopan impostato a false" />
+    <option name="LAST_COMMIT_MESSAGE" value="autopan impostato a false" />
   </component>
 </project>

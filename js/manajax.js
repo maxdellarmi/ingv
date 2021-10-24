@@ -61,7 +61,18 @@ var Manajax = function(xmlService){
 						('text' == mySelf.responseType || 'html' == mySelf.responseType) 
 							? ajaxObj.responseText
 							: ajaxObj.responseText);
-
+					//EEList.xml?output=xml
+					alert(mySelf.URLString);
+					/*if (mySelf.URLString == ("EEList.xml?output=xml") )  {
+						alert("ciao");
+						console.log("mySelf.URLString - EEList");
+						quakesPQMarkers=[];
+						for (var i = 0; i < PQMarkers.length; i++) {
+							quakesPQMarkers.push(PQMarkers[i]);
+						}
+						///TODO:DETAILQUAKES dopo aver valorizzato l'array con tutti le feature mostrarle sulla mappa simile a creazioneMappaLocalityPHP
+						creazioneMappaQuakesPHP(quakesPQMarkers);
+					}*/
 					//potrebbe non essere presente.
 					if (document.getElementById("access")!== undefined && document.getElementById("access")!==  null ) {
 						console.log("DROPDOWN access VALUE:");
@@ -75,20 +86,32 @@ var Manajax = function(xmlService){
 						if (dropdownElementSelected == "EQ") {  //caricamento stellette terremoti
 							console.log("CREAZIONE MAPPA TERREMOTI:");
 							creazioneMappa();
-						}
-						if (dropdownElementSelected == "LOC") {
+						}else if (dropdownElementSelected == "LOC") {
 							console.log("CREAZIONE MAPPA LOCALITA:");
 							indexLocalita();
-						}
-						if (dropdownElementSelected == "EE") {
+						} else if (dropdownElementSelected == "EE") {
 							console.log("CREAZIONE MAPPA EFFETTI SULL'AMBIENTE:");
 							indexEEAmbiente();
 						}
-					}
-					//CONTROLLA SE E' STATO CHIAMATO UN LAYER DIRETTO LOCALITY.php o l'altro col dettaglio
-					if (mySelf.URLString.indexOf("localitySources") >0 ) {
+					} 	//CONTROLLA SE E' STATO CHIAMATO UN LAYER DIRETTO LOCALITY.php o l'altro col dettaglio
+					else if (mySelf.URLString.indexOf("localitySources") >0 ) {
+						console.log("mySelf.URLString - localitySources");
 						//creazioneMappaLocalityPHP(epiMarkers);
 						creazioneMappaLocalityPHP(localityPHPmarkers);
+					}
+					//CONTROLLA SE E' STATO CHIAMATO UN LAYER DIRETTO QUAKES.php o l'altro col dettaglio
+					else if (mySelf.URLString.indexOf("quakeSources") >0 ) {
+						console.log("mySelf.URLString - quakeSources");
+					}
+					else if (mySelf.URLString == ("EEList.xml?output=xml") )  {
+						//alert("ciao");
+						console.log("mySelf.URLString - EEList chiamata effettuata per ultimo dopo [quakeSources] TODO visualizzare la mappa");
+						quakesPQMarkers=[];
+						for (var i = 0; i < PQMarkers.length; i++) {
+							quakesPQMarkers.push(PQMarkers[i]);
+						}
+						///TODO:DETAILQUAKES dopo aver valorizzato l'array con tutti le feature mostrarle sulla mappa simile a creazioneMappaLocalityPHP
+						creazioneMappaQuakesPHP(quakesPQMarkers);
 					}
 					console.log(mySelf);
 				}

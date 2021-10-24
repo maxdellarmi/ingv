@@ -279,6 +279,9 @@ function showPQ(){
 }
 
 function parsePQData(XmlText){
+	console.log("parsePQData"+ xmlServicePQ);
+	console.log("parsePQDataXml - showPQ"+ XmlText);
+
 	XMLLocList = new DOMParser().parseFromString(XmlText.trim(), 'text/xml');
 	XMLLocListArrived = true;
 	nper = XMLLocList.getElementsByTagName("nperiod")[0].childNodes[0].nodeValue;
@@ -286,7 +289,10 @@ function parsePQData(XmlText){
 	openEE();
 }
 
+/** Se Nterr.substring(0,2) == "M2" allora chiama un altro file
+ */
 function openEE(){
+	console.log("parsePQData - openEE");
 	var mySelf = this;
 	var itemName;
 	var callBackBlock;
@@ -305,6 +311,7 @@ function openEE(){
 }
 
 function parseEEData(XmlText){
+	console.log("parseEEData - openEE:" + xmlServiceEE + "or" + xmlServiceEE_MED);
 
 	XMLEEList = new DOMParser().parseFromString(XmlText.trim(), 'text/xml');
 	XMLEEListArrived = true;
@@ -360,8 +367,8 @@ function parseEEData(XmlText){
 }
 
 function parsePQData2(XmlText){
-
-	var boundsPQ = new google.maps.LatLngBounds();
+	console.log("parsePQData2 : " + XmlText);
+	//var boundsPQ = new google.maps.LatLngBounds();
 
 	// =========================    READ EPICENTER DATA    ==============================================
 	var Location = XMLLocList.getElementsByTagName("earthquakelocation")[0].childNodes[0].nodeValue;
@@ -659,8 +666,8 @@ function parsePQData2(XmlText){
 			else locPQname[i] =  locPQdesloc + " (" + locPQcountry + ')'
 
 
-			locPQlat[i] = parseFloat(XMLLocList.getElementsByTagName("lat_wgs84")[i].childNodes[0].nodeValue).toFixed(3);
-			locPQlon[i] = parseFloat(XMLLocList.getElementsByTagName("lon_wgs84")[i].childNodes[0].nodeValue).toFixed(3);
+			locPQlat[i] = parseFloat(XMLLocList.getElementsByTagName("lat_wgs84")[i].childNodes[0].nodeValue).toFixed(5);
+			locPQlon[i] = parseFloat(XMLLocList.getElementsByTagName("lon_wgs84")[i].childNodes[0].nodeValue).toFixed(5);
 
 			//D1comm[i] = XMLLocList.getElementsByTagName("COMM")[i].childNodes[0].nodeValue;
 			 distance[i] = (google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(locPQlat[i], locPQlon[i]), new google.maps.LatLng(Lat, Lon)) / 1000).toFixed(1);
@@ -689,61 +696,54 @@ function parsePQData2(XmlText){
 
             E1comm[i] = '';
 
-            // --------------------------   MARKERS  - SVG
+			///TODO:DETAILQUAKES gestione locality nella pagina dettaglio singolo terremoto PQMarkers conterra tutte le variabili
+			// // --------------------------   MARKERS   - .PNG
+			// if (fISPQ[i] >= 11) {var icon = {url: "images/IS/11.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+			// if (fISPQ[i] <= 10.9 && fISPQ[i] > 9.9) {var icon = {url: "images/IS/10.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+			// if (fISPQ[i] <= 9.9 && fISPQ[i] > 8.9) {var icon = {url: "images/IS/9.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+			// if (fISPQ[i] <= 8.9 && fISPQ[i] > 7.9) {var icon = {url: "images/IS/8.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+			// if (fISPQ[i] <= 7.9 && fISPQ[i] > 6.9) {var icon = {url: "images/IS/7.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+			// if (fISPQ[i] <= 6.9 && fISPQ[i] > 5.9 ) {var icon = {url: "images/IS/6.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+			// if (fISPQ[i] <= 5.9 && fISPQ[i] > 4.9) {var icon = {url: "images/IS/5.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+			// if (fISPQ[i] <= 4.9 && fISPQ[i] > 3.9) {var icon = {url: "images/IS/4.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+			// if (fISPQ[i] <= 3.9 ) {var icon = {url: "images/IS/3.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
 			//
-			// if (fISPQ[i] >= 11) var fillCol = '#3c0a63';
-			// if (fISPQ[i] <= 10.9 && fISPQ[i] > 9.9) var fillCol = '#7413c1';
-			// if (fISPQ[i] <= 9.9 && fISPQ[i] > 8.9) var fillCol = '#a00801';
-			// if (fISPQ[i] <= 8.9 && fISPQ[i] > 7.9) var fillCol = '#d62a17';
-			// if (fISPQ[i] <= 7.9 && fISPQ[i] > 6.9) var fillCol = '#ff6614';
-			// if (fISPQ[i] <= 6.9 && fISPQ[i] > 5.9 ) var fillCol = '#ffad0a';
-			// if (fISPQ[i] <= 5.9 && fISPQ[i] > 4.9) var fillCol = '#f7e13b';
-			// if (fISPQ[i] <= 4.9 && fISPQ[i] > 3.9) var fillCol = '#f7e69b';
-			// if (fISPQ[i] <= 3.9 ) var fillCol = '#ffffff';
-			//
-			// var icon = {
-			// 	path: pathPQ,
-			// 	fillColor: fillCol,
-			// 	fillOpacity: 1,
-			// 	anchor: new google.maps.Point(PQanchor1 , PQanchor2),
-			// 	strokeWeight: strokePQ,
-			// 	scale: scalePQ
-			// }
-			//
-            // // plot PQ
-            // var markerPQ = new google.maps.Marker({
-            //     position: new google.maps.LatLng(locPQlat[i], locPQlon[i]),
-            //     map: map,
-            //     icon: icon
-            // });
+			// // plot PQ
+			// var markerPQ = new google.maps.Marker({
+			//     position: new google.maps.LatLng(locPQlat[i], locPQlon[i]),
+			//     map: map,
+			//     //title: Year[i] + ' ' + Month[i] + ' ' + Day[i],
+			//     icon: icon
+			// });
 
+			var marker = new ol.Feature({
+				geometry: new ol.geom.Point(  [ locPQlon[i], locPQlat[i]  ] ),  //ol.proj.fromLonLat( [ locLat[i], locLon[i] ] )), //NB. ol.proj.fromLonLat  converte in metri
+				type: "locality",
+				ExportKmlR: "",
+				OnClickTextIT: "",
+				url: ""
+			});
 
-			// --------------------------   MARKERS   - .PNG
-            if (fISPQ[i] >= 11) {var icon = {url: "images/IS/11.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-			if (fISPQ[i] <= 10.9 && fISPQ[i] > 9.9) {var icon = {url: "images/IS/10.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-			if (fISPQ[i] <= 9.9 && fISPQ[i] > 8.9) {var icon = {url: "images/IS/9.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-			if (fISPQ[i] <= 8.9 && fISPQ[i] > 7.9) {var icon = {url: "images/IS/8.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-			if (fISPQ[i] <= 7.9 && fISPQ[i] > 6.9) {var icon = {url: "images/IS/7.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-			if (fISPQ[i] <= 6.9 && fISPQ[i] > 5.9 ) {var icon = {url: "images/IS/6.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-			if (fISPQ[i] <= 5.9 && fISPQ[i] > 4.9) {var icon = {url: "images/IS/5.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-			if (fISPQ[i] <= 4.9 && fISPQ[i] > 3.9) {var icon = {url: "images/IS/4.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-			if (fISPQ[i] <= 3.9 ) {var icon = {url: "images/IS/3.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+			if (fISPQ[i] >= 11) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11.png', size: [13, 13], scale: 0.7})}));}
+			if (fISPQ[i] <= 10.9 && fISPQ[i] > 9.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/10.png', size: [13, 13], scale: 0.7})}));}
+			if (fISPQ[i] <= 9.9 && fISPQ[i] > 8.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/9.png', size: [13, 13], scale: 0.7})}));}
+			if (fISPQ[i] <= 8.9 && fISPQ[i] > 7.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/8.png', size: [13, 13], scale: 0.7})}));}
+			if (fISPQ[i] <= 7.9 && fISPQ[i] > 6.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/7.png', size: [13, 13], scale: 0.7})}));}
+			if (fISPQ[i] <= 6.9 && fISPQ[i] > 5.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/6.png', size: [13, 13], scale: 0.7})}));}
+			if (fISPQ[i] <= 5.9 && fISPQ[i] > 4.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/5.png', size: [13, 13], scale: 0.7})}));}
+			if (fISPQ[i] <= 4.9 && fISPQ[i] > 3.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/4.png', size: [13, 13], scale: 0.7})}));}
+			if (fISPQ[i] <= 3.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/3.png', size: [13, 13], scale: 0.7})}));}
 
-            // plot PQ
-            var markerPQ = new google.maps.Marker({
-                position: new google.maps.LatLng(locPQlat[i], locPQlon[i]),
-                map: map,
-                //title: Year[i] + ' ' + Month[i] + ' ' + Day[i],
-                icon: icon
-            });
-
-
-            boundsPQ.extend(markerPQ.getPosition());
-            PQMarkers.push(markerPQ);
+            //boundsPQ.extend(markerPQ.getPosition());
+            //PQMarkers.push(markerPQ);
+			PQMarkers.push(marker);
         }
 	}
+
+	///TODO: VERIFICARE LE ALTRE CHIAMATE QUI:
 	// ------- EE EFFECTS ----------------------------------------------
 	if (Reliability != 'F'){
+		///TODO: VERIFICARE ALTRE -- iconEEonly
 		var iconEEonly = {
 	        path: pathPQ,
 	        strokeColor: '#30a559', //'#72b260',
@@ -791,29 +791,50 @@ function parsePQData2(XmlText){
 							symbolEEExport[indEE] = 'NP'
 						}
 
+						///TODO:DETAILQUAKES aggiornamento punti per PQMarkers2
 						// --------------------------   MARKERS   - .PNG
-						if (fISPQ[indEE] >= 11) {var iconEE = {url: "images/IS/11EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-	        			if (fISPQ[indEE] <= 10.9 && fISPQ[indEE] > 9.9) {var iconEE = {url: "images/IS/10EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-	        			if (fISPQ[indEE] <= 9.9 && fISPQ[indEE] > 8.9) {var iconEE = {url: "images/IS/9EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-	        			if (fISPQ[indEE] <= 8.9 && fISPQ[indEE] > 7.9) {var iconEE = {url: "images/IS/8EE.png", sanchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-	        			if (fISPQ[indEE] <= 7.9 && fISPQ[indEE] > 6.9) {var iconEE = {url: "images/IS/7EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-	        			if (fISPQ[indEE] <= 6.9 && fISPQ[indEE] > 5.9 ) {var iconEE = {url: "images/IS/6EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-	        			if (fISPQ[indEE] <= 5.9 && fISPQ[indEE] > 4.9) {var iconEE = {url: "images/IS/5EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-	        			if (fISPQ[indEE] <= 4.9 && fISPQ[indEE] > 3.9) {var iconEE = {url: "images/IS/4EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-	        			if (fISPQ[indEE] <= 3.9 ) {var iconEE = {url: "images/IS/3EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
-
-						// togli marker precedente (solo int, no EE) e plotta quello nuovo con EE
-						PQMarkers[indEE].setMap(null)
-						var markerEE = new google.maps.Marker({
-							position: new google.maps.LatLng(locPQlat[indEE], locPQlon[indEE]),
-							map: map,
-							icon: iconEE,
+						// if (fISPQ[indEE] >= 11) {var iconEE = {url: "images/IS/11EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+						// if (fISPQ[indEE] <= 10.9 && fISPQ[indEE] > 9.9) {var iconEE = {url: "images/IS/10EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+						// if (fISPQ[indEE] <= 9.9 && fISPQ[indEE] > 8.9) {var iconEE = {url: "images/IS/9EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+						// if (fISPQ[indEE] <= 8.9 && fISPQ[indEE] > 7.9) {var iconEE = {url: "images/IS/8EE.png", sanchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+						// if (fISPQ[indEE] <= 7.9 && fISPQ[indEE] > 6.9) {var iconEE = {url: "images/IS/7EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+						// if (fISPQ[indEE] <= 6.9 && fISPQ[indEE] > 5.9 ) {var iconEE = {url: "images/IS/6EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+						// if (fISPQ[indEE] <= 5.9 && fISPQ[indEE] > 4.9) {var iconEE = {url: "images/IS/5EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+						// if (fISPQ[indEE] <= 4.9 && fISPQ[indEE] > 3.9) {var iconEE = {url: "images/IS/4EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+						// if (fISPQ[indEE] <= 3.9 ) {var iconEE = {url: "images/IS/3EE.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
+						//
+						// // togli marker precedente (solo int, no EE) e plotta quello nuovo con EE
+						// PQMarkers[indEE].setMap(null)
+						// var markerEE = new google.maps.Marker({
+						// 	position: new google.maps.LatLng(locPQlat[indEE], locPQlon[indEE]),
+						// 	map: map,
+						// 	icon: iconEE,
+						// });
+						// PQMarkers[indEE] = markerEE;
+						var marker = new ol.Feature({
+							geometry: new ol.geom.Point(  [locPQlon[indEE], locPQlat[indEE] ] ),  //ol.proj.fromLonLat( [ locLat[i], locLon[i] ] )), //NB. ol.proj.fromLonLat  converte in metri
+							type:"localityEE",
+							ExportKmlR: "",
+							OnClickTextIT: "",
+							url: ""
 						});
-						PQMarkers[indEE] = markerEE;
 
-					} else {
+						if (fISPQ[indEE] >= 11) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11EE.png', size: [13, 13], scale: 0.7})}));}
+						if (fISPQ[indEE] <= 10.9 && fISPQ[indEE] > 9.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/10EE.png', size: [13, 13], scale: 0.7})}));}
+						if (fISPQ[indEE] <= 9.9 && fISPQ[indEE] > 8.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/9EE.png', size: [13, 13], scale: 0.7})}));}
+						if (fISPQ[indEE] <= 8.9 && fISPQ[indEE] > 7.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/8EE.png', size: [13, 13], scale: 0.7})}));}
+						if (fISPQ[indEE] <= 7.9 && fISPQ[indEE] > 6.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/7EE.png', size: [13, 13], scale: 0.7})}));}
+						if (fISPQ[indEE] <= 6.9 && fISPQ[indEE] > 5.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/6EE.png', size: [13, 13], scale: 0.7})}));}
+						if (fISPQ[indEE] <= 5.9 && fISPQ[indEE] > 4.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/5EE.png', size: [13, 13], scale: 0.7})}));}
+						if (fISPQ[indEE] <= 4.9 && fISPQ[indEE] > 3.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/4EE.png', size: [13, 13], scale: 0.7})}));}
+						if (fISPQ[indEE] <= 3.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/3EE.png', size: [13, 13], scale: 0.7})}));}
+
+						PQMarkers[indEE] = marker;
+
+					}   //if (indEE != -1) {
+					else {
+					///TODO:DETAILQUAKES verificare questa sezione nel caso in cui si verifichi l'ELSE
 						E1list[EmoreIn] = '';
-
 						// ------- effetti ambientali non in PQ
 						E1comm[EmoreIn] = EE_comm[k];
 						locPQname[EmoreIn] = EE_loc[k];
@@ -958,7 +979,9 @@ function parsePQData2(XmlText){
 
 	// ================ PLOT EPICENTER
 
-	var StarBIG = {path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z', fillColor: '#ffffff', fillOpacity: 0.6, anchor: new google.maps.Point(125,125), strokeWeight: 2, strokeColor:'#FF0000', scale: 0.15};
+
+	///TODO:DETAILQUAKES trasformare in svg1
+	/*var StarBIG = {path: 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z', fillColor: '#ffffff', fillOpacity: 0.6, anchor: new google.maps.Point(125,125), strokeWeight: 2, strokeColor:'#FF0000', scale: 0.15};
 	epicenter = new google.maps.Marker({ //EPICLICK MOD: epicenter now is global variable
 		position: new google.maps.LatLng(Lat, Lon),
 		map: map,
@@ -974,12 +997,36 @@ function parsePQData2(XmlText){
 	    epicenter.zIndex = -100
 		epicenter.setMap(map);
 		// alert(epicenter.zIndex)
+	});*/
+
+	var stella = `<svg viewBox="0 0 250 250" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" stroke="#FF0000" stroke-width="2.5" fill="#ffffff" /></svg>`;
+	var compiled;
+
+	var singleFeature = new ol.Feature({
+		geometry: new ol.geom.Point([ Lon, Lat ] ),
+		type: "singleQuake",
+		title: 'lat: ' + Lat + ', lon: ' +Lon,
+		OnClickTextIT : ""
 	});
-	boundsPQ.extend(epicenter.getPosition());
-	map.fitBounds(boundsPQ);
-	if (PQMarkers.length < 2) {
+
+	var workingSvg = stella;
+	var stileIcone = new ol.style.Style({
+		image: new ol.style.Icon({
+			opacity: 0.6, //parametro opacity
+			src: 'data:image/svg+xml;utf8,' + escape(workingSvg),
+			scale: 0.15 //parametro scale moltiplicato per ingrandire le stelle
+		})
+	});
+	singleFeature.setStyle(stileIcone);
+	/******TODO GESTIONE VISUALIZZAZIONE STELLE TERREMOTI CON OL*****/
+	PQMarkers.push(singleFeature);
+
+	///TODO:DETAILQUAKES dopo la gestione mappa serve fare lo zoom
+/*	boundsPQ.extend(epicenter.getPosition());
+	map.fitBounds(boundsPQ);*/
+/*	if (PQMarkers.length < 2) {
 		map.setZoom(8);
-	}
+	}*/
 
 	//===========================     VARIABLES FOR EXPORT
 
@@ -1919,6 +1966,7 @@ function parsePQData2(XmlText){
     }
 	// SELEZIONE LINGUA --> FATTA QUI; UNA VOLTA RIEMPITI TUTTI I DIV
 	new LanguageTools().setLanguage(Langsel);
+    console.log("ESECUZIONE parsePQData2 finita");
 }
 
 

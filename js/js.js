@@ -727,8 +727,22 @@ function readBiblio(XMLlist, xmltagname){
     return [codbib, titolo, anno, place, author]
 }
 
-function createQuakePageLink(urlTOT, nterr, pagetype){
-
+	/***
+	 * La pagina per la creazione del link dei terremoti (Pagina del terremoto) DEVE chiamarsi index obbligatoriamente - altrimenti questo pezzo di codice non funziona.
+	 * @param urlTOT
+	 * @param nterr
+	 * @param pagetype
+	 * @returns {*}
+	 */
+	function createQuakePageLink(urlTOT, nterr, pagetype){
+    // console.log("createQuakePageLink:" + pagetype );
+    // console.log("createQuakePageLink:" + urlTOT );
+    // console.log("createQuakePageLink:" + nterr );
+	if ( urlTOT.split('/').length >2 ) {
+    	var basePath = urlTOT.substring(0, urlTOT.lastIndexOf('/'));
+    	urlTOT = basePath + "/";
+    	// console.log("newURLTOT:"+ urlTOT);
+	}
     if (pagetype == 'index') {
         if (urlTOT.slice(-1) == '#') var QuakeLink = urlTOT.substring(0, urlTOT.length - 1) + 'quake.php?' + nterr;
         else var QuakeLink = urlTOT + 'quake.php?' + nterr;
