@@ -62,7 +62,7 @@ var Manajax = function(xmlService){
 							? ajaxObj.responseText
 							: ajaxObj.responseText);
 					//EEList.xml?output=xml
-					alert(mySelf.URLString);
+					//alert(mySelf.URLString);
 					/*if (mySelf.URLString == ("EEList.xml?output=xml") )  {
 						alert("ciao");
 						console.log("mySelf.URLString - EEList");
@@ -103,7 +103,7 @@ var Manajax = function(xmlService){
 					else if (mySelf.URLString.indexOf("quakeSources") >0 ) {
 						console.log("mySelf.URLString - quakeSources");
 					}
-					else if (mySelf.URLString == ("EEList.xml?output=xml") )  {
+					else if (mySelf.URLString == ("EEList.xml?output=xml") || mySelf.URLString == ("EEList_MED.xml?output=xml")  )  {
 						//alert("ciao");
 						console.log("mySelf.URLString - EEList chiamata effettuata per ultimo dopo [quakeSources] TODO visualizzare la mappa");
 						quakesPQMarkers=[];

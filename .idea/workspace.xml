@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="autopan impostato a false">
-      <change afterPath="$PROJECT_DIR$/index3.php" afterDir="false" />
+    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="1)impostato la pagina quakes.php &#10;2)caricamento dati di base openlayer &#10;3)Nuova funzione mapOL per manajax chiamata su creazioneMappaQuakesPHP">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index2.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/js.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/js.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/locality.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/locality.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/manajax.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/manajax.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/mapOL.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/mapOL.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/quake.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/quake.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quake.php" beforeDir="false" afterPath="$PROJECT_DIR$/quake.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,7 +175,8 @@
       <workItem from="1634828526831" duration="172000" />
       <workItem from="1634828796993" duration="756000" />
       <workItem from="1634834600485" duration="1608000" />
-      <workItem from="1635068218028" duration="12936000" />
+      <workItem from="1635068218028" duration="12999000" />
+      <workItem from="1635329487742" duration="1400000" />
     </task>
     <task id="LOCAL-00001" summary="img">
       <created>1631987175531</created>
@@ -296,7 +290,14 @@
       <option name="project" value="LOCAL" />
       <updated>1634835203978</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="1)impostato la pagina quakes.php &#10;2)caricamento dati di base openlayer &#10;3)Nuova funzione mapOL per manajax chiamata su creazioneMappaQuakesPHP">
+      <created>1635081832827</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1635081832827</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -342,6 +343,7 @@
     <MESSAGE value="Caricamento iniziale e visibilita layer locality.php e locality.js completata.&#10;Gestione google maps rimossa e introdotta gestion OPENLAYER.&#10;File manajax.js adattato per il caricamento della funzione creazioneMappaLocalityPHP dopo il caricamento dell'XML di dettaglio del layer.&#10;TODO: vanno implementati gli altri eventi, gestione informazioni popup, click degli elementi in tabella (a sinistra)." />
     <MESSAGE value="introdotti i controlli di mappa FullScreen e LATLONG nella sezione in basso a destra che segue i movimenti del mouse sulla mappa." />
     <MESSAGE value="autopan impostato a false" />
-    <option name="LAST_COMMIT_MESSAGE" value="autopan impostato a false" />
+    <MESSAGE value="1)impostato la pagina quakes.php &#10;2)caricamento dati di base openlayer &#10;3)Nuova funzione mapOL per manajax chiamata su creazioneMappaQuakesPHP" />
+    <option name="LAST_COMMIT_MESSAGE" value="1)impostato la pagina quakes.php &#10;2)caricamento dati di base openlayer &#10;3)Nuova funzione mapOL per manajax chiamata su creazioneMappaQuakesPHP" />
   </component>
 </project>

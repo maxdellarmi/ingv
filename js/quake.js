@@ -999,7 +999,7 @@ function parsePQData2(XmlText){
 		// alert(epicenter.zIndex)
 	});*/
 
-	var stella = `<svg viewBox="0 0 250 250" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" stroke="#FF0000" stroke-width="2.5" fill="#ffffff" /></svg>`;
+	var stella = `<svg viewBox="0 0 250 250" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" stroke="#FF0000" stroke-width="15" fill="#ffffff" /></svg>`;
 	var compiled;
 
 	var singleFeature = new ol.Feature({
@@ -1012,9 +1012,9 @@ function parsePQData2(XmlText){
 	var workingSvg = stella;
 	var stileIcone = new ol.style.Style({
 		image: new ol.style.Icon({
-			opacity: 0.6, //parametro opacity
+			opacity: 0.75, //parametro opacity
 			src: 'data:image/svg+xml;utf8,' + escape(workingSvg),
-			scale: 0.15 //parametro scale moltiplicato per ingrandire le stelle
+			scale: 0.18 //parametro scale moltiplicato per ingrandire le stelle
 		})
 	});
 	singleFeature.setStyle(stileIcone);

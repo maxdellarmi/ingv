@@ -117,6 +117,8 @@ function creazioneMappa () {
                (quakeVector!== undefined)? mapOL.removeLayer(quakeVector): null; //meglio rimuovere a mano i layers se rimane reference non li toglie
                console.log("CLEANUP pulizia del layer Localita");
                (localityVector!== undefined)? mapOL.removeLayer(localityVector): null;// console.log("CLEANUP pulizia del layer Raster")
+               console.log("CLEANUP pulizia del layer Eventi ambientali");
+               (EEVector!== undefined)? mapOL.removeLayer(EEVector): null;    // console.log("CLEANUP pulizia del layer Raster")
                    // mapOL.removeLayer(rasterLayer);
                //////////////////////////////////////////
                /***forza la pulizia dei layer vecchi ***/
@@ -354,8 +356,147 @@ function creazioneMappaLocalityPHP (quakes) {
 }
 
 function creazioneMappaQuakesPHP (quakes) {
-    console.log("creazioneMappaQuakesPHP");
+    console.log("creazioneMappaQuakesPHP - quakesPQMarkers");
     console.log(quakes);
+    $(document).ready(function() {
+        try {
+            // do some crazy stuff
+            var center = [12.6508, 42.5681];
+
+            rasterLayer = new ol.layer.Tile({
+                source: new ol.source.OSM(),
+                projection: 'EPSG:4326'
+            });
+            console.log('caricamento dei terremoti in input quakes:');
+            console.log(quakes);
+
+            quakeVector = new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    features: quakes,
+                    projection: 'EPSG:4326'
+                })
+            });
+            quakeVector.setVisible(true);
+
+            if (mapOL === undefined) {
+                mapOL = new ol.Map({
+                    // controls: ol.control.defaults({
+                    //     attributionOptions: ({
+                    //         collapsible: false
+                    //     })
+                    // }),
+                    controls: ol.control.defaults({
+                        attributionOptions: ({
+                            collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
+                    layers: [rasterLayer, quakeVector],
+                    target: document.getElementById('mapOL'),
+                    view: new ol.View({
+                        projection: 'EPSG:4326',
+                        center: center,
+                        zoom: 6,
+                    })
+                });
+            }
+            else {
+                //TODO: CLEANUP degli altri layers dalle variabili globali
+                console.log("CLEANUP DEI LAYERS VARIABILI GLOBALI DICHIARATE");
+                //nascondo gli altri layer che non interessano anche se lo fa da solo e' piu veloce
+                console.log("CLEANUP inizio pulizia di tutti gli altri layer presenti (tranne raster)");
+                console.log("CLEANUP pulizia del layer Quakes");
+                // quakeVector.setVisible(false);
+                (quakeVector!== undefined)? mapOL.removeLayer(quakeVector): null; //meglio rimuovere a mano i layers se rimane reference non li toglie
+                console.log("CLEANUP pulizia del layer Localita");
+                (localityVector!== undefined)? mapOL.removeLayer(localityVector): null;// console.log("CLEANUP pulizia del layer Raster")
+                console.log("CLEANUP pulizia del layer Eventi ambientali");
+                (EEVector!== undefined)? mapOL.removeLayer(EEVector): null;    // console.log("CLEANUP pulizia del layer Raster")
+                // mapOL.removeLayer(rasterLayer);
+                //////////////////////////////////////////
+                /***forza la pulizia dei layer vecchi ***/
+                //////////////////////////////////////////
+                mapOL.getLayers().forEach(function (layer) {
+                    console.log("CLEANUP DEI LAYERS DAL CLICLO DELLA MAPPA");
+                    mapOL.removeLayer(layer);
+                });
+                console.log("ADDING NEW LAYERS");
+                mapOL.addLayer(rasterLayer);
+                mapOL.addLayer(quakeVector);
+            }
+
+            /*
+            https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html
+            setLayers(layers) inherited
+            Clear any existing layers and add layers to the map.
+            */
+
+            var element = document.getElementById('popup');
+            var popup = new ol.Overlay({
+                element: element,
+                positioning: 'bottom-center',
+                stopEvent: true,
+                offset: [0, -20],
+                autoPan: true,
+                autoPanAnimation: {
+                    duration: 250
+                }
+            });
+            mapOL.addOverlay(popup);
+
+            // display popup on click
+            mapOL.on('click', function (evt) {
+                var feature = mapOL.forEachFeatureAtPixel(evt.pixel,
+                    function (feature) {
+                        return feature;
+                    });
+
+                if (feature) {
+                    $(element).popover('destroy')
+                    var coordinates = feature.getGeometry().getCoordinates();
+                    console.log("FEATURE ONCLICK popup data:")
+                    console.log(feature.OnClickTextIT);
+                    var popupContent = feature.OnClickTextIT;
+                    popup.setPosition(coordinates);
+                    $(element).popover({
+                        'placement': 'top',
+                        'animation': false,
+                        'html': true,
+                        'trigger': 'manual',
+                        'content': popupContent // feature.OnClickTextIT;
+                    });
+                    $(element).popover('show');
+                } else {
+                    $(element).popover('destroy');
+                    popup.setPosition(undefined);
+                }
+
+            });
+            // change mouse cursor when over marker
+            mapOL.on('pointermove', function (e) {
+                if (e.dragging) {
+                    // $(element).popover('hide'); element popover non trovato andava in errore
+                    return;
+                }
+                var pixel = mapOL.getEventPixel(e.originalEvent);
+                var hit = mapOL.hasFeatureAtPixel(pixel);
+                mapOL.getTarget().style.cursor = hit ? 'pointer' : '';
+            });
+
+            ///TODO AUTOPOSIZIONAMENTO AL CARICAMENTO DEL LAYER
+            // mapOL.getView().fit(  quakeVector.getSource().getExtent(), mapOL.getSize()); //versione senza padding
+            var padding = [500, 50, 500, 50]
+            mapOL.getView().fit(
+                quakeVector.getSource().getExtent(),
+                {
+                    size: mapOL.getSize(),
+                    padding: padding,
+                }
+            );
+        } catch (e) {
+            console.error(e, e.stack);
+        }
+    });
+
+
+
 }
 
 
