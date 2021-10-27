@@ -355,8 +355,8 @@ function parseEEData(XmlText){
 				}
 
 				EE_codeff[k] = XMLEEList.getElementsByTagName("CODICE_EFF")[i].childNodes[0].nodeValue;
-				EE_Lat[k] = parseFloat(XMLEEList.getElementsByTagName("LAT_WGS84")[i].childNodes[0].nodeValue).toFixed(3);;
-				EE_Lon[k] = parseFloat(XMLEEList.getElementsByTagName("LON_WGS84")[i].childNodes[0].nodeValue).toFixed(3);
+				EE_Lat[k] = parseFloat(XMLEEList.getElementsByTagName("LAT_WGS84")[i].childNodes[0].nodeValue).toFixed(5);
+				EE_Lon[k] = parseFloat(XMLEEList.getElementsByTagName("LON_WGS84")[i].childNodes[0].nodeValue).toFixed(5);
 
                 k += 1
 			} else k = k;
@@ -847,13 +847,37 @@ function parsePQData2(XmlText){
 						locPQlon[EmoreIn] = EE_Lon[k];
 						distance[EmoreIn] = (google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(EE_Lat[k], EE_Lon[k]), new google.maps.LatLng(Lat, Lon)) / 1000).toFixed(1);
 
-						var markerEE = new google.maps.Marker({
+						//Vecchia
+						/*var markerEE = new google.maps.Marker({
 							position: new google.maps.LatLng(EE_Lat[k], EE_Lon[k]),
 							map: map,
 							icon: iconEEonly,
+						});*/
+
+						//console.log("eeonly");
+
+						//var eeloconly = `<svg viewBox="-10 -10 200 200" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M13,14H2c-0.5523,0-1-0.4477-1-1V2c0-0.5523,0.4477-1,1-1h11c0.5523,0,1,0.4477,1,1v11C14,13.5523,13.5523,14,13,14z"  stroke="#30a559" stroke-width="1.8" fill="#ffffff"  /></svg>`;
+						var eeloconly= `<svg viewBox="0 0 15 15" height="33px" width="33px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M13,14H2c-0.5523,0-1-0.4477-1-1V2c0-0.5523,0.4477-1,1-1h11c0.5523,0,1,0.4477,1,1v11C14,13.5523,13.5523,14,13,14z"  stroke="#30a559" stroke-width="1.8" fill="#ffffff"  /></svg>`;
+						var singleFeature = new ol.Feature({
+							geometry: new ol.geom.Point([ EE_Lon[k], EE_Lat[k]] ),  //ol.proj.fromLonLat( [ locLat[i], locLon[i] ] )), //NB. ol.proj.fromLonLat  converte in metri
+							type:"EEonly",
+							ExportKmlR: "",
+							OnClickTextIT: "",
+							url: ""
 						});
-						PQMarkers[EmoreIn] = markerEE;
-						boundsPQ.extend(markerEE.getPosition());
+
+						var workingSvg = eeloconly;
+						var stileIcone = new ol.style.Style({
+							image: new ol.style.Icon({
+								//opacity: 0.15, //parametro opacity
+								src: 'data:image/svg+xml;utf8,' + escape(workingSvg),
+								scale: 0.35
+							})
+						});
+						singleFeature.setStyle(stileIcone);
+						PQMarkers[EmoreIn] = singleFeature;
+						//PQMarkers[EmoreIn] = markerEE;
+						//boundsPQ.extend(markerEE.getPosition());
 
 						if (EE_nterr[k].length == 5) symbolEE[EmoreIn] = '<img src="images/EE/00_NT.png" width="15px">'
 						else symbolEE[EmoreIn] = '<img src="images/EE/00_NP.png" width="15px">'
@@ -872,6 +896,7 @@ function parsePQData2(XmlText){
 						}
 						EmoreIn = EmoreIn + 1;
 					}
+					///TODO:DETAILQUAKES verificare come gestire questa variabile EEdone
 					EEdone.push(EE_nloc[k]);
 				}
 	        }
