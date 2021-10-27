@@ -2004,12 +2004,15 @@ function showComm(evt, idname){
 
 function openPopupPQ(marker, textEN, textIT, NlocI){
 
-	google.maps.event.addListener(marker, 'click', function() {
+	//Vecchia gestione google map non piu presente
+	/*google.maps.event.addListener(marker, 'click', function() {
 		// EPICLICK MOD: restore epicenter on top
 		epicenter.setMap(null);
 		epicenter.zIndex = epiZ;
 		epicenter.setMap(map);
-				
+	*/
+	marker.OnClickTextIT = "";
+
 		// specify language of popup window
 	   if (Langsel == "EN") {
 			textEN = textEN.split(biblioEQ_pdfT_abbrIT).join(biblioEQ_pdfT_abbrEN)
@@ -2022,8 +2025,9 @@ function openPopupPQ(marker, textEN, textIT, NlocI){
 		   for (var i=0; i<class_codeEE.length; i++){
 			   textEN = textEN.split(class_titleEE_IT[i]).join(class_titleEE_EN[i])
 		   }
-		   infowindow.setContent(textEN);
-
+		   //Vecchia gestione google map non piu presente
+		   // infowindow.setContent(textEN);
+		   marker.OnClickTextIT = textEN;
 	   } else {
 			textIT = textIT.split(biblioEQ_pdfT_abbrEN).join(biblioEQ_pdfT_abbrIT)
 		   textIT = textIT.split(biblioEQ_pdfR_abbrEN).join(biblioEQ_pdfR_abbrIT)
@@ -2032,15 +2036,14 @@ function openPopupPQ(marker, textEN, textIT, NlocI){
 		   textIT = textIT.split(flag3descr['EN']).join(flag3descr['IT'])
 		   textIT = textIT.split(flagMED1descr['EN']).join(flagMED1descr['IT'])
 		   textIT = textIT.split(flagMED2descr['EN']).join(flagMED2descr['IT'])
-		   // for (var i=0; i<class_codeEE.length; i++){
-			   // textIT = textIT.split(class_titleEE_EN[i]).join(class_titleEE_IT[i])
-		   // }
-		   infowindow.setContent(textIT);
+			//Vecchia gestione google map non piu presente
+		  // infowindow.setContent(textIT);
+		   marker.OnClickTextIT = textIT;
 	   }
 
 
 		// open popup window
-		infowindow.open(map, marker);
+		// infowindow.open(map, marker);
 
 		$('section').translatable({
 		  contentNodeSelector     : 'span.gtranslate'
@@ -2067,7 +2070,7 @@ function openPopupPQ(marker, textEN, textIT, NlocI){
 		// highlight new table row
 		rows.style.backgroundColor = "#ffffaa";
 		NlocOld = NlocI;
-	})
+	//})   //Vecchia gestione google map non piu presente
 }
 
 
