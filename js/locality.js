@@ -497,11 +497,9 @@ function parseLocData(XmlText){
 	});
 	/******TODO GESTIONE VISUALIZZAZIONE PINPOINT CON OL*****/
 	markerLOC.setStyle(stilePinPoint);
-
 	/******TODO variabile di appoggio per tutto quello che bisogna visualizzare sul layer*****/
 	console.log('aggiungo markerLOC al layer globale localityPHPmarkers');
 	localityPHPmarkers.push(markerLOC);
-
 	/******TODO SOSTITUIRE GLI OGGETTI GOOGLE CON OL *****/
 	// -----------------------------------------     LOCALITY BIBLIOGRAPHY
 
@@ -1030,8 +1028,7 @@ function parseLocData(XmlText){
 				})
 			});
 			singleFeature.setStyle(stileIcone);
-			/******TODO GESTIONE VISUALIZZAZIONE STELLE TERREMOTI CON OL*****/
-			epiMarkers.push(singleFeature);
+
 
 			//replace in KML file after definition of icon
 			ExportKmlR = ExportKmlR.replace('#' + Nterr[i],'#' + EpiIcon);
@@ -1118,6 +1115,8 @@ function parseLocData(XmlText){
 					'</div></div>' ].join('\n');
 			}
 
+
+
 			//-------    TEXT FOR EPICENTER POPUP WINDOW TO SHOW WHEN PQ IS ON
 			//           (without description of effects at locality) !!!!!!!!! NOT USED IN FACT   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -1132,6 +1131,11 @@ function parseLocData(XmlText){
 				'</div>' ].join('\n');
 
 			indexEQ[i] = i;
+
+			/******TODO GESTIONE VISUALIZZAZIONE STELLE TERREMOTI CON OL*****/
+			singleFeature.OnClickTextIT = OnClickTextIT;
+			epiMarkers.push(singleFeature);
+
 			// l'ordine di openPopup e oms.addmarker (ora in showquakes) decide chi parte prima tra openpopup e spiderfy!!
 
 			/////TODO GESTIONE POPUP PASSA INFORMAZIONI OnClickTextEN e OnClickTextIT poi aggiunge delle info e infine il text assegnato e' nella variabile textIT
