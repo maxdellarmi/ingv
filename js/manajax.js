@@ -61,18 +61,9 @@ var Manajax = function(xmlService){
 						('text' == mySelf.responseType || 'html' == mySelf.responseType) 
 							? ajaxObj.responseText
 							: ajaxObj.responseText);
-					//EEList.xml?output=xml
-					//alert(mySelf.URLString);
-					/*if (mySelf.URLString == ("EEList.xml?output=xml") )  {
-						alert("ciao");
-						console.log("mySelf.URLString - EEList");
-						quakesPQMarkers=[];
-						for (var i = 0; i < PQMarkers.length; i++) {
-							quakesPQMarkers.push(PQMarkers[i]);
-						}
-						///TODO:DETAILQUAKES dopo aver valorizzato l'array con tutti le feature mostrarle sulla mappa simile a creazioneMappaLocalityPHP
-						creazioneMappaQuakesPHP(quakesPQMarkers);
-					}*/
+
+					//alert(mySelf.URLString); //EEList.xml?output=xml e EEList_MED.xml?output=xml
+
 					//potrebbe non essere presente.
 					if (document.getElementById("access")!== undefined && document.getElementById("access")!==  null ) {
 						console.log("DROPDOWN access VALUE:");
