@@ -123,20 +123,13 @@ function zoomHandlingWMSLAYERSStrum() {
     });
 }
 
+/***
+ * NOTA. Il primo caricamento va sempre a vuoto perche' non sono ancora stati caricati i filtri viene caricato correttamente dopo la funzione showQuakes.
+ */
 function creazioneMappa () {
     $(document).ready(function() {
         try {
-            //setting mousePositionControl
-            /* mousePositionControl = new ol.control.MousePosition({
-                coordinateFormat: function(coord) {
-                    //console.log(coord);
-                    //console.log(ol.coordinate.format(coord, templateStr, 3).toString());
-                    return ol.coordinate.format(coord, templateStr, 3);},
-                projection: 'EPSG:3857',
-                className: 'custom-mouse-position',
-                target: document.getElementById('tdCursor'),
-                undefinedHTML: '&nbsp;',
-            });*/
+
             var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
 
 
@@ -147,15 +140,20 @@ function creazioneMappa () {
 
             console.log('caricati i terremoti test')
 
-            for (var i = 0; i < markersArray.length; i++) { //inizializzato nel js index.js
-                markers.push(markersArray[i]['Marker']);    //markers inizializzato in questo file.
-            }
+            // for (var i = 0; i < markersArray.length; i++) { //inizializzato nel js index.js
+            //     markers.push(markersArray[i]['Marker']);    //markers inizializzato in questo file.
+            // }
+
+
             console.log("carico i markers");
             // console.log(markers);
 
+            /***
+             * NOTA. Il primo caricamento va sempre a vuoto perche' non sono ancora stati caricati i filtri viene caricato correttamente dopo la funzione showQuakes.
+             */
             quakeVector = new ol.layer.Vector({
                 source: new ol.source.Vector({
-                    features: markers,
+                    features:  filteredMarkersArray, //markers,  //NB. Il primo caricamento va sempre a vuoto perche' non sono ancora stati caricati i filtri viene caricato correttamente dopo la funzione showQuakes.
                     projection: 'EPSG:3857'
                 })
             });

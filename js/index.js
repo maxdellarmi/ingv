@@ -22,6 +22,7 @@ var LogPilot = null;
 var GmapsPilot = null;
 var markersArray = [];
 
+var filteredMarkersArray = [];
 
 var markersArrayEE = [];
 
@@ -218,7 +219,11 @@ var GmapsTools = function(){
 				EPIpathCALC = 'M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z';
 				//   --------------------------------------------  Epincenter type: FALSE   ---------------------------------------------------------
 				if (FlagFalse) {
-					Star = {path: google.maps.SymbolPath.CIRCLE, strokeColor: "#000000", scale: 4, strokeWeight: 3};
+					Star = {path: google.maps.SymbolPath.CIRCLE,
+						strokeColor: "#000000",
+						scale: 4,
+						fillColor: "none",   //per gestire cerchi vuoti
+						strokeWeight: 25}; //3
 					EpiIcon = "F";
 					//   --------------------------------------------  Epincenter type: NOT PARAMETERIZED   ---------------------------------------------------------
 				} else if (Epicenter === "Not parameterized") {
@@ -229,7 +234,7 @@ var GmapsTools = function(){
 						strokeColor: "#000000",
 						fillColor: "#000000",
 						fillOpacity: 1,
-						scale: 3
+						scale: 5
 					};
 					EpiIcon = "NP";
 					//   --------------------------------------------  Epincenter type: CALCULATED   ---------------------------------------------------------
@@ -244,7 +249,7 @@ var GmapsTools = function(){
 								fillColor: color4,
 								fillOpacity: 1,
 								anchor: new google.maps.Point(125, 125),
-								strokeWeight: 0.5,
+								strokeWeight: 5,
 								scale: StarScale4
 							};
 							EpiIcon = "C_9.5";
@@ -256,7 +261,7 @@ var GmapsTools = function(){
 								fillColor: color3,
 								fillOpacity: 1,
 								anchor: new google.maps.Point(125, 125),
-								strokeWeight: 0.5,
+								strokeWeight: 5,
 								scale: StarScale3
 							};
 							EpiIcon = "C_8"
@@ -268,7 +273,7 @@ var GmapsTools = function(){
 								fillColor: color2,
 								fillOpacity: 1,
 								anchor: new google.maps.Point(125, 125),
-								strokeWeight: 0.5,
+								strokeWeight: 5,
 								scale: StarScale2
 							};
 							EpiIcon = "C_6";
@@ -280,8 +285,8 @@ var GmapsTools = function(){
 								fillColor: color1,
 								fillOpacity: 1,
 								anchor: new google.maps.Point(125, 125),
-								strokeWeight: 0.5,
-								scale: StarScale1
+								strokeWeight: 5,
+								scale: StarScale1 * 1.35
 							};
 							EpiIcon = "C_4";
 						}
@@ -296,9 +301,10 @@ var GmapsTools = function(){
 							Star = {
 								path: google.maps.SymbolPath.CIRCLE,
 								scale: CircleScale4,
+								strokeColor: "#000000",
 								fillColor: color4,
 								fillOpacity: 1,
-								strokeWeight: 0.5
+								strokeWeight: 5
 							};
 							EpiIcon = "L_9.5";
 						};
@@ -306,9 +312,10 @@ var GmapsTools = function(){
 							Star = {
 								path: google.maps.SymbolPath.CIRCLE,
 								scale: CircleScale3,
+								strokeColor: "#000000",
 								fillColor: color3,
 								fillOpacity: 1,
-								strokeWeight: 0.5
+								strokeWeight: 5
 							};
 							EpiIcon = "L_8";
 						}
@@ -316,10 +323,11 @@ var GmapsTools = function(){
 						if (5.9 < Io && 7.5 >= Io) {
 							Star = {
 								path: google.maps.SymbolPath.CIRCLE,
+								strokeColor: "#000000",
 								scale: CircleScale2,
 								fillColor: color2,
 								fillOpacity: 1,
-								strokeWeight: 0.5
+								strokeWeight: 5
 							};
 							EpiIcon = "L_6";
 						}
@@ -328,9 +336,10 @@ var GmapsTools = function(){
 							Star = {
 								path: google.maps.SymbolPath.CIRCLE,
 								scale: CircleScale1,
+								strokeColor: "#000000",
 								fillColor: color1,
 								fillOpacity: 1,
-								strokeWeight: 0.5
+								strokeWeight: 5
 							};
 							EpiIcon = "L_4";
 						}
@@ -342,40 +351,44 @@ var GmapsTools = function(){
 						if (9.5 < Io) {
 							Star = {
 								path: google.maps.SymbolPath.CIRCLE,
+								fillColor: "none",   //per gestire cerchi vuoti
 								scale: CircleScale4,
 								strokeColor: color4,
 								fillOpacity: 0,
-								strokeWeight: 3
+								strokeWeight: 15//3
 							};
 							EpiIcon = "R_9.5";
 						}
 						if (7.5 < Io && 9.5 >= Io) {
 							Star = {
 								path: google.maps.SymbolPath.CIRCLE,
+								fillColor: "none",   //per gestire cerchi vuoti
 								scale: CircleScale3,
 								strokeColor: color3,
 								fillOpacity: 0,
-								strokeWeight: 3
+								strokeWeight: 15//3
 							};
 							EpiIcon = "R_8";
 						}
 						if (5.9 < Io && 7.5 >= Io) {
 							Star = {
 								path: google.maps.SymbolPath.CIRCLE,
+								fillColor: "none",   //per gestire cerchi vuoti
 								scale: CircleScale2,
 								strokeColor: color2,
 								fillOpacity: 0,
-								strokeWeight: 3
+								strokeWeight: 15//3
 							};
 							EpiIcon = "R_6";
 						}
 						if (6 > Io) {
 							Star = {
 								path: google.maps.SymbolPath.CIRCLE,
+								fillColor: "none",   //per gestire cerchi vuoti
 								scale: CircleScale1,
 								strokeColor: color1,
 								fillOpacity: 0,
-								strokeWeight: 3
+								strokeWeight: 15//3
 							};
 							EpiIcon = "R_4";
 						}
@@ -387,10 +400,11 @@ var GmapsTools = function(){
 						if (9.5 < Io) {
 							Star = {
 								path: EPIpathCALC,
+								fillColor: "none",   //per gestire stelle vuote
 								strokeColor: color4,
 								strokeOpacity: 1,
 								anchor: new google.maps.Point(125, 125),
-								strokeWeight: 2,
+								strokeWeight: 15,//2,
 								scale: StarScale4
 							};
 							EpiIcon = "H_9.5";
@@ -399,10 +413,11 @@ var GmapsTools = function(){
 						if (7.5 < Io && 9.5 >= Io) {
 							Star = {
 								path: EPIpathCALC,
+								fillColor: "none",  //per gestire stelle vuote
 								strokeColor: color3,
 								strokeOpacity: 1,
 								anchor: new google.maps.Point(125, 125),
-								strokeWeight: 2,
+								strokeWeight: 15,//2,
 								scale: StarScale3
 							};
 							EpiIcon = "H_8";
@@ -411,10 +426,11 @@ var GmapsTools = function(){
 						if (5.9 < Io && 7.5 >= Io) {
 							Star = {
 								path: EPIpathCALC,
+								fillColor: "none",
 								strokeColor: color2,
 								strokeOpacity: 1,
 								anchor: new google.maps.Point(125, 125),
-								strokeWeight: 2,
+								strokeWeight: 15,//2,
 								scale: StarScale2
 							};
 							EpiIcon = "H_6";
@@ -423,10 +439,11 @@ var GmapsTools = function(){
 						if (6 > Io) {
 							Star = {
 								path: EPIpathCALC,
+								fillColor: "none",  //per gestire stelle vuote
 								strokeColor: color1,
 								strokeOpacity: 1,
 								anchor: new google.maps.Point(125, 125),
-								strokeWeight: 2,
+								strokeWeight: 15,//2,
 								scale: StarScale1
 							};
 							EpiIcon = "H_4";
@@ -441,6 +458,7 @@ var GmapsTools = function(){
 				//newtest
 				var cerchio = `<svg viewBox="0 0 250 250"   {height} {width} xmlns="http://www.w3.org/2000/svg" version="1.1"><circle cx="50" cy="50" r="40" {stroke} {widthS} {fill} /></svg>`;
 				var stella = `<svg viewBox="0 0 250 250" {height} {width} xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" {fill} {stroke} {widthS} /></svg>`;
+
 
 
 				//stroke="{strokeColor}" stroke-width="{strokeWeight}" fill="{fillColor}
@@ -509,7 +527,8 @@ var GmapsTools = function(){
 					compiled = template(stella, {
 						stroke:  (Star.strokeColor!== undefined) ? String().concat("stroke=\"",Star.strokeColor,'\"'): String().concat("stroke=\"","#000000",'\"') ,
 						//widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"",Star.strokeWeight,'\"'): String().concat("stroke-width=\"","5",'\"'),
-						widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"","5",'\"'): String().concat("stroke-width=\"","5",'\"'),
+						widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"",Star.strokeWeight * 2,'\"'): String().concat("stroke-width=\"","5",'\"'),
+						//widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"","5",'\"'): String().concat("stroke-width=\"","5",'\"'),
 						fill:	(Star.fillColor!== undefined) ? String().concat("fill=\"",Star.fillColor,'\"'): undefined,
 						height: String().concat("height=\"",'200px','\"'),
 						width: String().concat("width=\"",'200px','\"')
@@ -637,7 +656,7 @@ var GmapsTools = function(){
 
 	// ====================== Show quakes on table and map, based on filters selected by user
 	this.showQuakes = function(Filters){
-
+		console.log("showQuakes...")
 
 		bounds = new google.maps.LatLngBounds();
 		iMarker = 0; //index on selected markers (after filters)
@@ -658,14 +677,14 @@ var GmapsTools = function(){
 		chartArray = [];
 		ExportKmlR = "";
 		for (var i = 0; i < markersArray.length; i++) { // index on all markers
-			var RecTer = markersArray[i];
+			var RecTer = markersArray[i];   //ASSEGNA uno dei markers alla variabile RecTer
 			var YearFlag = false,
 				IntMagFlag = false,
 				ZoneFlag = false, //***GT***
 				FalseFlag = (RecTer['FlagFalse']) ? true : false, //***GT***
 				LatFlag = false,
 				LonFlag = false;
-
+			//<editor-fold defaultstate="expanded" desc="GESTIONE FILTRI LAYER QUAKES in base alle variabili YearFlag && IntMagFlag && ZoneFlag && !(FalseFlag) && LatFlag && LonFlag">
 			YearFlag = ( Filters['StartYear'] <= RecTer['Year'] && Filters['StopYear'] >= RecTer['Year']) ? true : false;
 			if (param == "Io") {
 				IntMagFlag = ( Filters['StartIo'] <= RecTer['Io'] && Filters['StopIo'] >= RecTer['Io']) ? true : false;
@@ -677,6 +696,7 @@ var GmapsTools = function(){
 
 			if ('BOTH' == Filters['Zone'] || Filters['Zone'] == RecTer['Zone']) ZoneFlag = true;
 			if (Filters['FlagFalse']) FalseFlag = false;
+			//</editor-fold>
 
 			if ( YearFlag && IntMagFlag && ZoneFlag && !(FalseFlag) && LatFlag && LonFlag){
 
@@ -699,7 +719,10 @@ var GmapsTools = function(){
 				//////TODO VERIFICARE COME TRADURRE IL VECCHIO SET MAP
 				//RecTer['Marker'].setMap(map);
 				// console.log('setMap rimosso');
-				//////oms.addMarker(RecTer['Marker']);
+				//////oms.addMarker(RecTer['Marker']);  //ex oggetto OverlappingMarkerSpiderfier (OMS)
+				// console.log('assegna iesimo a filteredMarkersArray');
+				filteredMarkersArray.push(RecTer['Marker']);  // e' il marker
+
 
 				//bounds.extend(RecTer['Marker'].getPosition());
 				// console.log("RecTer['Marker'].getPosition() rimosso");
@@ -936,10 +959,8 @@ var GmapsTools = function(){
 			$('.tablesorter').trigger('updateAll');
 		}
 
-
-
-
-
+		console.log('CHIAMATA successiva a CREAZIONE MAPPA OL PER VISUALIZZAZIONE TERREMOTI FILTRATI');
+		creazioneMappa();
 		// loading div
 		$('#loading').hide();
 
@@ -950,6 +971,7 @@ var GmapsTools = function(){
 	this.clearMap = function(){
 		console.log("CLEAR MAP chiamata TODO implementare nuova pulizia della mappa" )
 		if (rectangle) rectangle.setMap(null);
+		filteredMarkersArray = [];
 		// cancellazione dei marker di Spiderfier
 		//////// oms.clearMarkers();
 
@@ -1084,6 +1106,7 @@ function ResetMap(){
 	document.getElementById('selArea').style.display = "block";
 	document.getElementById('NoselArea').style.display = "none";
 	clearMap();
+	console.log('CHIAMATA A SHOWQUAKES con FILTRI....');
 	GmapsPilot.showQuakes({
 		StartYear: parseInt(document.getElementById('StartDate').value),
 		StopYear: parseInt(document.getElementById('StopDate').value),

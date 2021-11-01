@@ -76,7 +76,7 @@ var Manajax = function(xmlService){
 						var dropdownElementSelected = document.getElementById("access").value;
 						if (dropdownElementSelected == "EQ") {  //caricamento stellette terremoti
 							console.log("CREAZIONE MAPPA TERREMOTI:");
-							creazioneMappa();
+							creazioneMappa(); //NB. CHIAMATA X 2 VOLTE ANCHE DALLA FUNZIONE SHOWQUAKES PER l'APPLICAZIONE DEI FILTRI!
 						}else if (dropdownElementSelected == "LOC") {
 							console.log("CREAZIONE MAPPA LOCALITA:");
 							indexLocalita();
