@@ -467,7 +467,7 @@ var GEO50 = new google.maps.ImageMapType({
  *
  */
 var GEO100  = new ol.layer.Tile({
-    opacity: 0.5,
+    opacity: 0.9,
     visible: true,
     //extent: [-13884991, 2870341, -7455066, 6338219],
     source: new ol.source.TileWMS({
