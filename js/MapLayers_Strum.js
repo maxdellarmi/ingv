@@ -463,9 +463,11 @@ var GEO50 = new google.maps.ImageMapType({
 /***
  * * LISTA SERVIZI Portale del Servizio Geologico d'Italia ISPRA
  * http://portalesgi.isprambiente.it/it/lista-servizi-wms/Geological%20Maps
+ * QUESTE CHIAMATE IN PRODUZIONE FALLISCONO:http://geoservices.isprambiente.it/arcgis/services/Geologia/geologia_italia_100k/ImageServer/WMSServer', //OLD le chiamate falliscono
+ *
  */
 var GEO100  = new ol.layer.Tile({
-    opacity: 0.9,
+    opacity: 0.5,
     visible: true,
     //extent: [-13884991, 2870341, -7455066, 6338219],
     source: new ol.source.TileWMS({
@@ -476,7 +478,7 @@ var GEO100  = new ol.layer.Tile({
         params: {
             //'LAYERS': 'geologia_italia_100k', OLD
             //'LAYERS': 'geo_500k_italia', // new funziona ma 500
-            'LAYERS': '0',  // LAYERS 1,2,3,4,5,6 // IL LAYER 0 contiene solamente una suddivisione in riquadri
+            'LAYERS': '1',  // LAYERS 1,2,3,4,5,6 // IL LAYER 0 contiene solamente una suddivisione in riquadri
             'TILED': true
         },
         serverType: 'geoserver',

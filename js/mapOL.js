@@ -68,6 +68,8 @@ function zoomHandlingWMSLAYERSStrum() {
                 document.getElementById('FraneDiff').style.color = "black";
                 document.getElementById('DGPV').disabled = false;
                 document.getElementById('FraneDGPV').style.color = "black";
+                document.getElementById('GEO100').disabled = false;       //aggiunta gestione zoom GEOLOGICA100k
+                document.getElementById('Geomap').style.color = "black";  //aggiunta gestione zoom GEOLOGICA100k
             }
 
             if (mapOL.getView().getZoom() < 12) {
@@ -76,6 +78,13 @@ function zoomHandlingWMSLAYERSStrum() {
                 document.getElementById('IGM100').checked = false;
                 Toggle4 = "on";
                 ToggleLayer4();
+
+                document.getElementById('GEO100').disabled = true;  //aggiunta gestione zoom GEOLOGICA100k
+                document.getElementById('Geomap').style.color = "#909090"; //aggiunta gestione zoom GEOLOGICA100k
+                document.getElementById('GEO100').checked = false; //aggiunta gestione zoom GEOLOGICA100k
+                Toggle9 = "on";                                             //aggiunta gestione zoom GEOLOGICA100k
+                ToggleLayer9();                                             //aggiunta gestione zoom GEOLOGICA100k
+
                 document.getElementById('FL').disabled = true;
                 document.getElementById('FraneLin').style.color = "#909090";
                 document.getElementById('FL').checked = false;
