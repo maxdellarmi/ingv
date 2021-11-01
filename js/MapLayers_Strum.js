@@ -194,6 +194,7 @@ var IGM25  = new ol.layer.Tile({
     //extent: [-13884991, 2870341, -7455066, 6338219],
     source: new ol.source.TileWMS({
         url: 'http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_25000.map',
+        //projection: 'EPSG:3857',
         params: {
             'LAYERS': 'CB.IGM25000.32,CB.IGM25000.33',
             'TILED': true},
@@ -250,6 +251,7 @@ var IGM100  = new ol.layer.Tile({
     //extent: [-13884991, 2870341, -7455066, 6338219],
     source: new ol.source.TileWMS({
         url: 'http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_100000.map',
+        //projection: 'EPSG:3857',
         params: {
             'LAYERS': 'MB.IGM100000.33,MB.IGM100000.32',
             'TILED': true},
@@ -305,6 +307,7 @@ var IGM200  = new ol.layer.Tile({
     //extent: [-13884991, 2870341, -7455066, 6338219],
     source: new ol.source.TileWMS({
         url: 'http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_250000.map',
+        //projection: 'EPSG:3857',
         params: {
             'LAYERS': 'CB.IGM250000.33,CB.IGM250000.32',
             'TILED': true},
@@ -457,54 +460,80 @@ var GEO50 = new google.maps.ImageMapType({
                 });
 
 
-var GEO100 = new google.maps.ImageMapType({
-                    getTileUrl: function (coord, zoom) {
-                        var proj = map.getProjection();
-                        var zfactor = Math.pow(2, zoom);
-                        // get Long Lat coordinates
-                        var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
-                        var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
+/***
+ * * LISTA SERVIZI Portale del Servizio Geologico d'Italia ISPRA
+ * http://portalesgi.isprambiente.it/it/lista-servizi-wms/Geological%20Maps
+ */
+var GEO100  = new ol.layer.Tile({
+    opacity: 0.9,
+    visible: true,
+    //extent: [-13884991, 2870341, -7455066, 6338219],
+    source: new ol.source.TileWMS({
+        //url: 'http://geoservices.isprambiente.it/arcgis/services/Geologia/geologia_italia_100k/ImageServer/WMSServer', //OLD le chiamate falliscono
+        //url : 'http://sgi2.isprambiente.it/arcgis/services/raster/geo_500k_italia/ImageServer/WMSServer', NEW funziona ma 500K
+        url : 'http://sgi2.isprambiente.it/arcgis/services/servizi/carta_geologica_100k/MapServer/WmsServer', //NEW preso dal sito
+        //projection: 'EPSG:3857',
+        params: {
+            //'LAYERS': 'geologia_italia_100k', OLD
+            //'LAYERS': 'geo_500k_italia', // new funziona ma 500
+            'LAYERS': '0',  // LAYERS 1,2,3,4,5,6 // IL LAYER 0 contiene solamente una suddivisione in riquadri
+            'TILED': true
+        },
+        serverType: 'geoserver',
+        // Countries have transparency, so do not fade tiles:
+        transition: 0,
+    }),
+});
 
-                        //corrections for the slight shift of the WMS LAYER
-                        var deltaX = 0.000;
-                        var deltaY = 0.0000;
-
-                        //create the Bounding box string
-                        var bbox =     (top.lng() + deltaX) + "," +
-    	                               (bot.lat() + deltaY) + "," +
-    	                               (bot.lng() + deltaX) + "," +
-    	                               (top.lat() + deltaY);
-
-                        //base WMS URL
-
-                        var urlWMS = "http://geoservices.isprambiente.it/arcgis/services/Geologia/geologia_italia_100k/ImageServer/WMSServer?";
-                        urlWMS += "&VERSION=1.1.1";  //WMS version
-					    urlWMS += "&REQUEST=GetMap"; //WMS operation
-						urlWMS += "&SRS=EPSG:4326";     //set WGS84
-						urlWMS += "&WIDTH=512";         //tile size in google
-                        urlWMS += "&HEIGHT=512";
-						urlWMS += "&LAYERS=" + "geologia_italia_100k"; //WMS layers
-						urlWMS += "&STYLES=default";   //,default,default,default,default";
-                        urlWMS += "&TRANSPARENT=false";
-					    urlWMS += "&OPACITY=0.1";
-                        urlWMS += "&FORMAT=image/png" ; //WMS format
-
-
-
-                        urlWMS += "&BBOX=" + bbox;      // set bounding box
-
-                         return urlWMS;                // return URL for the tile
-
-
-
-                    },
-                    tileSize: new google.maps.Size(512, 512),
-					// minZoom: 14,
-					// maxZoom: 16,
-					opacity: 0.9,
-
-                });
-
+//<editor-fold defaultstate="expanded" desc="LAYER GEO100 vecchia gestione gmaps">
+// var GEO100 = new google.maps.ImageMapType({
+//                     getTileUrl: function (coord, zoom) {
+//                         var proj = map.getProjection();
+//                         var zfactor = Math.pow(2, zoom);
+//                         // get Long Lat coordinates
+//                         var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
+//                         var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
+//
+//                         //corrections for the slight shift of the WMS LAYER
+//                         var deltaX = 0.000;
+//                         var deltaY = 0.0000;
+//
+//                         //create the Bounding box string
+//                         var bbox =     (top.lng() + deltaX) + "," +
+//     	                               (bot.lat() + deltaY) + "," +
+//     	                               (bot.lng() + deltaX) + "," +
+//     	                               (top.lat() + deltaY);
+//
+//                         //base WMS URL
+//
+//                         var urlWMS = "http://geoservices.isprambiente.it/arcgis/services/Geologia/geologia_italia_100k/ImageServer/WMSServer?";
+//                         urlWMS += "&VERSION=1.1.1";  //WMS version
+// 					    urlWMS += "&REQUEST=GetMap"; //WMS operation
+// 						urlWMS += "&SRS=EPSG:4326";     //set WGS84
+// 						urlWMS += "&WIDTH=512";         //tile size in google
+//                         urlWMS += "&HEIGHT=512";
+// 						urlWMS += "&LAYERS=" + "geologia_italia_100k"; //WMS layers
+// 						urlWMS += "&STYLES=default";   //,default,default,default,default";
+//                         urlWMS += "&TRANSPARENT=false";
+// 					    urlWMS += "&OPACITY=0.1";
+//                         urlWMS += "&FORMAT=image/png" ; //WMS format
+//
+//
+//
+//                         urlWMS += "&BBOX=" + bbox;      // set bounding box
+//
+//                          return urlWMS;                // return URL for the tile
+//
+//
+//
+//                     },
+//                     tileSize: new google.maps.Size(512, 512),
+// 					// minZoom: 14,
+// 					// maxZoom: 16,
+// 					opacity: 0.9,
+//
+//                 });
+//</editor-fold>
 
 var GEOSTR500 = new google.maps.ImageMapType({
                     getTileUrl: function (coord, zoom) {
@@ -554,158 +583,231 @@ var GEOSTR500 = new google.maps.ImageMapType({
 
                 });
 
- var FL = new google.maps.ImageMapType({
-                    getTileUrl: function (coord, zoom) {
-                        var proj = map.getProjection();
-                        var zfactor = Math.pow(2, zoom);
-                        // get Long Lat coordinates
-                        var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
-                        var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
-
-                        //corrections for the slight shift of the WMS LAYER
-                        var deltaX = 0.000;
-                        var deltaY = 0.0000;
-
-                        //create the Bounding box string
-                        var bbox =     (top.lng() + deltaX) + "," +
-    	                               (bot.lat() + deltaY) + "," +
-    	                               (bot.lng() + deltaX) + "," +
-    	                               (top.lat() + deltaY);
-
-                        //base WMS URL
-
-						var urlWMS = "http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/Vettoriali/Catalogo_Frane.map&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=RN.CATALOGO_FRANE.LINEARI&GN:Predefinito&TRANSPARENT=TRUE&FORMAT=image/gif";
 
 
-                        urlWMS += "&BBOX=" + bbox;      // set bounding box
-
-                         return urlWMS;                // return URL for the tile
-
-
-
-                    },
-                    tileSize: new google.maps.Size(512, 512),
-					// minZoom: 14,
-					// maxZoom: 16,
-					opacity: 0.9,
-
-
- });
-
-  var FP = new google.maps.ImageMapType({
-                    getTileUrl: function (coord, zoom) {
-                        var proj = map.getProjection();
-                        var zfactor = Math.pow(2, zoom);
-                        // get Long Lat coordinates
-                        var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
-                        var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
-
-                        //corrections for the slight shift of the WMS LAYER
-                        var deltaX = 0.000;
-                        var deltaY = 0.0000;
-
-                        //create the Bounding box string
-                        var bbox =     (top.lng() + deltaX) + "," +
-    	                               (bot.lat() + deltaY) + "," +
-    	                               (bot.lng() + deltaX) + "," +
-    	                               (top.lat() + deltaY);
-
-                        //base WMS URL
-
-						var urlWMS = "http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/Vettoriali/Catalogo_Frane.map&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=RN.CATALOGO_FRANE.POLIGONALI&GN:Predefinito&TRANSPARENT=TRUE&FORMAT=image/gif";
-
-
-                        urlWMS += "&BBOX=" + bbox;      // set bounding box
-
-                         return urlWMS;                // return URL for the tile
-
-
-
-                    },
-                    tileSize: new google.maps.Size(512, 512),
-					// minZoom: 14,
-					// maxZoom: 16,
-					opacity: 0.9,
-
-
- });
-
-   var FD = new google.maps.ImageMapType({
-                    getTileUrl: function (coord, zoom) {
-                        var proj = map.getProjection();
-                        var zfactor = Math.pow(2, zoom);
-                        // get Long Lat coordinates
-                        var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
-                        var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
-
-                        //corrections for the slight shift of the WMS LAYER
-                        var deltaX = 0.000;
-                        var deltaY = 0.0000;
-
-                        //create the Bounding box string
-                        var bbox =     (top.lng() + deltaX) + "," +
-    	                               (bot.lat() + deltaY) + "," +
-    	                               (bot.lng() + deltaX) + "," +
-    	                               (top.lat() + deltaY);
-
-                        //base WMS URL
-
-						var urlWMS = "http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/Vettoriali/Catalogo_Frane.map&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=RN.CATALOGO_FRANE.AREE.FRANE.DIFFUSE&GN:Predefinito&TRANSPARENT=TRUE&FORMAT=image/gif";
+var FL  = new ol.layer.Tile({
+    opacity: 0.4,
+    visible: true,
+    //extent: [-13884991, 2870341, -7455066, 6338219],
+    source: new ol.source.TileWMS({
+        url: 'http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/Vettoriali/Catalogo_Frane.map',
+        //projection: 'EPSG:3857',
+        params: {
+            'LAYERS': 'RN.CATALOGO_FRANE.LINEARI',
+            'TILED': true},
+        serverType: 'geoserver',
+        // Countries have transparency, so do not fade tiles:
+        transition: 0,
+    }),
+});
+//<editor-fold defaultstate="expanded" desc="LAYER FL vecchia gestione gmaps">
+//  var FL = new google.maps.ImageMapType({
+//                     getTileUrl: function (coord, zoom) {
+//                         var proj = map.getProjection();
+//                         var zfactor = Math.pow(2, zoom);
+//                         // get Long Lat coordinates
+//                         var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
+//                         var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
+//
+//                         //corrections for the slight shift of the WMS LAYER
+//                         var deltaX = 0.000;
+//                         var deltaY = 0.0000;
+//
+//                         //create the Bounding box string
+//                         var bbox =     (top.lng() + deltaX) + "," +
+//     	                               (bot.lat() + deltaY) + "," +
+//     	                               (bot.lng() + deltaX) + "," +
+//     	                               (top.lat() + deltaY);
+//
+//                         //base WMS URL
+//
+// 						var urlWMS = "http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/Vettoriali/Catalogo_Frane.map&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=RN.CATALOGO_FRANE.LINEARI&GN:Predefinito&TRANSPARENT=TRUE&FORMAT=image/gif";
+//
+//
+//                         urlWMS += "&BBOX=" + bbox;      // set bounding box
+//
+//                          return urlWMS;                // return URL for the tile
+//
+//
+//
+//                     },
+//                     tileSize: new google.maps.Size(512, 512),
+// 					// minZoom: 14,
+// 					// maxZoom: 16,
+// 					opacity: 0.9,
+//
+//
+//  });
+//</editor-fold>
 
 
-                        urlWMS += "&BBOX=" + bbox;      // set bounding box
+var FP  = new ol.layer.Tile({
+    opacity: 0.4,
+    visible: true,
+    //extent: [-13884991, 2870341, -7455066, 6338219],
+    source: new ol.source.TileWMS({
+        url: 'http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/Vettoriali/Catalogo_Frane.map',
+        //projection: 'EPSG:3857',
+        params: {
+            'LAYERS': 'RN.CATALOGO_FRANE.POLIGONALI',
+            'TILED': true},
+        serverType: 'geoserver',
+        // Countries have transparency, so do not fade tiles:
+        transition: 0,
+    }),
+});
+//<editor-fold defaultstate="expanded" desc="LAYER FP vecchia gestione gmaps">
+//   var FP = new google.maps.ImageMapType({
+//                     getTileUrl: function (coord, zoom) {
+//                         var proj = map.getProjection();
+//                         var zfactor = Math.pow(2, zoom);
+//                         // get Long Lat coordinates
+//                         var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
+//                         var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
+//
+//                         //corrections for the slight shift of the WMS LAYER
+//                         var deltaX = 0.000;
+//                         var deltaY = 0.0000;
+//
+//                         //create the Bounding box string
+//                         var bbox =     (top.lng() + deltaX) + "," +
+//     	                               (bot.lat() + deltaY) + "," +
+//     	                               (bot.lng() + deltaX) + "," +
+//     	                               (top.lat() + deltaY);
+//
+//                         //base WMS URL
+//
+// 						var urlWMS = "http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/Vettoriali/Catalogo_Frane.map&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=RN.CATALOGO_FRANE.POLIGONALI&GN:Predefinito&TRANSPARENT=TRUE&FORMAT=image/gif";
+//
+//
+//                         urlWMS += "&BBOX=" + bbox;      // set bounding box
+//
+//                          return urlWMS;                // return URL for the tile
+//
+//
+//
+//                     },
+//                     tileSize: new google.maps.Size(512, 512),
+// 					// minZoom: 14,
+// 					// maxZoom: 16,
+// 					opacity: 0.9,
+//
+//
+//  });
+//</editor-fold>
 
-                         return urlWMS;                // return URL for the tile
+
+var FD  = new ol.layer.Tile({
+    opacity: 0.4,
+    visible: true,
+    //extent: [-13884991, 2870341, -7455066, 6338219],
+    source: new ol.source.TileWMS({
+        url: 'http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/Vettoriali/Catalogo_Frane.map',
+        //projection: 'EPSG:3857',
+        params: {
+            'LAYERS': 'RN.CATALOGO_FRANE.AREE.FRANE.DIFFUSE',
+            'TILED': true},
+        serverType: 'geoserver',
+        // Countries have transparency, so do not fade tiles:
+        transition: 0,
+    }),
+});
+
+//<editor-fold defaultstate="expanded" desc="LAYER FD vecchia gestione gmaps">
+//    var FD = new google.maps.ImageMapType({
+//                     getTileUrl: function (coord, zoom) {
+//                         var proj = map.getProjection();
+//                         var zfactor = Math.pow(2, zoom);
+//                         // get Long Lat coordinates
+//                         var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
+//                         var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
+//
+//                         //corrections for the slight shift of the WMS LAYER
+//                         var deltaX = 0.000;
+//                         var deltaY = 0.0000;
+//
+//                         //create the Bounding box string
+//                         var bbox =     (top.lng() + deltaX) + "," +
+//     	                               (bot.lat() + deltaY) + "," +
+//     	                               (bot.lng() + deltaX) + "," +
+//     	                               (top.lat() + deltaY);
+//
+//                         //base WMS URL
+//
+// 						var urlWMS = "http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/Vettoriali/Catalogo_Frane.map&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=RN.CATALOGO_FRANE.AREE.FRANE.DIFFUSE&GN:Predefinito&TRANSPARENT=TRUE&FORMAT=image/gif";
+//
+//
+//                         urlWMS += "&BBOX=" + bbox;      // set bounding box
+//
+//                          return urlWMS;                // return URL for the tile
+//
+//
+//
+//                     },
+//                     tileSize: new google.maps.Size(512, 512),
+// 					// minZoom: 14,
+// 					// maxZoom: 16,
+// 					opacity: 0.9,
+//
+//
+//  });
+//</editor-fold>
 
 
-
-                    },
-                    tileSize: new google.maps.Size(512, 512),
-					// minZoom: 14,
-					// maxZoom: 16,
-					opacity: 0.9,
-
-
- });
-
-   var DGPV = new google.maps.ImageMapType({
-                    getTileUrl: function (coord, zoom) {
-                        var proj = map.getProjection();
-                        var zfactor = Math.pow(2, zoom);
-                        // get Long Lat coordinates
-                        var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
-                        var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
-
-                        //corrections for the slight shift of the WMS LAYER
-                        var deltaX = 0.000;
-                        var deltaY = 0.0000;
-
-                        //create the Bounding box string
-                        var bbox =     (top.lng() + deltaX) + "," +
-    	                               (bot.lat() + deltaY) + "," +
-    	                               (bot.lng() + deltaX) + "," +
-    	                               (top.lat() + deltaY);
-
-                        //base WMS URL
-
-						var urlWMS = "http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/Vettoriali/Catalogo_Frane.map&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=RN.CATALOGO_FRANE.DGPV&GN:Predefinito&TRANSPARENT=TRUE&FORMAT=image/gif";
-
-
-                        urlWMS += "&BBOX=" + bbox;      // set bounding box
-
-                         return urlWMS;                // return URL for the tile
-
-
-
-                    },
-                    tileSize: new google.maps.Size(512, 512),
-					// minZoom: 14,
-					// maxZoom: 16,
-					opacity: 0.9,
-
-
- });
-
+var DGPV  = new ol.layer.Tile({
+    opacity: 0.4,
+    visible: true,
+    //extent: [-13884991, 2870341, -7455066, 6338219],
+    source: new ol.source.TileWMS({
+        url: 'http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/Vettoriali/Catalogo_Frane.map',
+        //projection: 'EPSG:3857',
+        params: {
+            'LAYERS': 'RN.CATALOGO_FRANE.DGPV',
+            'TILED': true},
+        serverType: 'geoserver',
+        // Countries have transparency, so do not fade tiles:
+        transition: 0,
+    }),
+});
+//<editor-fold defaultstate="expanded" desc="LAYER DGPV vecchia gestione gmaps">
+//    var DGPV = new google.maps.ImageMapType({
+//                     getTileUrl: function (coord, zoom) {
+//                         var proj = map.getProjection();
+//                         var zfactor = Math.pow(2, zoom);
+//                         // get Long Lat coordinates
+//                         var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
+//                         var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
+//
+//                         //corrections for the slight shift of the WMS LAYER
+//                         var deltaX = 0.000;
+//                         var deltaY = 0.0000;
+//
+//                         //create the Bounding box string
+//                         var bbox =     (top.lng() + deltaX) + "," +
+//     	                               (bot.lat() + deltaY) + "," +
+//     	                               (bot.lng() + deltaX) + "," +
+//     	                               (top.lat() + deltaY);
+//
+//                         //base WMS URL
+//
+// 						var urlWMS = "http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/Vettoriali/Catalogo_Frane.map&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=RN.CATALOGO_FRANE.DGPV&GN:Predefinito&TRANSPARENT=TRUE&FORMAT=image/gif";
+//
+//
+//                         urlWMS += "&BBOX=" + bbox;      // set bounding box
+//
+//                          return urlWMS;                // return URL for the tile
+//
+//
+//
+//                     },
+//                     tileSize: new google.maps.Size(512, 512),
+// 					// minZoom: 14,
+// 					// maxZoom: 16,
+// 					opacity: 0.9,
+//
+//
+//  });
+//</editor-fold>
 
  $(function() {
      $('#WMSlayersIcon').click(function(event) {

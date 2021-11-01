@@ -1,29 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="POPUP in caso di dettaglio localita bugfix risolto qui: http://cft5.test/locality.php?054623.00IT">
+    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="1) rimosse forzature a UTF8&#10;2) gestione layer KML e wms aggiunte&#10;3) proiezione mappa aggiornata a webmarcator e tutti i layer impostati di conseguenza">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LocList.xml" beforeDir="false" afterPath="$PROJECT_DIR$/LocList.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/credits_disclaimerEN.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/credits_disclaimerEN.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/credits_disclaimerIT.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/credits_disclaimerIT.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/help_EN.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/help_EN.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/help_IT.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/help_IT.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/info_EN.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/info_EN.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/info_IT.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/info_IT.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/scalaMCS_EN.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/scalaMCS_EN.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/scalaMCS_IT.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/scalaMCS_IT.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/MapLayers_Strum.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/MapLayers_Strum.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/index_EE.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index_EE.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/index_loc.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index_loc.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/locality.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/locality.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/mapOL.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/mapOL.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/quake.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/quake.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/toggleWMS.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/toggleWMS.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js_old/js.js" beforeDir="false" afterPath="$PROJECT_DIR$/js_old/js.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/locality.php" beforeDir="false" afterPath="$PROJECT_DIR$/locality.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/quake.php" beforeDir="false" afterPath="$PROJECT_DIR$/quake.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,7 +179,7 @@
       <workItem from="1635339216068" duration="4416000" />
       <workItem from="1635345702702" duration="3002000" />
       <workItem from="1635717714211" duration="1656000" />
-      <workItem from="1635760628338" duration="8692000" />
+      <workItem from="1635760628338" duration="15686000" />
     </task>
     <task id="LOCAL-00001" summary="img">
       <created>1631987175531</created>
@@ -354,7 +335,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635347777887</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="1) rimosse forzature a UTF8&#10;2) gestione layer KML e wms aggiunte&#10;3) proiezione mappa aggiornata a webmarcator e tutti i layer impostati di conseguenza">
+      <created>1635769553706</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1635769553706</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -406,6 +394,7 @@
     <MESSAGE value="pulizia commenti" />
     <MESSAGE value="DETAILQUAKES Sezione nel caso in cui si verifichi l'ELSE disegno di eeloconly (Eff. ambiente naturale)" />
     <MESSAGE value="POPUP in caso di dettaglio localita bugfix risolto qui: http://cft5.test/locality.php?054623.00IT" />
-    <option name="LAST_COMMIT_MESSAGE" value="POPUP in caso di dettaglio localita bugfix risolto qui: http://cft5.test/locality.php?054623.00IT" />
+    <MESSAGE value="1) rimosse forzature a UTF8&#10;2) gestione layer KML e wms aggiunte&#10;3) proiezione mappa aggiornata a webmarcator e tutti i layer impostati di conseguenza" />
+    <option name="LAST_COMMIT_MESSAGE" value="1) rimosse forzature a UTF8&#10;2) gestione layer KML e wms aggiunte&#10;3) proiezione mappa aggiornata a webmarcator e tutti i layer impostati di conseguenza" />
   </component>
 </project>
