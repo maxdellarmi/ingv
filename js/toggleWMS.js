@@ -49,46 +49,105 @@ if (Toggle2 == "off") {
 
 function ToggleLayer3() {
 	if (Toggle3 == "off") {
-		map.overlayMapTypes.setAt(8, IGM25);
+		console.log("richiesta di Toggle3 == 'ON'");
+//	map.overlayMapTypes.setAt(25, REG);
+		mapOL.addLayer(IGM25);
 		Toggle3 = "on";
 	} else {
-		map.overlayMapTypes.setAt(8, null);
+		console.log("richiesta di Toggle3 == 'OFF'");
+		(IGM25!== undefined)? mapOL.removeLayer(IGM25): null;
+		//map.overlayMapTypes.setAt(25, null);
 		Toggle3 = "off";
 	}
 }
 
+// function ToggleLayer3() {
+// 	if (Toggle3 == "off") {
+// 		map.overlayMapTypes.setAt(8, IGM25);
+// 		Toggle3 = "on";
+// 	} else {
+// 		map.overlayMapTypes.setAt(8, null);
+// 		Toggle3 = "off";
+// 	}
+// }
+
+// function ToggleLayer4() {
+// 	if (Toggle4 == "off") {
+// 		map.overlayMapTypes.setAt(7, IGM100);
+// 		Toggle4 = "on";
+// 	} else {
+// 		map.overlayMapTypes.setAt(7, null);
+// 		Toggle4 = "off";
+// 	}
+// }
+
 function ToggleLayer4() {
 	if (Toggle4 == "off") {
-		map.overlayMapTypes.setAt(7, IGM100);
+		console.log("richiesta di Toggle4 == 'ON'");
+//	map.overlayMapTypes.setAt(25, REG);
+		mapOL.addLayer(IGM100);
 		Toggle4 = "on";
 	} else {
-		map.overlayMapTypes.setAt(7, null);
+		console.log("richiesta di Toggle4 == 'OFF'");
+		(IGM100!== undefined)? mapOL.removeLayer(IGM100): null;
+		//map.overlayMapTypes.setAt(25, null);
 		Toggle4 = "off";
 	}
 }
 
-function ToggleLayer5() {
+// function ToggleLayer5() {
+//
+// 	if (Toggle5 == "off") {
+// 		map.overlayMapTypes.setAt(6, IGM200);
+// 		Toggle5 = "on";
+// 	} else {
+// 		map.overlayMapTypes.setAt(6, null);
+// 		Toggle5 = "off";
+// 	}
+// }
 
+function ToggleLayer5() {
 	if (Toggle5 == "off") {
-		map.overlayMapTypes.setAt(6, IGM200);
+		console.log("richiesta di Toggle5 == 'ON'");
+//	map.overlayMapTypes.setAt(25, REG);
+		mapOL.addLayer(IGM200);
 		Toggle5 = "on";
 	} else {
-		map.overlayMapTypes.setAt(6, null);
+		console.log("richiesta di Toggle5 == 'OFF'");
+		(IGM200!== undefined)? mapOL.removeLayer(IGM200): null;
+		//map.overlayMapTypes.setAt(25, null);
 		Toggle5 = "off";
 	}
 }
 
+// function ToggleLayer6() {
+// 	if (Toggle6 == "off") {
+// 		$('#refDISS').show();
+// 		DISS_ISS.setMap(map);
+// 		Toggle6 = "on";
+// 	} else {
+// 		$('#refDISS').hide();
+// 		DISS_ISS.setMap(null);
+// 		Toggle6 = "off";
+// 	}
+// }
+
+
 function ToggleLayer6() {
 	if (Toggle6 == "off") {
 		$('#refDISS').show();
-		DISS_ISS.setMap(map);
+		console.log("richiesta di Toggle6 == 'ON'");
+//	map.overlayMapTypes.setAt(25, REG);
+		mapOL.addLayer(DISS_ISS);
 		Toggle6 = "on";
 	} else {
 		$('#refDISS').hide();
-		DISS_ISS.setMap(null);
+		console.log("richiesta di Toggle6 == 'OFF'");
+		(DISS_ISS !== undefined)? mapOL.removeLayer(DISS_ISS): null;
 		Toggle6 = "off";
 	}
 }
+
 // 		var iwOuter = $('.gm-style-iw');
 //
 // 	  // Moves the infowindow 10px to the right.
@@ -104,31 +163,63 @@ function ToggleLayer6() {
 // 	  iwBackground.children(':nth-child(1)').css({'display' : 'none'});
 // 		}
 
+// function ToggleLayer7() {
+// 	if (Toggle7 == "off") {
+// 		$('#refDISS').show();
+// 		DISS_CSS.setMap(map);
+// 		Toggle7 = "on";
+// 	} else {
+// 		$('#refDISS').hide();
+// 		DISS_CSS.setMap(null);
+// 		Toggle7 = "off";
+// 	}
+// }
+
 function ToggleLayer7() {
 	if (Toggle7 == "off") {
 		$('#refDISS').show();
-		DISS_CSS.setMap(map);
+		console.log("richiesta di Toggle7 == 'ON'");
+//	map.overlayMapTypes.setAt(25, REG);
+		mapOL.addLayer(DISS_CSS);
 		Toggle7 = "on";
 	} else {
 		$('#refDISS').hide();
-		DISS_CSS.setMap(null);
+		console.log("richiesta di Toggle7 == 'OFF'");
+		(DISS_CSS !== undefined)? mapOL.removeLayer(DISS_CSS): null;
 		Toggle7 = "off";
 	}
 }
 
+//
+// function ToggleLayer8() {
+// 	if (Toggle8 == "off") {
+// 		$('#refDISS').show();
+// 		DISS_SUBD.setMap(map);
+// 		//map.overlayMapTypes.setAt(3, GEO50);
+// 		Toggle8 = "on";
+// 	} else {
+// 		$('#refDISS').hide();
+// 		DISS_SUBD.setMap(null);
+// 		//map.overlayMapTypes.setAt(3, null);
+// 		Toggle8 = "off";
+// 	}
+// }
+
 function ToggleLayer8() {
 	if (Toggle8 == "off") {
 		$('#refDISS').show();
-		DISS_SUBD.setMap(map);
-		//map.overlayMapTypes.setAt(3, GEO50);
+		console.log("richiesta di Toggle8 == 'ON'");
+//	map.overlayMapTypes.setAt(25, REG);
+		mapOL.addLayer(DISS_SUBD);
 		Toggle8 = "on";
 	} else {
 		$('#refDISS').hide();
-		DISS_SUBD.setMap(null);
-		//map.overlayMapTypes.setAt(3, null);
+		console.log("richiesta di Toggle8 == 'OFF'");
+		(DISS_SUBD !== undefined)? mapOL.removeLayer(DISS_SUBD): null;
 		Toggle8 = "off";
 	}
 }
+
 
 function ToggleLayer9() {
 	if (Toggle9 == "off") {

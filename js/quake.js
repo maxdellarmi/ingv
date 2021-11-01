@@ -280,7 +280,7 @@ function showPQ(){
 
 function parsePQData(XmlText){
 	console.log("parsePQData"+ xmlServicePQ);
-	console.log("parsePQDataXml - showPQ"+ XmlText);
+	//console.log("parsePQDataXml - showPQ"+ XmlText);
 
 	XMLLocList = new DOMParser().parseFromString(XmlText.trim(), 'text/xml');
 	XMLLocListArrived = true;
@@ -717,7 +717,7 @@ function parsePQData2(XmlText){
 			// });
 
 			var marker = new ol.Feature({
-				geometry: new ol.geom.Point(  [ locPQlon[i], locPQlat[i]  ] ),  //ol.proj.fromLonLat( [ locLat[i], locLon[i] ] )), //NB. ol.proj.fromLonLat  converte in metri
+				geometry: new ol.geom.Point(new ol.proj.fromLonLat([locPQlon[i], locPQlat[i]])),//new ol.geom.Point(  [ locPQlon[i], locPQlat[i]  ] ),
 				type: "locality",
 				ExportKmlR: "",
 				OnClickTextIT: "",
@@ -812,7 +812,7 @@ function parsePQData2(XmlText){
 						// });
 						// PQMarkers[indEE] = markerEE;
 						var marker = new ol.Feature({
-							geometry: new ol.geom.Point(  [locPQlon[indEE], locPQlat[indEE] ] ),  //ol.proj.fromLonLat( [ locLat[i], locLon[i] ] )), //NB. ol.proj.fromLonLat  converte in metri
+							geometry: new ol.geom.Point(new ol.proj.fromLonLat([locPQlon[indEE], locPQlat[indEE]])), //new ol.geom.Point(  [locPQlon[indEE], locPQlat[indEE] ] ),
 							type:"localityEE",
 							ExportKmlR: "",
 							OnClickTextIT: "",
@@ -859,7 +859,7 @@ function parsePQData2(XmlText){
 						//var eeloconly = `<svg viewBox="-10 -10 200 200" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M13,14H2c-0.5523,0-1-0.4477-1-1V2c0-0.5523,0.4477-1,1-1h11c0.5523,0,1,0.4477,1,1v11C14,13.5523,13.5523,14,13,14z"  stroke="#30a559" stroke-width="1.8" fill="#ffffff"  /></svg>`;
 						var eeloconly= `<svg viewBox="0 0 15 15" height="33px" width="33px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M13,14H2c-0.5523,0-1-0.4477-1-1V2c0-0.5523,0.4477-1,1-1h11c0.5523,0,1,0.4477,1,1v11C14,13.5523,13.5523,14,13,14z"  stroke="#30a559" stroke-width="1.8" fill="#ffffff"  /></svg>`;
 						var singleFeature = new ol.Feature({
-							geometry: new ol.geom.Point([ EE_Lon[k], EE_Lat[k]] ),  //ol.proj.fromLonLat( [ locLat[i], locLon[i] ] )), //NB. ol.proj.fromLonLat  converte in metri
+							geometry: new ol.geom.Point(new ol.proj.fromLonLat([EE_Lon[k], EE_Lat[k]])),//new ol.geom.Point([ EE_Lon[k], EE_Lat[k]] ),
 							type:"EEonly",
 							ExportKmlR: "",
 							OnClickTextIT: "",
@@ -1028,7 +1028,7 @@ function parsePQData2(XmlText){
 	var compiled;
 
 	var singleFeature = new ol.Feature({
-		geometry: new ol.geom.Point([ Lon, Lat ] ),
+		geometry: new ol.geom.Point(new ol.proj.fromLonLat([Lon, Lat])),//new ol.geom.Point([ Lon, Lat ] ),
 		type: "singleQuake",
 		title: 'lat: ' + Lat + ', lon: ' +Lon,
 		OnClickTextIT : ""

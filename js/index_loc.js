@@ -196,7 +196,7 @@ function createTableandPlot(Filters){
 	for (var i = 0; i < descloc.length; i++){
 		//TODO AGGIUNGERE LE PROPERTIES QUI PER VISUALIZZARLE NEL POPUP
 		var marker = new ol.Feature({
-			geometry: new ol.geom.Point(  [ locLon[i], locLat[i]  ] ),  //ol.proj.fromLonLat( [ locLat[i], locLon[i] ] )), //NB. ol.proj.fromLonLat  converte in metri
+			geometry: new ol.geom.Point(new ol.proj.fromLonLat([locLon[i], locLat[i]])), //new ol.geom.Point(  [ locLon[i], locLat[i]  ] ),
 			name: country[i],
 			description: descloc[i],
 			ExportKmlR: "",

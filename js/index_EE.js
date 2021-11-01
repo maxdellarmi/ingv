@@ -355,7 +355,7 @@ function parseEEData(XmlText){
 				}*/
 
 				marker = new ol.Feature({
-					geometry: new ol.geom.Point([fEE_Lon, fEE_Lat]),
+					geometry: new ol.geom.Point(new ol.proj.fromLonLat([fEE_Lon, fEE_Lat])),//new ol.geom.Point([fEE_Lon, fEE_Lat]),
 					ExportKmlR: "",
 					OnClickTextIT: "",
 					ContentPopupText: ""

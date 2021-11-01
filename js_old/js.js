@@ -321,9 +321,10 @@ function placeMap() {
 
 	// ------------------------         LISTENER PER MAP OVERLAYS
   map.addListener('zoom_changed', function() {
+  	alert(map.getView().getZoom());
     // 3 seconds after the center of the map has changed, pan back to the
     // marker.
-    if (map.getZoom() > 11) {
+    if (map.getView().getZoom() > 11) {
 		document.getElementById('IGM100').disabled = false; document.getElementById('TopoIGM100').style.color = "black";
 		document.getElementById('FL').disabled = false; document.getElementById('FraneLin').style.color = "black";
 		document.getElementById('FP').disabled = false; document.getElementById('FranePol').style.color = "black";
@@ -331,7 +332,7 @@ function placeMap() {
 		document.getElementById('DGPV').disabled = false; document.getElementById('FraneDGPV').style.color = "black";
 	}
 
-	if (map.getZoom() < 12) {
+	if (map.getView().getZoom() < 12) {
 		document.getElementById('IGM100').disabled = true; document.getElementById('TopoIGM100').style.color = "#909090"; document.getElementById('IGM100').checked = false; Toggle4 = "on"; ToggleLayer4();
 		document.getElementById('FL').disabled = true; document.getElementById('FraneLin').style.color = "#909090"; document.getElementById('FL').checked = false; Toggle11a = "on"; ToggleLayer11a();
 		document.getElementById('FP').disabled = true; document.getElementById('FranePol').style.color = "#909090"; document.getElementById('FP').checked = false; Toggle11b = "on"; ToggleLayer11b();
@@ -339,9 +340,10 @@ function placeMap() {
 		document.getElementById('DGPV').disabled = true; document.getElementById('FraneDGPV').style.color = "#909090"; document.getElementById('DGPV').checked = false; Toggle11d = "on"; ToggleLayer11d();
 	}
 
-	if (map.getZoom() > 13) { document.getElementById('IGM25').disabled = false; document.getElementById('TopoIGM25').style.color = "black";}
-	if (map.getZoom() < 14) { document.getElementById('IGM25').disabled = true; document.getElementById('TopoIGM25').style.color = "#909090"; document.getElementById('IGM25').checked = false; Toggle3 = "on"; ToggleLayer3()}
+	if (map.getView().getZoom() > 13) { document.getElementById('IGM25').disabled = false; document.getElementById('TopoIGM25').style.color = "black";}
+	if (map.getView().getZoom() < 14) { document.getElementById('IGM25').disabled = true; document.getElementById('TopoIGM25').style.color = "#909090"; document.getElementById('IGM25').checked = false; Toggle3 = "on"; ToggleLayer3()}
   });
+
 
 
 

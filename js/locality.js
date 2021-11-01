@@ -490,7 +490,7 @@ function parseLocData(XmlText){
 		});
 
 	var markerLOC = new ol.Feature({
-		geometry: new ol.geom.Point([locLon, locLat]),
+		geometry: new ol.geom.Point(new ol.proj.fromLonLat([locLon, locLat])), //new ol.geom.Point([locLon, locLat]),
 		type: "pinpoint",
 		title : sLoctot+'\n'+'lat: ' + locLat + ', lon: ' + locLon,
 		OnClickTextIT : ""
@@ -982,7 +982,7 @@ function parseLocData(XmlText){
 			var compiled;
 
 			var singleFeature = new ol.Feature({
-				geometry: new ol.geom.Point([ Lon[i], Lat[i]]),
+				geometry:new ol.geom.Point(new ol.proj.fromLonLat([Lon[i], Lat[i]])), //new ol.geom.Point([ Lon[i], Lat[i]]),
 				type: "quakes",
 				title: DateLabel[i],
 				OnClickTextIT : ""

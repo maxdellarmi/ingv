@@ -40,10 +40,77 @@ function calculateMousePosition() {
             //console.log(coord);
             //console.log(ol.coordinate.format(coord, templateStr, 3).toString());
             return ol.coordinate.format(coord, templateStr, 3);},
-        projection: 'EPSG:4326',
+       projection: 'EPSG:4326', //projection: 'EPSG:3857', //EPSG:3857 WebMercator mentre la mappa e' cosi il mouseover e' in WGS84 4326
         className: 'custom-mouse-position',
         target: document.getElementById('tdCursor'),
         undefinedHTML: '&nbsp;',
+    });
+}
+
+/**
+ * adattamnento del vecchio 	// ------------------------         LISTENER PER MAP OVERLAYS
+ map.addListener('zoom_changed', function() {
+ */
+function zoomHandlingWMSLAYERSStrum() {
+    mapOL.on('moveend', function(e) {
+        try {
+            console.log("ZOOM CHANGED MOVEEND" + mapOL.getView().getZoom());
+            // 3 seconds after the center of the map has changed, pan back to the
+            // marker.
+            if (mapOL.getView().getZoom() > 11) {
+                document.getElementById('IGM100').disabled = false;
+                document.getElementById('TopoIGM100').style.color = "black";
+                document.getElementById('FL').disabled = false;
+                document.getElementById('FraneLin').style.color = "black";
+                document.getElementById('FP').disabled = false;
+                document.getElementById('FranePol').style.color = "black";
+                document.getElementById('FD').disabled = false;
+                document.getElementById('FraneDiff').style.color = "black";
+                document.getElementById('DGPV').disabled = false;
+                document.getElementById('FraneDGPV').style.color = "black";
+            }
+
+            if (mapOL.getView().getZoom() < 12) {
+                document.getElementById('IGM100').disabled = true;
+                document.getElementById('TopoIGM100').style.color = "#909090";
+                document.getElementById('IGM100').checked = false;
+                Toggle4 = "on";
+                ToggleLayer4();
+                document.getElementById('FL').disabled = true;
+                document.getElementById('FraneLin').style.color = "#909090";
+                document.getElementById('FL').checked = false;
+                Toggle11a = "on";
+                ToggleLayer11a();
+                document.getElementById('FP').disabled = true;
+                document.getElementById('FranePol').style.color = "#909090";
+                document.getElementById('FP').checked = false;
+                Toggle11b = "on";
+                ToggleLayer11b();
+                document.getElementById('FD').disabled = true;
+                document.getElementById('FraneDiff').style.color = "#909090";
+                document.getElementById('FD').checked = false;
+                Toggle11c = "on";
+                ToggleLayer11c();
+                document.getElementById('DGPV').disabled = true;
+                document.getElementById('FraneDGPV').style.color = "#909090";
+                document.getElementById('DGPV').checked = false;
+                Toggle11d = "on";
+                ToggleLayer11d();
+            }
+
+            if (mapOL.getView().getZoom() > 13) {
+                document.getElementById('IGM25').disabled = false;
+                document.getElementById('TopoIGM25').style.color = "black";
+            }
+            if (mapOL.getView().getZoom() < 14) {
+                document.getElementById('IGM25').disabled = true;
+                document.getElementById('TopoIGM25').style.color = "#909090";
+                document.getElementById('IGM25').checked = false;
+                Toggle3 = "on";
+                ToggleLayer3()
+            }
+        }
+        catch (e) { console.log(e);}
     });
 }
 
@@ -56,17 +123,17 @@ function creazioneMappa () {
                     //console.log(coord);
                     //console.log(ol.coordinate.format(coord, templateStr, 3).toString());
                     return ol.coordinate.format(coord, templateStr, 3);},
-                projection: 'EPSG:4326',
+                projection: 'EPSG:3857',
                 className: 'custom-mouse-position',
                 target: document.getElementById('tdCursor'),
                 undefinedHTML: '&nbsp;',
             });*/
-            var center = [12.6508, 42.5681];
+            var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
 
 
             rasterLayer = new ol.layer.Tile({
                 source: new ol.source.OSM(),
-                projection: 'EPSG:4326'
+                projection: 'EPSG:3857'
             });
 
             console.log('caricati i terremoti test')
@@ -80,7 +147,7 @@ function creazioneMappa () {
             quakeVector = new ol.layer.Vector({
                 source: new ol.source.Vector({
                     features: markers,
-                    projection: 'EPSG:4326'
+                    projection: 'EPSG:3857'
                 })
             });
 
@@ -101,7 +168,7 @@ function creazioneMappa () {
                    layers: [rasterLayer, quakeVector],
                    target: document.getElementById('mapOL'),
                    view: new ol.View({
-                       projection: 'EPSG:4326',
+                       projection: 'EPSG:3857',
                        center: center,
                        zoom: 6,
                    })
@@ -192,8 +259,9 @@ function creazioneMappa () {
 
             // change mouse cursor when over marker
             console.log('popover su mapOL.js gestione terremoti commentato perche andava in errore ');
-
             resizeMapIndex();
+            console.log('inizio gestione zoom');
+            zoomHandlingWMSLAYERSStrum();
         } catch (e) {
             console.error(e, e.stack);
         }
@@ -220,11 +288,11 @@ function creazioneMappaLocalityPHP (quakes) {
     $(document).ready(function() {
         try {
             // do some crazy stuff
-            var center = [12.6508, 42.5681];
+            var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
 
             rasterLayer = new ol.layer.Tile({
                 source: new ol.source.OSM(),
-                projection: 'EPSG:4326'
+                projection: 'EPSG:3857'
             });
             console.log('caricamento dei terremoti in input quakes:');
             console.log(quakes);
@@ -232,7 +300,7 @@ function creazioneMappaLocalityPHP (quakes) {
             quakeVector = new ol.layer.Vector({
                 source: new ol.source.Vector({
                     features: quakes,
-                    projection: 'EPSG:4326'
+                    projection: 'EPSG:3857'
                 })
             });
             quakeVector.setVisible(true);
@@ -250,7 +318,7 @@ function creazioneMappaLocalityPHP (quakes) {
                     layers: [rasterLayer, quakeVector],
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
-                        projection: 'EPSG:4326',
+                        projection: 'EPSG:3857',
                         center: center,
                         zoom: 6,
                     })
@@ -349,6 +417,7 @@ function creazioneMappaLocalityPHP (quakes) {
                     padding: padding,
                 }
             );
+            mapOL.getView().setZoom(8); //si aggiunge zoom per essere sicuro di visualizzare la porzione necessaria di mappa
         } catch (e) {
             console.error(e, e.stack);
         }
@@ -361,11 +430,11 @@ function creazioneMappaQuakesPHP (quakes) {
     $(document).ready(function() {
         try {
             // do some crazy stuff
-            var center = [12.6508, 42.5681];
+            var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
 
             rasterLayer = new ol.layer.Tile({
                 source: new ol.source.OSM(),
-                projection: 'EPSG:4326'
+                projection: 'EPSG:3857'
             });
             console.log('caricamento dei terremoti in input quakes:');
             console.log(quakes);
@@ -373,7 +442,7 @@ function creazioneMappaQuakesPHP (quakes) {
             quakeVector = new ol.layer.Vector({
                 source: new ol.source.Vector({
                     features: quakes,
-                    projection: 'EPSG:4326'
+                    projection: 'EPSG:3857'
                 })
             });
             quakeVector.setVisible(true);
@@ -391,7 +460,7 @@ function creazioneMappaQuakesPHP (quakes) {
                     layers: [rasterLayer, quakeVector],
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
-                        projection: 'EPSG:4326',
+                        projection: 'EPSG:3857',
                         center: center,
                         zoom: 6,
                     })
@@ -503,7 +572,7 @@ function creazioneMappaQuakesPHP (quakes) {
 function indexLocalita () {
     $(document).ready(function() {
         try {
-            var center =[12.6508, 42.5681];
+           var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
             console.log(center);
 
             console.log("carico i dati");
@@ -513,7 +582,7 @@ function indexLocalita () {
             localityVector = new ol.layer.Vector({
                 source: new ol.source.Vector({
                     features: LOCMarkers,
-                    projection: 'EPSG:4326'
+                    projection: 'EPSG:3857'
                 })
             });
             localityVector.setVisible(true);
@@ -523,7 +592,7 @@ function indexLocalita () {
 
             rasterLayer = new ol.layer.Tile({
                 source: new ol.source.OSM(),
-                projection: 'EPSG:4326'
+                projection: 'EPSG:3857'
             });
 
 
@@ -540,7 +609,7 @@ function indexLocalita () {
                     layers: [rasterLayer, localityVector],
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
-                        projection: 'EPSG:4326',
+                        projection: 'EPSG:3857',
                         center: center,
                         zoom: 6,
                     })
@@ -645,7 +714,8 @@ function indexLocalita () {
 function indexEEAmbiente() {
     $(document).ready(function() {
         try {
-            var center =[12.6508, 42.5681];
+           var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
+            
             console.log(center);
 
             console.log("carico i dati");
@@ -660,7 +730,7 @@ function indexEEAmbiente() {
             EEVector = new ol.layer.Vector({
                 source: new ol.source.Vector({
                     features: EEmarkers,
-                    projection: 'EPSG:4326'
+                    projection: 'EPSG:3857'
                 })
             });
             EEVector.setVisible(true);
@@ -670,7 +740,7 @@ function indexEEAmbiente() {
 
             rasterLayer = new ol.layer.Tile({
                 source: new ol.source.OSM(),
-                projection: 'EPSG:4326'
+                projection: 'EPSG:3857'
             });
 
 
@@ -687,7 +757,7 @@ function indexEEAmbiente() {
                     layers: [rasterLayer, EEVector],
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
-                        projection: 'EPSG:4326',
+                        projection: 'EPSG:3857',
                         center: center,
                         zoom: 6,
                     })

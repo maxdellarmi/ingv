@@ -188,134 +188,222 @@ var REG =  new ol.layer.Tile({
 //  });
 //</editor-fold>
 
+var IGM25  = new ol.layer.Tile({
+    opacity: 0.9,
+    visible: true,
+    //extent: [-13884991, 2870341, -7455066, 6338219],
+    source: new ol.source.TileWMS({
+        url: 'http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_25000.map',
+        params: {
+            'LAYERS': 'CB.IGM25000.32,CB.IGM25000.33',
+            'TILED': true},
+        serverType: 'geoserver',
+        // Countries have transparency, so do not fade tiles:
+        transition: 0,
+    }),
+});
+//<editor-fold defaultstate="expanded" desc="LAYER IMG25 vecchia gestione gmaps">
+// var IGM25 = new google.maps.ImageMapType({
+//                     getTileUrl: function (coord, zoom) {
+//                         var proj = map.getProjection();
+//                         var zfactor = Math.pow(2, zoom);
+//                         // get Long Lat coordinates
+//                         var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
+//                         var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
+//
+//                         //corrections for the slight shift of the WMS LAYER
+//                         var deltaX = 0.000;
+//                         var deltaY = 0.0000;
+//
+//                         //create the Bounding box string
+//                         var bbox =     (top.lng() + deltaX) + "," +
+//     	                               (bot.lat() + deltaY) + "," +
+//     	                               (bot.lng() + deltaX) + "," +
+//     	                               (top.lat() + deltaY);
+//
+//                         //base WMS URL
+//
+//                         var urlWMS = "http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_25000.map&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=CB.IGM25000.32,CB.IGM25000.33&STYLES=default,default&TRANSPARENT=TRUE&FORMAT=image/gif";
+//
+//
+//
+//
+//                         urlWMS += "&BBOX=" + bbox;      // set bounding box
+//
+//                          return urlWMS;                // return URL for the tile
+//
+//
+//
+//                     },
+//                     tileSize: new google.maps.Size(512, 512),
+// 					// minZoom: 14,
+// 					// maxZoom: 16,
+// 					opacity: 0.9,
+//
+//                 });
+//</editor-fold>
 
-var IGM25 = new google.maps.ImageMapType({
-                    getTileUrl: function (coord, zoom) {
-                        var proj = map.getProjection();
-                        var zfactor = Math.pow(2, zoom);
-                        // get Long Lat coordinates
-                        var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
-                        var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
-
-                        //corrections for the slight shift of the WMS LAYER
-                        var deltaX = 0.000;
-                        var deltaY = 0.0000;
-
-                        //create the Bounding box string
-                        var bbox =     (top.lng() + deltaX) + "," +
-    	                               (bot.lat() + deltaY) + "," +
-    	                               (bot.lng() + deltaX) + "," +
-    	                               (top.lat() + deltaY);
-
-                        //base WMS URL
-
-                        var urlWMS = "http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_25000.map&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=CB.IGM25000.32,CB.IGM25000.33&STYLES=default,default&TRANSPARENT=TRUE&FORMAT=image/gif";
-
-
-
-
-                        urlWMS += "&BBOX=" + bbox;      // set bounding box
-
-                         return urlWMS;                // return URL for the tile
-
-
-
-                    },
-                    tileSize: new google.maps.Size(512, 512),
-					// minZoom: 14,
-					// maxZoom: 16,
-					opacity: 0.9,
-
-                });
-
-var IGM100 = new google.maps.ImageMapType({
-                    getTileUrl: function (coord, zoom) {
-                        var proj = map.getProjection();
-                        var zfactor = Math.pow(2, zoom);
-                        // get Long Lat coordinates
-                        var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
-                        var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
-
-                        //corrections for the slight shift of the WMS LAYER
-                        var deltaX = 0.000;
-                        var deltaY = 0.0000;
-
-                        //create the Bounding box string
-                        var bbox =     (top.lng() + deltaX) + "," +
-    	                               (bot.lat() + deltaY) + "," +
-    	                               (bot.lng() + deltaX) + "," +
-    	                               (top.lat() + deltaY);
-
-                        //base WMS URL
-
-                       var urlWMS = "http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_100000.map&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=MB.IGM100000.33,MB.IGM100000.32&STYLES=default,default&TRANSPARENT=TRUE&FORMAT=image/gif";
-
-
-
-                        urlWMS += "&BBOX=" + bbox;      // set bounding box
-
-                         return urlWMS;                // return URL for the tile
-
-
-
-                    },
-                    tileSize: new google.maps.Size(512, 512),
-					// minZoom: 14,
-					// maxZoom: 16,
-					opacity: 0.9,
-
-                });
-
-
-var IGM200 = new google.maps.ImageMapType({
-                    getTileUrl: function (coord, zoom) {
-                        var proj = map.getProjection();
-                        var zfactor = Math.pow(2, zoom);
-                        // get Long Lat coordinates
-                        var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
-                        var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
-
-                        //corrections for the slight shift of the WMS LAYER
-                        var deltaX = 0.000;
-                        var deltaY = 0.0000;
-
-                        //create the Bounding box string
-                        var bbox =     (top.lng() + deltaX) + "," +
-    	                               (bot.lat() + deltaY) + "," +
-    	                               (bot.lng() + deltaX) + "," +
-    	                               (top.lat() + deltaY);
-
-                        //base WMS URL
-
-						var urlWMS = "http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_250000.map&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=CB.IGM250000.33,CB.IGM250000.32&STYLES=default,default&TRANSPARENT=TRUE&FORMAT=image/gif";
-
-
-                        urlWMS += "&BBOX=" + bbox;      // set bounding box
-
-                         return urlWMS;                // return URL for the tile
-
-
-
-                    },
-                    tileSize: new google.maps.Size(512, 512),
-					// minZoom: 14,
-					// maxZoom: 16,
-					opacity: 0.9,
-
-                });
+//http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_100000.map
+var IGM100  = new ol.layer.Tile({
+    opacity: 0.9,
+    visible: true,
+    //extent: [-13884991, 2870341, -7455066, 6338219],
+    source: new ol.source.TileWMS({
+        url: 'http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_100000.map',
+        params: {
+            'LAYERS': 'MB.IGM100000.33,MB.IGM100000.32',
+            'TILED': true},
+        serverType: 'geoserver',
+        // Countries have transparency, so do not fade tiles:
+        transition: 0,
+    }),
+});
+//<editor-fold defaultstate="expanded" desc="LAYER IMG100 vecchia gestione gmaps">
+// var IGM100 = new google.maps.ImageMapType({
+//                     getTileUrl: function (coord, zoom) {
+//                         var proj = map.getProjection();
+//                         var zfactor = Math.pow(2, zoom);
+//                         // get Long Lat coordinates
+//                         var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
+//                         var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
+//
+//                         //corrections for the slight shift of the WMS LAYER
+//                         var deltaX = 0.000;
+//                         var deltaY = 0.0000;
+//
+//                         //create the Bounding box string
+//                         var bbox =     (top.lng() + deltaX) + "," +
+//     	                               (bot.lat() + deltaY) + "," +
+//     	                               (bot.lng() + deltaX) + "," +
+//     	                               (top.lat() + deltaY);
+//
+//                         //base WMS URL
+//
+//                        var urlWMS = "http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_100000.map&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=MB.IGM100000.33,MB.IGM100000.32&STYLES=default,default&TRANSPARENT=TRUE&FORMAT=image/gif";
+//
+//
+//
+//                         urlWMS += "&BBOX=" + bbox;      // set bounding box
+//
+//                          return urlWMS;                // return URL for the tile
+//
+//
+//
+//                     },
+//                     tileSize: new google.maps.Size(512, 512),
+// 					// minZoom: 14,
+// 					// maxZoom: 16,
+// 					opacity: 0.9,
+//
+//                 });
+//</editor-fold>
 
 
+var IGM200  = new ol.layer.Tile({
+    opacity: 0.9,
+    visible: true,
+    //extent: [-13884991, 2870341, -7455066, 6338219],
+    source: new ol.source.TileWMS({
+        url: 'http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_250000.map',
+        params: {
+            'LAYERS': 'CB.IGM250000.33,CB.IGM250000.32',
+            'TILED': true},
+        serverType: 'geoserver',
+        // Countries have transparency, so do not fade tiles:
+        transition: 0,
+    }),
+});
 
-var DISS_ISS = new google.maps.KmlLayer('http://storing.ingv.it/cfti/cfti5/KML/ISS.kml', {preserveViewport:true} ) ;
+//<editor-fold defaultstate="expanded" desc="LAYER IGM200 vecchia gestione gmaps">
+// var IGM200 = new google.maps.ImageMapType({
+//                     getTileUrl: function (coord, zoom) {
+//                         var proj = map.getProjection();
+//                         var zfactor = Math.pow(2, zoom);
+//                         // get Long Lat coordinates
+//                         var top = proj.fromPointToLatLng(new google.maps.Point(coord.x * 512 / zfactor, coord.y * 512 / zfactor));
+//                         var bot = proj.fromPointToLatLng(new google.maps.Point((coord.x + 1) * 512 / zfactor, (coord.y + 1) * 512 / zfactor));
+//
+//                         //corrections for the slight shift of the WMS LAYER
+//                         var deltaX = 0.000;
+//                         var deltaY = 0.0000;
+//
+//                         //create the Bounding box string
+//                         var bbox =     (top.lng() + deltaX) + "," +
+//     	                               (bot.lat() + deltaY) + "," +
+//     	                               (bot.lng() + deltaX) + "," +
+//     	                               (top.lat() + deltaY);
+//
+//                         //base WMS URL
+//
+// 						var urlWMS = "http://wms.pcn.minambiente.it/ogc?map=/ms_ogc/WMS_v1.3/raster/IGM_250000.map&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=512&LAYERS=CB.IGM250000.33,CB.IGM250000.32&STYLES=default,default&TRANSPARENT=TRUE&FORMAT=image/gif";
+//
+//
+//                         urlWMS += "&BBOX=" + bbox;      // set bounding box
+//
+//                          return urlWMS;                // return URL for the tile
+//
+//
+//
+//                     },
+//                     tileSize: new google.maps.Size(512, 512),
+// 					// minZoom: 14,
+// 					// maxZoom: 16,
+// 					opacity: 0.9,
+//
+//                 });
+//</editor-fold>
 
-var DISS_CSS = new google.maps.KmlLayer('http://storing.ingv.it/cfti/cfti5/KML/CSS.kml', {preserveViewport:true} ) ;
+var DISS_ISS = new ol.layer.Vector({
+    source: new ol.source.Vector({
+        url: 'http://diss.rm.ingv.it/dissGM/kml321/ISS.kml',//'http://cft5.test/KML/ISS.kml', //http://cft5.test/KML/ISS.kml
+        format: new ol.format.KML(),
+    }),
+});
+/*
+non so se openlayer supporta questo
+<kml xmlns="http://earth.google.com/kml/2.1">
+  <NetworkLink>
+    <Link>
+      <href>http://diss.rm.ingv.it/dissGM/kml321/ISS.kml</href>
+      <refreshMode>onInterval</refreshMode>
+      <refreshInterval> 3600 </refreshInterval>
+    </Link>
+  </NetworkLink>
+</kml>
+http://diss.rm.ingv.it/dissGM/kml321/ISS.kml
+ */
 
-var DISS_SUBD = new google.maps.KmlLayer('http://storing.ingv.it/cfti/cfti5/KML/SUBD.kml', {preserveViewport:true} ) ;
+// var DISS_ISS = new google.maps.KmlLayer('http://storing.ingv.it/cfti/cfti5/KML/ISS.kml', {preserveViewport:true} ) ;
+
+
+//http://diss.rm.ingv.it/dissGM/kml321/CSS.kml
+//var DISS_CSS = new google.maps.KmlLayer('http://storing.ingv.it/cfti/cfti5/KML/CSS.kml', {preserveViewport:true} ) ;
+
+var DISS_CSS = new ol.layer.Vector({
+    source: new ol.source.Vector({
+        url: 'http://diss.rm.ingv.it/dissGM/kml321/CSS.kml',
+        format: new ol.format.KML(),
+    }),
+});
+
+
+//http://diss.rm.ingv.it/dissGM/kml321/SUBD.kml
+// var DISS_SUBD = new google.maps.KmlLayer('http://storing.ingv.it/cfti/cfti5/KML/SUBD.kml', {preserveViewport:true} ) ;
+
+var DISS_SUBD = new ol.layer.Vector({
+    source: new ol.source.Vector({
+        url: 'http://diss.rm.ingv.it/dissGM/kml321/SUBD.kml',
+        format: new ol.format.KML(),
+    }),
+});
+
 
 
 // var CUSTOM_LAYER = new google.maps.KmlLayer('http://www.cftilab.it/file_repository/EE_Cedit_fino1997.kmz', {preserveViewport:true} ) ;
 // 'http://www.cftilab.it/file_repository/Surfacerupturesofthe2009LAq.kmz'
 
+
+/**************CONTINUA DA QUI *************************/
 
 var GEO50 = new google.maps.ImageMapType({
                     getTileUrl: function (coord, zoom) {
