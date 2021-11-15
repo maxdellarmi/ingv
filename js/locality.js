@@ -945,20 +945,20 @@ function parseLocData(XmlText){
 					EpicenterITA = "Singola località";
 					EpicenterENG= Epicenter[i];
 
-					if(9.5 < Io[i]) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale4, fillColor: color4, fillOpacity: 1, strokeWeight: 0.5 }; EpiIcon="L_9.5"};
-			        if(7.5 < Io[i] && 9.5 >= Io[i]) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale3, fillColor: color3, fillOpacity: 1, strokeWeight: 0.5 }; EpiIcon="L_8"};
-			        if(5.9 < Io[i] && 7.5 >= Io[i]) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale2, fillColor: color2, fillOpacity: 1, strokeWeight: 0.5 }; EpiIcon="L_6"};
-			        if(6 > Io[i] ) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale1, fillColor: color1, fillOpacity: 1, strokeWeight: 0.5 }; EpiIcon="L_4"};
+					if(9.5 < Io[i]) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale4, fillColor: color4, fillOpacity: 1, strokeWeight: 5 , strokeColor: "#000000"}; EpiIcon="L_9.5"};
+			        if(7.5 < Io[i] && 9.5 >= Io[i]) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale3, fillColor: color3, fillOpacity: 1, strokeWeight: 5 , strokeColor: "#000000"}; EpiIcon="L_8"};
+			        if(5.9 < Io[i] && 7.5 >= Io[i]) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale2, fillColor: color2, fillOpacity: 1, strokeWeight: 5 , strokeColor: "#000000"}; EpiIcon="L_6"};
+			        if(6 > Io[i] ) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale1, fillColor: color1, fillOpacity: 1, strokeWeight: 5, strokeColor: "#000000" }; EpiIcon="L_4"};
 
 				//   --------------------------------------------  Epincenter type: AREA   ---------------------------------------------------------
 			} else if (Epicenter[i] == "Region, area"){
 					EpicenterITA = "Regione, area";
 					EpicenterENG= Epicenter[i];
 
-					if(9.5 < Io[i]) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale4, strokeColor: color4, fillOpacity: 0, strokeWeight: 3 }; EpiIcon="R_9.5"};
-			        if(7.5 < Io[i] && 9.5 >= Io[i]) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale3, strokeColor: color3, fillOpacity: 0, strokeWeight: 3 }; EpiIcon="R_8"};
-			        if(5.9 < Io[i] && 7.5 >= Io[i]) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale2, strokeColor: color2, fillOpacity: 0, strokeWeight: 3 }; EpiIcon="R_6"};
-			        if(6 > Io[i] ) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale1, strokeColor: color1, fillOpacity: 0, strokeWeight: 3 }; EpiIcon="R_4"};
+					if(9.5 < Io[i]) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale4, strokeColor: color4, fillOpacity: 0, strokeWeight: 5 }; EpiIcon="R_9.5"};
+			        if(7.5 < Io[i] && 9.5 >= Io[i]) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale3, strokeColor: color3, fillOpacity: 0, strokeWeight: 5 }; EpiIcon="R_8"};
+			        if(5.9 < Io[i] && 7.5 >= Io[i]) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale2, strokeColor: color2, fillOpacity: 0, strokeWeight: 5 }; EpiIcon="R_6"};
+			        if(6 > Io[i] ) {Star = {path: google.maps.SymbolPath.CIRCLE, scale: CircleScale1, strokeColor: color1, fillOpacity: 0, strokeWeight: 5 }; EpiIcon="R_4"};
 
 				 //--------------------------------------------  Epincenter type: Hypothetical  ---------------------------------------------------------
 				} else if (Epicenter[i] == "Hypothetical"){
@@ -977,7 +977,9 @@ function parseLocData(XmlText){
 			// 		  strokeOpacity: 1, anchor: new google.maps.Point(125,125),
 			// 		  strokeWeight: 2,
 			// 		  scale:StarScale1}
-			var cerchio = `<svg viewBox="0 0 250 250"   {height} {width} xmlns="http://www.w3.org/2000/svg" version="1.1"><circle cx="50" cy="50" r="40" {stroke} {widthS} {fill} /></svg>`;
+			
+			//var cerchio = `<svg viewBox="0 0 250 250"   {height} {width} xmlns="http://www.w3.org/2000/svg" version="1.1"><circle cx="50" cy="50" r="40" {stroke} {widthS} {fill} /></svg>`;
+			var cerchio = `<svg viewBox="0 0 100 100"  {height} {width}  xmlns="http://www.w3.org/2000/svg" version="1.1"><circle cx="40" cy="50" r="40"  {stroke} {widthS} {fill}  /></svg>`;
 			var stella = `<svg viewBox="0 0 250 250" {height} {width} xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" {fill} {stroke} {widthS} /></svg>`;
 			var compiled;
 
@@ -998,8 +1000,8 @@ function parseLocData(XmlText){
 					stroke:  (Star.strokeColor!== undefined) ? String().concat("stroke=\"",Star.strokeColor,'\"'): undefined ,
 					widthS: (Star.strokeWeight!== undefined) ? String().concat("stroke-width=\"",Star.strokeWeight,'\"'): undefined,
 					fill:	(Star.fillColor!== undefined) ? String().concat("fill=\"",Star.fillColor,'\"'): undefined,
-					height: String().concat("height=\"",'5px','\"'),
-					width: String().concat("width=\"",'5px','\"')
+					height: String().concat("height=\"",'2.5px','\"'),
+					width: String().concat("width=\"",'2.5px','\"')
 				});
 			}
 			else  if ( Star.path === EPIpathCALC)

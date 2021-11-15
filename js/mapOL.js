@@ -17,6 +17,8 @@ var localityVector;
 
 var EEVector;
 
+var pinpointVector;
+
 var templateStr = 'Lat:{y}, Lon:{x}';
 
 var mousePositionControl;
@@ -123,6 +125,19 @@ function zoomHandlingWMSLAYERSStrum() {
     });
 }
 
+function clusteringObjectWithFirstElementStyle (feature) {
+    var size = feature.get('features').length;
+    if (size === 1) {
+        return feature.get('features')[0].getStyle();
+    } else if (feature.get('features') !== undefined)
+    {
+        return feature.get('features')[0].getStyle();
+    }
+}
+
+
+
+
 /***
  * NOTA. Il primo caricamento va sempre a vuoto perche' non sono ancora stati caricati i filtri viene caricato correttamente dopo la funzione showQuakes.
  */
@@ -151,24 +166,30 @@ function creazioneMappa () {
             /***
              * NOTA. Il primo caricamento va sempre a vuoto perche' non sono ancora stati caricati i filtri viene caricato correttamente dopo la funzione showQuakes.
              */
-            quakeVector = new ol.layer.Vector({
-                source: new ol.source.Vector({
-                    features:  filteredMarkersArray, //markers,  //NB. Il primo caricamento va sempre a vuoto perche' non sono ancora stati caricati i filtri viene caricato correttamente dopo la funzione showQuakes.
-                    projection: 'EPSG:3857'
-                })
+
+            /**********************oggetti feature contenenti le coordinate****************/
+            var source = new ol.source.Vector ({
+                features: filteredMarkersArray,
+                projection: 'EPSG:3857'
             });
 
+            /*il criterio di raggruppamento cluster */
+            var clusterSource = new ol.source.Cluster({
+                distance: 1,
+                minDistance: 1,
+                source: source,
+            });
+            
+            quakeVector = new ol.layer.Vector({
+                source: clusterSource,
+                style: clusteringObjectWithFirstElementStyle,
+            });
+            
             quakeVector.setVisible(true);
 
 
            if (mapOL === undefined) {
                mapOL = new ol.Map({
-                   /*controls: ol.control.defaults({
-                       attributionOptions: ({
-                           collapsible: false
-                       })
-                   }),*/
-                   //settings maps control
                    controls: ol.control.defaults({
                        attributionOptions: ({
                            collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
@@ -193,6 +214,9 @@ function creazioneMappa () {
                (localityVector!== undefined)? mapOL.removeLayer(localityVector): null;// console.log("CLEANUP pulizia del layer Raster")
                console.log("CLEANUP pulizia del layer Eventi ambientali");
                (EEVector!== undefined)? mapOL.removeLayer(EEVector): null;    // console.log("CLEANUP pulizia del layer Raster")
+               (pinpointVector!== undefined)? mapOL.removeLayer(pinpointVector): null;    // console.log("CLEANUP pulizia del layer pinpointVector") 
+               
+
                    // mapOL.removeLayer(rasterLayer);
                //////////////////////////////////////////
                /***forza la pulizia dei layer vecchi ***/
@@ -231,13 +255,26 @@ function creazioneMappa () {
                     function (feature) {
                         return feature;
                     });
-
+            
                 if (feature) {
                     $(element).popover('destroy')
                     var coordinates = feature.getGeometry().getCoordinates();
+                    var popupContent = "";
                     console.log("FEATURE ONCLICK popup data:")
                     console.log(feature.OnClickTextIT);
-                    var popupContent = feature.OnClickTextIT;
+                    if ( feature.get('features') !== undefined) {
+                        var allpopupContent="";
+                        feature.get('features').forEach(function(feature) { 
+                            if (feature.OnClickTextIT != undefined) {
+                                allpopupContent += (feature.OnClickTextIT + '<br>'); 
+                            }
+                        });
+                        //console.log("TODO4 FEATURE SAME COORDINATES trying to merge all POPOP content:"+ allpopupContent);
+                        popupContent = allpopupContent;
+                    }
+                    else {
+                        popupContent = feature.OnClickTextIT;
+                    }
                     popup.setPosition(coordinates);
                     $(element).popover({
                         'placement': 'top',
@@ -251,8 +288,7 @@ function creazioneMappa () {
                     $(element).popover('destroy');
                     popup.setPosition(undefined);
                 }
-
-            });
+              },);
             // change mouse cursor when over marker
             mapOL.on('pointermove', function (e) {
                 if (e.dragging) {
@@ -275,6 +311,8 @@ function creazioneMappa () {
     });
 
 }
+
+
 
 
 /**
@@ -303,26 +341,44 @@ function creazioneMappaLocalityPHP (quakes) {
             });
             console.log('caricamento dei terremoti in input quakes:');
             console.log(quakes);
+            
+            var pinpoint= [];
+            var result = localityPHPmarkers.filter(obj => {
+                if (obj.values_.type== "pinpoint") { pinpoint.push(obj); }
+              })
 
-            quakeVector = new ol.layer.Vector({
+            pinpointVector = new ol.layer.Vector({
                 source: new ol.source.Vector({
-                    features: quakes,
+                    features: pinpoint,
                     projection: 'EPSG:3857'
                 })
             });
-            quakeVector.setVisible(true);
+            pinpointVector.setVisible(true);
+
+            var source = new ol.source.Vector ({
+                features: quakes,
+                projection: 'EPSG:3857'
+            });
+
+            /*il criterio di raggruppamento cluster */
+            var clusterSource = new ol.source.Cluster({
+                distance: 1,
+                minDistance: 1,
+                source: source,
+            });
+            
+            quakeVector = new ol.layer.Vector({
+                source: clusterSource,
+                style: clusteringObjectWithFirstElementStyle,
+            });
 
             if (mapOL === undefined) {
+
                 mapOL = new ol.Map({
-                    // controls: ol.control.defaults({
-                    //     attributionOptions: ({
-                    //         collapsible: false
-                    //     })
-                    // }),
                     controls: ol.control.defaults({
                         attributionOptions: ({
                             collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
-                    layers: [rasterLayer, quakeVector],
+                    layers: [rasterLayer, pinpoint, quakeVector ],
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
                         projection: 'EPSG:3857',
@@ -353,7 +409,9 @@ function creazioneMappaLocalityPHP (quakes) {
                 });
                 console.log("ADDING NEW LAYERS");
                 mapOL.addLayer(rasterLayer);
+                mapOL.addLayer(pinpointVector); 
                 mapOL.addLayer(quakeVector);
+                // mapOL.addLayer(clusters); /***************test*****/
             }
 
             /*
@@ -381,13 +439,26 @@ function creazioneMappaLocalityPHP (quakes) {
                     function (feature) {
                         return feature;
                     });
-
+            
                 if (feature) {
                     $(element).popover('destroy')
                     var coordinates = feature.getGeometry().getCoordinates();
+                    var popupContent = "";
                     console.log("FEATURE ONCLICK popup data:")
                     console.log(feature.OnClickTextIT);
-                    var popupContent = feature.OnClickTextIT;
+                    if ( feature.get('features') !== undefined) {
+                        var allpopupContent="";
+                        feature.get('features').forEach(function(feature) { 
+                            if (feature.OnClickTextIT != undefined) {
+                                allpopupContent += (feature.OnClickTextIT + '<br>'); 
+                            }
+                        });
+                        //console.log("TODO4 FEATURE SAME COORDINATES trying to merge all POPOP content:"+ allpopupContent);
+                        popupContent = allpopupContent;
+                    }
+                    else {
+                        popupContent = feature.OnClickTextIT;
+                    }
                     popup.setPosition(coordinates);
                     $(element).popover({
                         'placement': 'top',
@@ -401,8 +472,7 @@ function creazioneMappaLocalityPHP (quakes) {
                     $(element).popover('destroy');
                     popup.setPosition(undefined);
                 }
-
-            });
+              },);
             // change mouse cursor when over marker
             mapOL.on('pointermove', function (e) {
                 if (e.dragging) {
@@ -426,7 +496,8 @@ function creazioneMappaLocalityPHP (quakes) {
             );
             mapOL.getView().setZoom(8); //si aggiunge zoom per essere sicuro di visualizzare la porzione necessaria di mappa
         } catch (e) {
-            console.error(e, e.stack);
+            console.log("ERR gestito");
+            console.log(e, e.stack);
         }
     });
 }
@@ -485,6 +556,7 @@ function creazioneMappaQuakesPHP (quakes) {
                 (localityVector!== undefined)? mapOL.removeLayer(localityVector): null;// console.log("CLEANUP pulizia del layer Raster")
                 console.log("CLEANUP pulizia del layer Eventi ambientali");
                 (EEVector!== undefined)? mapOL.removeLayer(EEVector): null;    // console.log("CLEANUP pulizia del layer Raster")
+                (pinpointVector!== undefined)? mapOL.removeLayer(pinpointVector): null;    // console.log("CLEANUP pulizia del layer pinpointVector") 
                 // mapOL.removeLayer(rasterLayer);
                 //////////////////////////////////////////
                 /***forza la pulizia dei layer vecchi ***/
@@ -632,6 +704,7 @@ function indexLocalita () {
                 (quakeVector!== undefined)? mapOL.removeLayer(quakeVector): null; //meglio rimuovere a mano i layers se rimane reference non li toglie
                 console.log("CLEANUP pulizia del layer Eventi ambientali");
                 (EEVector!== undefined)? mapOL.removeLayer(EEVector): null;    // console.log("CLEANUP pulizia del layer Raster")
+                (pinpointVector!== undefined)? mapOL.removeLayer(pinpointVector): null;    // console.log("CLEANUP pulizia del layer pinpointVector") 
                     // mapOL.removeLayer(rasterLayer);
                 ////////////////////////////////////////////////////////////////////////
                 /***forza la pulizia dei layer vecchi anche se stesso vecchia versione***/
@@ -781,6 +854,7 @@ function indexEEAmbiente() {
                 (quakeVector!== undefined)? mapOL.removeLayer(quakeVector): null; //meglio rimuovere a mano i layers se rimane reference non li toglie
                 console.log("CLEANUP pulizia del layer Locality");
                 (localityVector!== undefined)? mapOL.removeLayer(localityVector): null;
+                (pinpointVector!== undefined)? mapOL.removeLayer(pinpointVector): null;    // console.log("CLEANUP pulizia del layer pinpointVector") 
                 // console.log("CLEANUP pulizia del layer Raster")
                 // mapOL.removeLayer(rasterLayer);
                 // }
