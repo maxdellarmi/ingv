@@ -885,6 +885,7 @@ function getSTRUMeq(date1, date2, lat1, lat2, lon1, lon2, M1, M2, depth1, depth2
       if (request.readyState === 4 && request.status === 200) {
           var type = request.getResponseHeader('Content-Type');
           if (type.indexOf("text") !== 1) {
+                console.log('XMLHttpRequest webservices.ingv.it/fdsnws/event/1/query response:' + request.responseText);
 				parseQuakeFile(request.responseText)
               return request.responseText;
           }
@@ -936,23 +937,42 @@ function parseQuakeFile(INGVquakes){
     		var StrumQuakeMagValue = line[10];
     		var StrumQuakeLocation = line[12];
 
-    		if (StrumQuakeMagValue>=6) var markerIcon = {url: urlIcon5, scaledSize: new google.maps.Size(scaleSTRUM5, scaleSTRUM5)}
-    		if (StrumQuakeMagValue<6 && StrumQuakeMagValue>=5) var markerIcon = {url: urlIcon4, scaledSize: new google.maps.Size(scaleSTRUM4, scaleSTRUM4)}
-    		if (StrumQuakeMagValue<5 && StrumQuakeMagValue>=4) var markerIcon = {url: urlIcon3, scaledSize: new google.maps.Size(scaleSTRUM3, scaleSTRUM3)}
-    		if (StrumQuakeMagValue<4 && StrumQuakeMagValue>=3) var markerIcon = {url: urlIcon2, scaledSize: new google.maps.Size(scaleSTRUM2, scaleSTRUM2)}
-    		if (StrumQuakeMagValue<3) var markerIcon = {url: urlIcon1, scaledSize: new google.maps.Size(scaleSTRUM1, scaleSTRUM1)}
+            //region vecchia gestione google maps
+            // if (StrumQuakeMagValue>=6) var markerIcon = {url: urlIcon5, scaledSize: new google.maps.Size(scaleSTRUM5, scaleSTRUM5)}
+    		// if (StrumQuakeMagValue<6 && StrumQuakeMagValue>=5) var markerIcon = {url: urlIcon4, scaledSize: new google.maps.Size(scaleSTRUM4, scaleSTRUM4)}
+    		// if (StrumQuakeMagValue<5 && StrumQuakeMagValue>=4) var markerIcon = {url: urlIcon3, scaledSize: new google.maps.Size(scaleSTRUM3, scaleSTRUM3)}
+    		// if (StrumQuakeMagValue<4 && StrumQuakeMagValue>=3) var markerIcon = {url: urlIcon2, scaledSize: new google.maps.Size(scaleSTRUM2, scaleSTRUM2)}
+    		// if (StrumQuakeMagValue<3) var markerIcon = {url: urlIcon1, scaledSize: new google.maps.Size(scaleSTRUM1, scaleSTRUM1)}
+    		//
+    		// var STRUMMarker = new google.maps.Marker({
+    		// 	position: new google.maps.LatLng(StrumQuakeLat, StrumQuakeLon),
+    		// 	map: map,
+    		// 	icon: markerIcon,
+    		// 	title: StrumQuakeMagType + ': ' + StrumQuakeMagValue,
+    		// })
+            // markersSTRUMOLD.push(STRUMMarker)
+            //endregion
 
-    		var STRUMMarker = new google.maps.Marker({
-    			position: new google.maps.LatLng(StrumQuakeLat, StrumQuakeLon),
-    			map: map,
-    			icon: markerIcon,
-    			title: StrumQuakeMagType + ': ' + StrumQuakeMagValue,
-    		})
-            markersSTRUMOLD.push(STRUMMarker)
+            if (StrumQuakeMagValue>=6) var markerIcon =new ol.style.Style({image: new ol.style.Icon({ src: urlIcon5, size: [512, 512], scale: 0.060/1.6})});
+            if (StrumQuakeMagValue<6 && StrumQuakeMagValue>=5) var markerIcon = new ol.style.Style({image: new ol.style.Icon({ src: urlIcon4, size: [512,512], scale: 0.053/1.6})});
+            if (StrumQuakeMagValue<5 && StrumQuakeMagValue>=4) var markerIcon = new ol.style.Style({image: new ol.style.Icon({ src: urlIcon3, size: [512,512], scale: 0.047/1.6})});
+            if (StrumQuakeMagValue<4 && StrumQuakeMagValue>=3) var markerIcon = new ol.style.Style({image: new ol.style.Icon({ src: urlIcon2, size: [512,512], scale: 0.043/1.6})});
+            if (StrumQuakeMagValue<3)var markerIcon = new ol.style.Style({image: new ol.style.Icon({ src: urlIcon1, size: [512,512], scale: 0.030/1.6})});
+
+////////////////////TODO: STRUM LAYER ATTIVARE ////////////////////////////////////*
+
+
+            var STRUMMarker =new ol.Feature({
+                geometry: new ol.geom.Point(new ol.proj.fromLonLat([StrumQuakeLon, StrumQuakeLat])), //new ol.geom.Point([locLon, locLat]),
+                type: "StruMM",
+                title :  StrumQuakeMagType + ': ' + StrumQuakeMagValue,
+                OnClickTextIT : ""
+            });
+            STRUMMarker.setStyle(markerIcon);
+
+
             var time = StrumQuakeTime.split('T')[1]
             var date = StrumQuakeTime.split('T')[0]
-
-
 
             // controlla se terremoto ha punti in HSIT
             HSITrequest(StrumQuakeCode, i)
@@ -965,9 +985,13 @@ function parseQuakeFile(INGVquakes){
 
     		var OnClickTextIT = '<div class="IWSTRUM"><div id="IWcloseSTRUM"><a onclick="infowindow2.close()" href="#"><img src="images/close.png" width="10px"></a></div>' + titleIT + '<br>' + '<br><a href="http://cnt.rm.ingv.it/event/' + StrumQuakeCode + '" target="_blank"> Pagina INGV-ONT </a><br></div>'
 
-            openPopupSTRUM(STRUMMarker, OnClickTextEN, OnClickTextIT, i, StrumQuakeCode)
 
-    	}
+            /**********TODO TRADURRE IL LAYER STRUM gestione popup *********************/
+            openPopupSTRUM(STRUMMarker, OnClickTextEN, OnClickTextIT, i, StrumQuakeCode);
+
+            console.log('aggiungo STRUMMarker al layer globale markersSTRUMOLD');
+            markersSTRUMOLD.push(STRUMMarker);
+        }
     }
 
     if (Langsel == 'IT') {
@@ -986,6 +1010,10 @@ function parseQuakeFile(INGVquakes){
         $('#warningSTRUM').show()
     }
 	$('#loading').hide()
+
+
+    ///show everything on THEMAP
+    visualizzaStruMMSuMappa();
 }
 
 // check if quake exists in HSIT and return flag in array (used in open popup)
@@ -1013,61 +1041,108 @@ function HSITrequest(HSITcode, s){
 
 
 function openPopupSTRUM(marker, textEN, textIT, s, StrumQuakeCode){
-	google.maps.event.addListener(marker, 'click', function() {
 
+    if (flagHSIT[s] == 1){
+                // var urlTOT = window.location.href
 
+               if (typeof(flagQuakePage)!='undefined'){
+                    var link = '../cftilab/cfr/index.php?'
+                   confrontoPQlinkIT =  '<br><br><abbr title="Accedi al tool di confronto delle mappe dei terremoti per visualizzare gli effetti del terremoto corrente insieme a quello di \'Hai sentito il Terremoto?\'"><a href="' + link + 'prj1=CFTI&ev1=' + Nterr +'&prj2=HSIT&ev2=' + StrumQuakeCode + '" target="_blank">Confronta gli effetti dei terremoti</a></abbr>'
+                   confrontoPQlinkEN =  '<br><br><abbr title="External page to compare the effects of the current earthquake and those of \'Hai sentito il terremoto?\'"><a href="' + link + 'prj1=CFTI&ev1=' + Nterr +'&prj2=HSIT&ev2=' + StrumQuakeCode + '" target="_blank">Compare earhtquake effects</a></abbr>'
+               } else {
+                   confrontoPQlinkIT = '';
+                   confrontoPQlinkEN = '';
+               }
 
-        if (flagHSIT[s] == 1){
-            // var urlTOT = window.location.href
+               HSITlinkEN = '<br><abbr title=""><a href="https://e.hsit.it/' + StrumQuakeCode + '/index.html " target="_blank"> HSIT page </a></abbr>'
+               HSITlinkIT = '<br><abbr title=""><a href="https://e.hsit.it/' + StrumQuakeCode + '/index.html " target="_blank"> Pagina HSIT </a></abbr>'
+    }
 
-           if (typeof(flagQuakePage)!='undefined'){
-                var link = '../cftilab/cfr/index.php?'
-               confrontoPQlinkIT =  '<br><br><abbr title="Accedi al tool di confronto delle mappe dei terremoti per visualizzare gli effetti del terremoto corrente insieme a quello di \'Hai sentito il Terremoto?\'"><a href="' + link + 'prj1=CFTI&ev1=' + Nterr +'&prj2=HSIT&ev2=' + StrumQuakeCode + '" target="_blank">Confronta gli effetti dei terremoti</a></abbr>'
-               confrontoPQlinkEN =  '<br><br><abbr title="External page to compare the effects of the current earthquake and those of \'Hai sentito il terremoto?\'"><a href="' + link + 'prj1=CFTI&ev1=' + Nterr +'&prj2=HSIT&ev2=' + StrumQuakeCode + '" target="_blank">Compare earhtquake effects</a></abbr>'
-           } else {
-               confrontoPQlinkIT = '';
-               confrontoPQlinkEN = '';
-           }
+    if (flagHSIT[s] == 1){
+        textIT = textIT + '<div class="IWSTRUM"' + HSITlinkIT + confrontoPQlinkIT + '</div>'
+        flagHSIT[s] = 0
+    }
+    marker.OnClickTextIT= textIT;
 
-           HSITlinkEN = '<br><abbr title=""><a href="https://e.hsit.it/' + StrumQuakeCode + '/index.html " target="_blank"> HSIT page </a></abbr>'
-           HSITlinkIT = '<br><abbr title=""><a href="https://e.hsit.it/' + StrumQuakeCode + '/index.html " target="_blank"> Pagina HSIT </a></abbr>'
-        }
-
-
-		// specify language of popup window
-		if (Langsel == "EN") {
-            if (flagHSIT[s] == 1){
-                textEN = textEN + '<div class="IWSTRUM"' + HSITlinkEN + confrontoPQlinkEN + '</div>'
-                flagHSIT[s] = 0
-            }
-
-			infowindow2.setContent(textEN);
-		} else {
-
-            if (flagHSIT[s] == 1){
-                textIT = textIT + '<div class="IWSTRUM"' + HSITlinkIT + confrontoPQlinkIT + '</div>'
-                flagHSIT[s] = 0
-            }
-			infowindow2.setContent(textIT);
-		}
-
-		// open popup window
-		infowindow2.open(map, marker);
-
-	})
+    //region vecchia gestione Googlemaps
+    // google.maps.event.addListener(marker, 'click', function() {
+    //
+    //
+    //
+    //     if (flagHSIT[s] == 1){
+    //         // var urlTOT = window.location.href
+    //
+    //        if (typeof(flagQuakePage)!='undefined'){
+    //             var link = '../cftilab/cfr/index.php?'
+    //            confrontoPQlinkIT =  '<br><br><abbr title="Accedi al tool di confronto delle mappe dei terremoti per visualizzare gli effetti del terremoto corrente insieme a quello di \'Hai sentito il Terremoto?\'"><a href="' + link + 'prj1=CFTI&ev1=' + Nterr +'&prj2=HSIT&ev2=' + StrumQuakeCode + '" target="_blank">Confronta gli effetti dei terremoti</a></abbr>'
+    //            confrontoPQlinkEN =  '<br><br><abbr title="External page to compare the effects of the current earthquake and those of \'Hai sentito il terremoto?\'"><a href="' + link + 'prj1=CFTI&ev1=' + Nterr +'&prj2=HSIT&ev2=' + StrumQuakeCode + '" target="_blank">Compare earhtquake effects</a></abbr>'
+    //        } else {
+    //            confrontoPQlinkIT = '';
+    //            confrontoPQlinkEN = '';
+    //        }
+    //
+    //        HSITlinkEN = '<br><abbr title=""><a href="https://e.hsit.it/' + StrumQuakeCode + '/index.html " target="_blank"> HSIT page </a></abbr>'
+    //        HSITlinkIT = '<br><abbr title=""><a href="https://e.hsit.it/' + StrumQuakeCode + '/index.html " target="_blank"> Pagina HSIT </a></abbr>'
+    //     }
+    //
+    //
+	// 	// specify language of popup window
+	// 	if (Langsel == "EN") {
+    //         if (flagHSIT[s] == 1){
+    //             textEN = textEN + '<div class="IWSTRUM"' + HSITlinkEN + confrontoPQlinkEN + '</div>'
+    //             flagHSIT[s] = 0
+    //         }
+    //
+	// 		infowindow2.setContent(textEN);
+	// 	} else {
+    //
+    //         if (flagHSIT[s] == 1){
+    //             textIT = textIT + '<div class="IWSTRUM"' + HSITlinkIT + confrontoPQlinkIT + '</div>'
+    //             flagHSIT[s] = 0
+    //         }
+	// 		infowindow2.setContent(textIT);
+	// 	}
+    //
+	// 	// open popup window
+	// 	infowindow2.open(map, marker);
+    //
+	// })
+    //endregion
 }
 
 
 function ClearMapSTRUM(){
     if (markersSTRUMOLD.length>0){
-        for (var i = 0; i < markersSTRUMOLD.length; i++) {
-            markersSTRUMOLD[i].setMap(null);
-        }
+        //vecchia GESTIONE GOOGLE MAPS NON PIU PRESENTE
+        // for (var i = 0; i < markersSTRUMOLD.length; i++) {
+        //     markersSTRUMOLD[i].setMap(null);
+        // }
         markersSTRUMOLD = [];
     }
+    console.log('reset selezione area strumm...');
+    document.getElementById('selAreaSTRUM').style.display = "block";
+    document.getElementById('NoselAreaSTRUM').style.display = "none";
+
+    console.log('reset LAYER visualizzato strum');
+    (StruMMLayer!== undefined)? mapOL.removeLayer(StruMMLayer): null;
 
     $('#numSTRUM').hide();
     $('#warningSTRUM').hide()
+
+    /*********************************************/
+    //RIMUOVE LE INTERAZIONI DOPO AVER CLICCATO OK se l'utente aveva selezionato il boundingBOX con la selezione ad area
+    console.log('removingInteractions  ClearMapSTRUM' + mapOL.getInteractions());
+    try {
+        mapOL.getInteractions().pop();
+        //mapOL.removeInteraction()
+    }
+    catch (e) {
+        console.error('ERRORE Gestito');
+        console.log(e, e.stack);
+    }
+
+
+    /*********************************************/
 }
 
 
@@ -1219,62 +1294,66 @@ function CreateRectSTRUM() {
 
 	document.getElementById('NoselAreaSTRUM').style.display = "block";
 
-	rectangleSTRUM = new google.maps.Rectangle({
-		strokeColor: '#1f708f',
-		strokeOpacity: 0.8,
-		strokeWeight: 3,
-		fillColor: '#FF0000',
-		fillOpacity: 0.01,
-		map: map,
-		bounds: latLngBoundsSTRUM,
-		editable: true,
-		draggable: true,
-	});
+    mapOLCreateRectangleSelectionArea("StartLatSTRUM", "StopLatSTRUM", "StartLonSTRUM", "StopLonSTRUM"  );
 
-	//   rectangle.setMap(null)
-	map.fitBounds(latLngBoundsSTRUM);
-
-
-	// Listener che monitora il cambiamento dei bounds del rettangolo in mappa e aggiorna i campi di testo del form
-	google.maps.event.addListener(rectangleSTRUM, 'bounds_changed', function() {
-
-		//acquisisco i vertici del rettangolo
-		bounds = rectangleSTRUM.getBounds();
-		var lat1 = bounds.getSouthWest().lat();
-		var lat2 = bounds.getNorthEast().lat();
-		var lon1 = bounds.getSouthWest().lng();
-		var lon2 = bounds.getNorthEast().lng();
-
-		//arrotondo a 2 decimali
-		lat1 = Math.round(lat1*100)/100;
-		lat2 = Math.round(lat2*100)/100;
-		lon1 = Math.round(lon1*100)/100;
-		lon2 = Math.round(lon2*100)/100;
-
-		if (lat1 > lat2) {
-		   var lat2a = lat1
-		   lat1 = lat2
-		   lat2 = lat2a
-		}
-
-		// aggiorno i campi del form
-		var elem_lat1 = document.getElementById("StartLatSTRUM");
-		elem_lat1.value = lat1;
-
-		var elem_lat2 = document.getElementById("StopLatSTRUM");
-		elem_lat2.value = lat2;
-
-		var elem_lon1 = document.getElementById("StartLonSTRUM");
-		elem_lon1.value = lon1;
-
-		var elem_lon2 = document.getElementById("StopLonSTRUM");
-		elem_lon2.value = lon2;
-
-		latLngBoundsSTRUM = new google.maps.LatLngBounds(
-			new google.maps.LatLng(lat1, lon1),
-			new google.maps.LatLng(lat2, lon2)
-		);
-	});
+    //region Oggetti google maps non piu usati vecchia gestione
+    // rectangleSTRUM = new google.maps.Rectangle({
+    //     strokeColor: '#1f708f',
+    //     strokeOpacity: 0.8,
+    //     strokeWeight: 3,
+    //     fillColor: '#FF0000',
+    //     fillOpacity: 0.01,
+    //     map: map,
+    //     bounds: latLngBoundsSTRUM,
+    //     editable: true,
+    //     draggable: true,
+    // });
+    //
+    // //   rectangle.setMap(null)
+    // map.fitBounds(latLngBoundsSTRUM);
+    //
+    //
+    // // Listener che monitora il cambiamento dei bounds del rettangolo in mappa e aggiorna i campi di testo del form
+    // google.maps.event.addListener(rectangleSTRUM, 'bounds_changed', function() {
+    //
+    //     //acquisisco i vertici del rettangolo
+    //     bounds = rectangleSTRUM.getBounds();
+    //     var lat1 = bounds.getSouthWest().lat();
+    //     var lat2 = bounds.getNorthEast().lat();
+    //     var lon1 = bounds.getSouthWest().lng();
+    //     var lon2 = bounds.getNorthEast().lng();
+    //
+    //     //arrotondo a 2 decimali
+    //     lat1 = Math.round(lat1*100)/100;
+    //     lat2 = Math.round(lat2*100)/100;
+    //     lon1 = Math.round(lon1*100)/100;
+    //     lon2 = Math.round(lon2*100)/100;
+    //
+    //     if (lat1 > lat2) {
+    //        var lat2a = lat1
+    //        lat1 = lat2
+    //        lat2 = lat2a
+    //     }
+    //
+    //     // aggiorno i campi del form
+    //     var elem_lat1 = document.getElementById("StartLatSTRUM");
+    //     elem_lat1.value = lat1;
+    //
+    //     var elem_lat2 = document.getElementById("StopLatSTRUM");
+    //     elem_lat2.value = lat2;
+    //
+    //     var elem_lon1 = document.getElementById("StartLonSTRUM");
+    //     elem_lon1.value = lon1;
+    //
+    //     var elem_lon2 = document.getElementById("StopLonSTRUM");
+    //     elem_lon2.value = lon2;
+    //
+    //     latLngBoundsSTRUM = new google.maps.LatLngBounds(
+    //         new google.maps.LatLng(lat1, lon1),
+    //         new google.maps.LatLng(lat2, lon2)
+    //     );
+    // });
+    //endregion
 }
 
 function resizeRectSTRUM() {
@@ -1289,5 +1368,6 @@ function resizeRectSTRUM() {
       new google.maps.LatLng(lat2, lon2)
 	  );
 
-	rectangleSTRUM.setBounds(latLngBoundsSTRUM);
+	/*****oggetti Google map non piu utilizzati *************/
+	//rectangleSTRUM.setBounds(latLngBoundsSTRUM);
 };

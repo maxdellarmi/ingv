@@ -1239,15 +1239,28 @@ function hideURLS(){
 }
 
 
-
-
-
+/**
+ * EVENTO attaccato al tasto OK della mappa per il filtro sui terremoti
+ */
 function xResetMap(){
 	document.getElementById('loading').style.display = "block";
 	 setTimeout(function () {
         	ResetMap();
     }, 10);
 	$('#clickOK').hide();
+	/*********************************************/
+	//RIMUOVE LE INTERAZIONI DOPO AVER CLICCATO OK se l'utente aveva selezionato il boundingBOX con la selezione ad area
+	console.log('removingInteractions' + mapOL.getInteractions());
+	try {
+		mapOL.getInteractions().pop();	
+	}
+	catch (e) {
+		console.error('ERRORE Gestito');
+		console.log(e, e.stack);
+	}
+	
+	/*********************************************/
+
 }
 
 function resizeMapIndex() {
@@ -1520,9 +1533,12 @@ function CreateRect() {
 
 	document.getElementById('selArea').style.display = "none";
 	$('#clickOK').show();
-
 	document.getElementById('NoselArea').style.display = "block";
 
+	console.log('CreateRect: calling mapOLCreateRectangleSelectionArea...');
+
+	mapOLCreateRectangleSelectionArea("LatS", "LatN", "LonW", "LonE");
+/*
 	rectangle = new google.maps.Rectangle({
 		strokeColor: '#1f708f',
 		strokeOpacity: 0.8,
@@ -1578,9 +1594,15 @@ function CreateRect() {
 			new google.maps.LatLng(lat1, lon1),
 			new google.maps.LatLng(lat2, lon2)
 		);
-	});
+	});*/
+
+
+
+
 }
 
+
+/*******oggetti GOOGLE MAPS non piu usati *******************/
 function resizeRect() {
 
 	var lat1 = Number((parseFloat(document.getElementById("LatS").value)).toFixed(2));
@@ -1593,7 +1615,8 @@ function resizeRect() {
       new google.maps.LatLng(lat2, lon2)
 	  );
 
-	rectangle.setBounds(latLngBounds);
+	/*******oggetti GOOGLE MAPS non piu usati *******************/
+	//rectangle.setBounds(latLngBounds);
 };
 
 function SwitchIoMM(passed) {

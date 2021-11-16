@@ -11,6 +11,8 @@ var mapOL;
 
 var quakeVector;
 
+var StruMMLayer;
+
 var rasterLayer;
 
 var localityVector;
@@ -35,6 +37,123 @@ function template(string, obj){
     return s;
 }
 
+/**
+ * Crea un rettangolo di selezione sulla mappa
+ * EXTENT PROIETTATO WGS84[LONminx, LATminy, LONmaxx, LATmaxy]:6.1249210937499985,43.44379506457301,10.805096875,45.743423637682156
+
+ * @param lat1element SELZIONE TERREMOTI document.getElementById("LatS"); SELEZIONE STRUM document.getElementById("StartLatSTRUM")
+ * @param lat2element SELZIONE TERREMOTI document.getElementById("LatN"); SELEZIONE STRUM document.getElementById("StopLatSTRUM")
+ * @param lon1element SELZIONE TERREMOTI document.getElementById("LonW"); SELEZIONE STRUM document.getElementById("StartLonSTRUM")
+ * @param lon2element SELZIONE TERREMOTI document.getElementById("LonE"); SELEZIONE STRUM document.getElementById("StopLonSTRUM")
+ */
+function mapOLCreateRectangleSelectionArea(lat1element, lat2element, lon1element, lon2element) {
+    try
+    {
+    // a normal select interaction to handle click
+    const select = new ol.interaction.Select();
+    mapOL.addInteraction(select);
+
+    const selectedFeatures = select.getFeatures();
+
+// a DragBox interaction used to select features by drawing boxes
+    const dragBox = new ol.interaction.DragBox({
+        condition: ol.events.condition.primaryAction, //click tasto sinistro
+    });
+
+    mapOL.addInteraction(dragBox);
+//removeInteraction rimuove l'oggetto di interazione
+
+    dragBox.on('boxend', function () {
+        // features that intersect the box geometry are added to the
+        // collection of selected features
+
+        // if the view is not obliquely rotated the box geometry and
+        // its extent are equalivalent so intersecting features can
+        // be added directly to the collection
+        const rotation = mapOL.getView().getRotation();
+        const oblique = rotation % (Math.PI / 2) !== 0;
+        const candidateFeatures = oblique ? [] : selectedFeatures;
+        const extent = dragBox.getGeometry().getExtent();
+
+        var extentWGS84 = ol.proj.transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
+        console.log("EXTENT AS IS[LONminx, LATminy, LONmaxx, LATmaxy]:" + extent);
+        console.log("EXTENT PROIETTATO WGS84[LONminx, LATminy, LONmaxx, LATmaxy]:" + extentWGS84);
+
+        if (extentWGS84!== undefined) {
+            //arrotondo a 2 decimali
+            var lat1 = Math.round(extentWGS84[1]*100)/100; //43
+            var lat2 = Math.round(extentWGS84[3]*100)/100; //46
+            var lon1 = Math.round(extentWGS84[0] *100)/100; //6
+            var lon2 = Math.round(extentWGS84[2]*100)/100; //11
+
+            console.log('lat1' + lat1)
+            console.log('lat2' + lat2)
+            console.log('lon1' + lon1)
+            console.log('lon2' + lon2)
+            //EXTENT PROIETTATO WGS84[LONminx, LATminy, LONmaxx, LATmaxy]:6.1249210937499985,43.44379506457301,10.805096875,45.743423637682156
+            //Aggiornamento dei campi del form
+            var elem_lat1 = document.getElementById(lat1element);//document.getElementById("LatS");
+            elem_lat1.value = lat1;
+
+            var elem_lat2 = document.getElementById(lat2element);//document.getElementById("LatN");
+            elem_lat2.value = lat2;
+
+            var elem_lon1 = document.getElementById(lon1element); //document.getElementById("LonW");
+            elem_lon1.value = lon1;
+
+            var elem_lon2 = document.getElementById(lon2element);//document.getElementById("LonE");
+            elem_lon2.value = lon2;
+        }
+        //region Gestione selezione LIVE delle feature sul source layer [NON USATA QUI]
+        // vectorSource.forEachFeatureIntersectingExtent(extent, function (feature) {
+        //     candidateFeatures.push(feature);
+        // });
+        // // when the view is obliquely rotated the box extent will
+        // // exceed its geometry so both the box and the candidate
+        // // feature geometries are rotated around a common anchor
+        // // to confirm that, with the box geometry aligned with its
+        // // extent, the geometries intersect
+        // if (oblique) {
+        //     const anchor = [0, 0];
+        //     const geometry = dragBox.getGeometry().clone();
+        //     geometry.rotate(-rotation, anchor);
+        //     const extent = geometry.getExtent();
+        //     candidateFeatures.forEach(function (feature) {
+        //         const geometry = feature.getGeometry().clone();
+        //         geometry.rotate(-rotation, anchor);
+        //         if (geometry.intersectsExtent(extent)) {
+        //             selectedFeatures.push(feature);
+        //         }
+        //     });
+        // }
+        //endregion
+    });
+
+// clear selection when drawing a new box and when clicking on the map
+    dragBox.on('boxstart', function () {
+        selectedFeatures.clear();
+    });
+
+
+/*    const infoBox = document.getElementById('info');
+    selectedFeatures.on(['add', 'remove'], function () {
+        const names = selectedFeatures.getArray().map(function (feature) {
+            return feature.get('name');
+        });
+        if (names.length > 0) {
+            infoBox.innerHTML = names.join(', ');
+        } else {
+            infoBox.innerHTML = 'No countries selected';
+        }
+    });*/
+
+} catch (e) {
+    console.error(e, e.stack);
+}
+
+
+
+}
 
 function calculateMousePosition() {
    return  new ol.control.MousePosition({
@@ -135,7 +254,138 @@ function clusteringObjectWithFirstElementStyle (feature) {
     }
 }
 
+function visualizzaStruMMSuMappa() {
+    $(document).ready(function() {
+        try {
+            var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
+            rasterLayer = new ol.layer.Tile({
+                source: new ol.source.OSM(),
+                projection: 'EPSG:3857',
+                title: 'BASEMAP'
+            });
+            console.log('caricati markersSTRUMOLD...');
+            console.log(markersSTRUMOLD);
 
+            var source = new ol.source.Vector ({
+                features: markersSTRUMOLD,
+                projection: 'EPSG:3857'
+            });
+
+            /*il criterio di raggruppamento cluster */
+            var clusterSource = new ol.source.Cluster({
+                distance: 1,
+                minDistance: 1,
+                source: source,
+            });
+            StruMMLayer = new ol.layer.Vector({
+                source: clusterSource,
+                style: clusteringObjectWithFirstElementStyle,
+                title: "STRUMM",
+            });
+            StruMMLayer.setVisible(true);
+
+            if (mapOL === undefined) {
+                console.log('mapOL undefined...')
+                mapOL = new ol.Map({
+                    controls: ol.control.defaults({
+                        attributionOptions: ({
+                            collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
+                    layers: [rasterLayer, StruMMLayer],
+                    target: document.getElementById('mapOL'),
+                    view: new ol.View({
+                        projection: 'EPSG:3857',
+                        center: center,
+                        zoom: 6,
+                    })
+                });
+            }
+            else {
+                console.log("ADDING NEW LAYERS");
+                //mapOL.addLayer(rasterLayer);
+                mapOL.addLayer(StruMMLayer);
+            }
+
+            /*
+            https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html
+            setLayers(layers) inherited
+            Clear any existing layers and add layers to the map.
+            */
+
+            var element = document.getElementById('popup');
+            var popup = new ol.Overlay({
+                element: element,
+                positioning: 'bottom-center',
+                stopEvent: true,
+                offset: [0, -20],
+                autoPan: true,
+                autoPanAnimation: {
+                    duration: 250
+                }
+            });
+            mapOL.addOverlay(popup);
+
+            // display popup on click
+            mapOL.on('click', function (evt) {
+                var feature = mapOL.forEachFeatureAtPixel(evt.pixel,
+                    function (feature) {
+                        return feature;
+                    });
+
+                if (feature) {
+                    $(element).popover('destroy')
+                    var coordinates = feature.getGeometry().getCoordinates();
+                    var popupContent = "";
+                    console.log("FEATURE ONCLICK popup data:")
+                    console.log(feature.OnClickTextIT);
+                    if ( feature.get('features') !== undefined) {
+                        var allpopupContent="";
+                        feature.get('features').forEach(function(feature) {
+                            if (feature.OnClickTextIT != undefined) {
+                                allpopupContent += (feature.OnClickTextIT + '<br>');
+                            }
+                        });
+                        //console.log("TODO4 FEATURE SAME COORDINATES trying to merge all POPOP content:"+ allpopupContent);
+                        popupContent = allpopupContent;
+                    }
+                    else {
+                        popupContent = feature.OnClickTextIT;
+                    }
+                    popup.setPosition(coordinates);
+                    $(element).popover({
+                        'placement': 'top',
+                        'animation': false,
+                        'html': true,
+                        'trigger': 'manual',
+                        'content': popupContent // feature.OnClickTextIT;
+                    });
+                    $(element).popover('show');
+                } else {
+                    $(element).popover('destroy');
+                    popup.setPosition(undefined);
+                }
+            },);
+            // change mouse cursor when over marker
+            mapOL.on('pointermove', function (e) {
+                if (e.dragging) {
+                    // $(element).popover('hide'); element popover non trovato andava in errore
+                    return;
+                }
+                var pixel = mapOL.getEventPixel(e.originalEvent);
+                var hit = mapOL.hasFeatureAtPixel(pixel);
+                mapOL.getTarget().style.cursor = hit ? 'pointer' : '';
+            });
+
+            // change mouse cursor when over marker
+            console.log('popover su mapOL.js gestione terremoti commentato perche andava in errore ');
+            resizeMapIndex();
+            console.log('inizio gestione zoom');
+            zoomHandlingWMSLAYERSStrum();
+        } catch (e) {
+            console.error('ERRORE Gestito');
+            console.log(e, e.stack);
+        }
+    });
+}
 
 
 /***
@@ -144,29 +394,20 @@ function clusteringObjectWithFirstElementStyle (feature) {
 function creazioneMappa () {
     $(document).ready(function() {
         try {
-
             var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
-
-
             rasterLayer = new ol.layer.Tile({
                 source: new ol.source.OSM(),
-                projection: 'EPSG:3857'
+                projection: 'EPSG:3857',
+                title: 'BASEMAP'
             });
-
             console.log('caricati i terremoti test')
-
             // for (var i = 0; i < markersArray.length; i++) { //inizializzato nel js index.js
             //     markers.push(markersArray[i]['Marker']);    //markers inizializzato in questo file.
             // }
-
-
             console.log("carico i markers");
-            // console.log(markers);
-
             /***
              * NOTA. Il primo caricamento va sempre a vuoto perche' non sono ancora stati caricati i filtri viene caricato correttamente dopo la funzione showQuakes.
              */
-
             /**********************oggetti feature contenenti le coordinate****************/
             var source = new ol.source.Vector ({
                 features: filteredMarkersArray,
@@ -179,16 +420,14 @@ function creazioneMappa () {
                 minDistance: 1,
                 source: source,
             });
-            
             quakeVector = new ol.layer.Vector({
                 source: clusterSource,
                 style: clusteringObjectWithFirstElementStyle,
             });
-            
             quakeVector.setVisible(true);
 
-
            if (mapOL === undefined) {
+               console.log('creazioneMappa: mapOL undefined....')
                mapOL = new ol.Map({
                    controls: ol.control.defaults({
                        attributionOptions: ({
@@ -215,19 +454,19 @@ function creazioneMappa () {
                console.log("CLEANUP pulizia del layer Eventi ambientali");
                (EEVector!== undefined)? mapOL.removeLayer(EEVector): null;    // console.log("CLEANUP pulizia del layer Raster")
                (pinpointVector!== undefined)? mapOL.removeLayer(pinpointVector): null;    // console.log("CLEANUP pulizia del layer pinpointVector") 
-               
+
 
                    // mapOL.removeLayer(rasterLayer);
                //////////////////////////////////////////
                /***forza la pulizia dei layer vecchi ***/
+               //https://stackoverflow.com/questions/40862706/unable-to-remove-all-layers-from-a-map
                 //////////////////////////////////////////
-               mapOL.getLayers().forEach(function (layer) {
-                   console.log("CLEANUP DEI LAYERS DAL CLICLO DELLA MAPPA");
-                   mapOL.removeLayer(layer);
-               });
+               puliziaClearAllMapsLayers();
+
                console.log("ADDING NEW LAYERS");
                mapOL.addLayer(rasterLayer);
                mapOL.addLayer(quakeVector);
+               (StruMMLayer!== undefined)? mapOL.addLayer(StruMMLayer): null;
            }
 
             /*
@@ -306,14 +545,34 @@ function creazioneMappa () {
             console.log('inizio gestione zoom');
             zoomHandlingWMSLAYERSStrum();
         } catch (e) {
-            console.error(e, e.stack);
+            console.error('ERRORE Gestito');
+            console.log(e, e.stack);
         }
     });
-
 }
 
+/**
+ * C'E UN BUG SULLA PULIZIA DEI LAYER E VA FATTO 2 VOLTE
+ * https://stackoverflow.com/questions/40862706/unable-to-remove-all-layers-from-a-map
+ */
+function puliziaClearAllMapsLayers() {
+    //create a copy and workin on that
+    console.log("CLEANUP DEI LAYERS DAL CLICLO DELLA MAPPA");
+    mapOL.getLayers().forEach(function (layer) {
+        if (layer !== undefined) {
+            console.log(layer.get("title"));
+            if ( layer.get("title")!='BASEMAP') { mapOL.removeLayer(layer);}
+        }
 
-
+    });
+//for some crazy reason I need to do it twice.
+    mapOL.getLayers().forEach(function (layer) {
+        if (layer !== undefined) {
+            console.log(layer.get("title"));
+            if ( layer.get("title")!='BASEMAP') { mapOL.removeLayer(layer);}
+        }
+    });
+}
 
 /**
  * Terremoti quakes di dettaglio caricati: localityPHPmarkers.push(epiMarkers[i]);
@@ -337,11 +596,13 @@ function creazioneMappaLocalityPHP (quakes) {
 
             rasterLayer = new ol.layer.Tile({
                 source: new ol.source.OSM(),
-                projection: 'EPSG:3857'
+                projection: 'EPSG:3857',
+                title: 'BASEMAP'
             });
             console.log('caricamento dei terremoti in input quakes:');
             console.log(quakes);
-            
+
+            /*****ricerca il pinpoint per aggiungerlo separatamente tra i layers *****/
             var pinpoint= [];
             var result = localityPHPmarkers.filter(obj => {
                 if (obj.values_.type== "pinpoint") { pinpoint.push(obj); }
@@ -378,7 +639,7 @@ function creazioneMappaLocalityPHP (quakes) {
                     controls: ol.control.defaults({
                         attributionOptions: ({
                             collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
-                    layers: [rasterLayer, pinpoint, quakeVector ],
+                    layers: [rasterLayer, pinpoint, quakeVector  ],
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
                         projection: 'EPSG:3857',
@@ -403,14 +664,14 @@ function creazioneMappaLocalityPHP (quakes) {
                 //////////////////////////////////////////
                 /***forza la pulizia dei layer vecchi ***/
                 //////////////////////////////////////////
-                mapOL.getLayers().forEach(function (layer) {
-                    console.log("CLEANUP DEI LAYERS DAL CLICLO DELLA MAPPA");
-                    mapOL.removeLayer(layer);
-                });
+                puliziaClearAllMapsLayers();
                 console.log("ADDING NEW LAYERS");
                 mapOL.addLayer(rasterLayer);
-                mapOL.addLayer(pinpointVector); 
+                mapOL.addLayer(pinpointVector);
                 mapOL.addLayer(quakeVector);
+                (StruMMLayer!== undefined)? mapOL.addLayer(StruMMLayer): null;
+
+
                 // mapOL.addLayer(clusters); /***************test*****/
             }
 
@@ -512,7 +773,8 @@ function creazioneMappaQuakesPHP (quakes) {
 
             rasterLayer = new ol.layer.Tile({
                 source: new ol.source.OSM(),
-                projection: 'EPSG:3857'
+                projection: 'EPSG:3857',
+                title: 'BASEMAP'
             });
             console.log('caricamento dei terremoti in input quakes:');
             console.log(quakes);
@@ -561,13 +823,11 @@ function creazioneMappaQuakesPHP (quakes) {
                 //////////////////////////////////////////
                 /***forza la pulizia dei layer vecchi ***/
                 //////////////////////////////////////////
-                mapOL.getLayers().forEach(function (layer) {
-                    console.log("CLEANUP DEI LAYERS DAL CLICLO DELLA MAPPA");
-                    mapOL.removeLayer(layer);
-                });
+                puliziaClearAllMapsLayers();
                 console.log("ADDING NEW LAYERS");
                 mapOL.addLayer(rasterLayer);
                 mapOL.addLayer(quakeVector);
+                (StruMMLayer!== undefined)? mapOL.addLayer(StruMMLayer): null;
             }
 
             /*
@@ -642,9 +902,6 @@ function creazioneMappaQuakesPHP (quakes) {
             console.error(e, e.stack);
         }
     });
-
-
-
 }
 
 
@@ -671,7 +928,8 @@ function indexLocalita () {
 
             rasterLayer = new ol.layer.Tile({
                 source: new ol.source.OSM(),
-                projection: 'EPSG:3857'
+                projection: 'EPSG:3857',
+                title: 'BASEMAP'
             });
 
 
@@ -709,13 +967,11 @@ function indexLocalita () {
                 ////////////////////////////////////////////////////////////////////////
                 /***forza la pulizia dei layer vecchi anche se stesso vecchia versione***/
                 ////////////////////////////////////////////////////////////////////////
-                mapOL.getLayers().forEach(function (layer) {
-                    console.log("CLEANUP DEI LAYERS DAL CLICLO DELLA MAPPA");
-                    mapOL.removeLayer(layer);
-                });
+                puliziaClearAllMapsLayers();
                 console.log("ADDING NEW LAYERS");
                 mapOL.addLayer(rasterLayer);
                 mapOL.addLayer(localityVector);
+                (StruMMLayer!== undefined)? mapOL.addLayer(StruMMLayer): null;
             }
 
 
@@ -820,7 +1076,8 @@ function indexEEAmbiente() {
 
             rasterLayer = new ol.layer.Tile({
                 source: new ol.source.OSM(),
-                projection: 'EPSG:3857'
+                projection: 'EPSG:3857',
+                title: 'BASEMAP'
             });
 
 
@@ -861,13 +1118,11 @@ function indexEEAmbiente() {
                 ////////////////////////////////////////////////////////////////////////
                 /***forza la pulizia dei layer vecchi anche se stesso vecchia versione***/
                 ////////////////////////////////////////////////////////////////////////
-                mapOL.getLayers().forEach(function (layer) {
-                    console.log("CLEANUP DEI LAYERS DAL CLICLO DELLA MAPPA");
-                    mapOL.removeLayer(layer);
-                });
+                puliziaClearAllMapsLayers();
                 console.log("ADDING NEW LAYERS");
                 mapOL.addLayer(rasterLayer);
                 mapOL.addLayer(EEVector);
+                (StruMMLayer!== undefined)? mapOL.addLayer(StruMMLayer): null;
             }
 
 
