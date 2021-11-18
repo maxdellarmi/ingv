@@ -504,20 +504,115 @@ function openPopupLOC(marker, textEN, textIT, NlocI){
 	})
 }
 
-// When clicking on table row, trigger event on Gmap marker (used to trigger popup window when clicking on table row)
+/**
+ * 1) zoom della view nella zona di riferimento dove e' posizionata la singola feature
+ * 2) EVENTO DI SELECT DELLA MAPPA utilizza  OVERLAY DICHIARATO VAR GLOBALE (popup variabile )
+ * su mapOL e * il popover ( var element = document.getElementById('popup'); ) - Gestione visibilita popup
+ * direttamente dall'evento select che restituisce la feature
+ * Seleziona singolo feature e mostra il singolo popup.
+ * 3) RIMUOVE LE INTERAZIONI
+ * @param prog Indice dell'elemento marker (feature) LOCMarkers[prog]
+ */
 function onclickListLOC(prog){
+	//<editor-fold desc="vecchia gestione google maps commentata ">
+	// if (FlagSel == 1) {
+	// 	FlagScroll == 0
+	// 	} else {
+	// 	FlagScroll = 0
+	// };
+	// google.maps.event.trigger(LOCMarkers[prog], 'click');
+	//
+	// //center map on selected event (when selecting from table line)
+	// var center = new google.maps.LatLng(locLat[prog], locLon[prog]);
+    // map.panTo(center);
+	//
+	// map.setZoom(10);
+	//map.fitBounds(bounds);
+	//</editor-fold>
 	if (FlagSel == 1) {
 		FlagScroll == 0
 		} else {
 		FlagScroll = 0
 	};
-	google.maps.event.trigger(LOCMarkers[prog], 'click');
 
-	//center map on selected event (when selecting from table line)
-	var center = new google.maps.LatLng(locLat[prog], locLon[prog]);
-    map.panTo(center);
+	//LOCMarkers[prog]
 
-	map.setZoom(10);
-	//map.fitBounds(bounds);
+	//************zoom nella zona di riferimento dove e' posizionata la singola feature
+	var padding = [500, 50, 500, 50]
+	mapOL.getView().fit(
+		LOCMarkers[prog].getGeometry().getExtent(),
+		{
+			size: mapOL.getSize(),
+			padding: padding,
+		}
+	);
+	mapOL.getView().setZoom(8);
+
+	//gestione selezione singola feature ---->> successivamente mostra il singolo popup
+	var collection = new ol.Collection();
+	var select = new ol.interaction.Select({
+		features: collection,
+		style: null,
+	});
+
+	mapOL.addInteraction(select);
+	window.setTimeout(function() {
+		collection.push(LOCMarkers[prog]);
+		select.dispatchEvent({
+			type: 'select',
+			selected: [LOCMarkers[prog]],
+			deselected: []
+		});
+	}, 500);
+
+
+	var element = document.getElementById('popup');
+	//EVENTO DI SELECT DELLA MAPPA SERVONO OVERLAY DICHIARATO VAR GLOBALE su mapOL e il popup
+	select.on('select', function(evt) {
+		// evento = evt;
+		console.log('selectSingleLocality');
+		if (evt.selected != undefined && evt.selected.length >0) {
+			if (evt.selected[0]) {
+				$(element).popover('destroy');
+				var coordinates = evt.selected[0].getGeometry().getCoordinates();
+				var popupContent = "";
+				console.log("FEATURE ONCLICK popup data:")
+				console.log(evt.selected[0].OnClickTextIT);
+				console.log('features singola da visualizzare...');
+				popupContent = evt.selected[0].OnClickTextIT;
+				console.log(popupContent);
+				/************************************************************/
+				//////////////variabile OVERLAY della mappa GLOBALE*******/
+				/************************************************************/
+				popup.setPosition(coordinates);
+				$(element).popover({
+					'placement': 'top',
+					'animation': false,
+					'html': true,
+					'trigger': 'manual',
+					'content': popupContent // feature.OnClickTextIT;
+				});
+				$(element).popover('show');
+			} else {
+				$(element).popover('destroy');
+				popup.setPosition(undefined);
+			}
+		}
+	});
+
+	/*********************************************/
+	//RIMUOVE LE INTERAZIONI DOPO AVER CLICCATO OK se l'utente aveva selezionato il boundingBOX con la selezione ad area
+	window.setTimeout(function() {
+		console.log('removingInteractions  SELECT' + mapOL.getInteractions());
+		try {
+			mapOL.getInteractions().pop();
+			//mapOL.removeInteraction()
+		}
+		catch (e) {
+			console.error('ERRORE Gestito');
+			console.log(e, e.stack);
+		}
+	}, 1000);
+
 
 }

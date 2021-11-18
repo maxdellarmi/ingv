@@ -495,6 +495,7 @@ var GmapsTools = function(){
 				  ]*/
 				///TODO: AGGIUNGI QUI LE PROPERTIES CHE DEVI VISUALIZZARE NEL POPUP
 				var singleFeature = new ol.Feature({
+					id: i,
 					geometry: new ol.geom.Point(new ol.proj.fromLonLat([Lon, Lat])),	 //new ol.geom.Point([Lon, Lat]),
 					title : onMouseOverText,
 					OnClickTextIT : ""
@@ -677,7 +678,9 @@ var GmapsTools = function(){
 		chartArray = [];
 		ExportKmlR = "";
 		for (var i = 0; i < markersArray.length; i++) { // index on all markers
-			var RecTer = markersArray[i];   //ASSEGNA uno dei markers alla variabile RecTer
+			//NB*********ASSEGNA uno dei markers alla variabile RecTer**************//
+			var RecTer = markersArray[i];
+			//NB*********ASSEGNA uno dei markers alla variabile RecTer**************//
 			var YearFlag = false,
 				IntMagFlag = false,
 				ZoneFlag = false, //***GT***
@@ -985,21 +988,117 @@ var GmapsTools = function(){
 	}
 }  // -- end GmapTools function
 
-
 // When clicking on table row, trigger event on Gmap marker (used to trigger popup window when clicking on table row)
+var evento;
+var select;
+/**
+ * 1) zoom della view nella zona di riferimento dove e' posizionata la singola feature
+
+ * 2) EVENTO DI SELECT DELLA MAPPA utilizza  OVERLAY DICHIARATO VAR GLOBALE (popup variabile )
+ * su mapOL e * il popover ( var element = document.getElementById('popup'); ) - Gestione visibilita popup
+ * direttamente dall'evento select che restituisce la feature.
+ * Seleziona singolo feature e mostra il singolo popup.
+ * 3) RIMUOVE LE INTERAZIONI
+ * @param prog Indice dell'elemento marker (feature) markersArray[prog]['Marker']
+ */
 function onclickList(prog){
+	//<editor-fold desc="vecchia gestione GOOGLE MAPS">
+	// sClick = "LIST";
+	// // Flag for scrolling table - set to zero when event is selected from table (and not from marker)
+	// FlagScroll = 0;
+	// if (Marker1) {
+	// 	Marker1.setIcon(StarCLICK_R);
+	// }
+	// google.maps.event.trigger(markersArray[prog]['Marker'], 'click');
+	//
+	// // center map on selected event (when selecting from table line)
+	// var center = new google.maps.LatLng(markersArray[prog]['Lat'], markersArray[prog]['Lon']);
+   // //////// map.panTo(center);
+	//</editor-fold>
+	console.log('evento click della singola feature..');
+	console.log(markersArray[prog]['Marker']);
+    //markersArray[1170]['Marker'].getGeometry().getExtent()
 	sClick = "LIST";
 	// Flag for scrolling table - set to zero when event is selected from table (and not from marker)
 	FlagScroll = 0;
 
-	if (Marker1) {
-		Marker1.setIcon(StarCLICK_R);
-	}
-	google.maps.event.trigger(markersArray[prog]['Marker'], 'click');
+	//************zoom nella zona di riferimento dove e' posizionata la singola feature
+	var padding = [500, 50, 500, 50]
+	mapOL.getView().fit(
+		markersArray[prog]['Marker'].getGeometry().getExtent(),
+		{
+			size: mapOL.getSize(),
+			padding: padding,
+		}
+	);
+	mapOL.getView().setZoom(8);
 
-	// center map on selected event (when selecting from table line)
-	var center = new google.maps.LatLng(markersArray[prog]['Lat'], markersArray[prog]['Lon']);
-   //////// map.panTo(center);
+    //gestione selezione singola feature ---->> successivamente mostra il singolo popup
+	var collection = new ol.Collection();
+	select = new ol.interaction.Select({
+		features: collection,
+		style: null,
+	});
+
+	mapOL.addInteraction(select);
+	window.setTimeout(function() {
+		collection.push(markersArray[prog]['Marker']);
+		select.dispatchEvent({
+			type: 'select',
+			selected: [markersArray[prog]['Marker']],
+			deselected: []
+		});
+	}, 500);
+
+
+
+	//EVENTO DI SELECT DELLA MAPPA SERVONO OVERLAY DICHIARATO VAR GLOBALE su mapOL e il popup
+	select.on('select', bindSelectEvent);
+
+	/*********************************************/
+	//RIMUOVE LE INTERAZIONI DOPO AVER CLICCATO OK se l'utente aveva selezionato il boundingBOX con la selezione ad area
+	window.setTimeout(function() {
+		console.log('removingInteractions  SELECT' + mapOL.getInteractions());
+		try {
+			mapOL.getInteractions().pop();
+		}
+		catch (e) {
+			console.error('ERRORE Gestito');
+			console.log(e, e.stack);
+		}
+	}, 1000);
+}
+
+function bindSelectEvent(evt) {
+	// evento = evt;
+	var element = document.getElementById('popup');
+	console.log('selectSingleQuake');
+	if (evt.selected != undefined && evt.selected.length >0) {
+		if (evt.selected[0]) {
+			$(element).popover('destroy');
+			var coordinates = evt.selected[0].getGeometry().getCoordinates();
+			var popupContent = "";
+			console.log("FEATURE ONCLICK popup data:")
+			console.log(evt.selected[0].OnClickTextIT);
+			console.log('features singola da visualizzare...');
+			popupContent = evt.selected[0].OnClickTextIT;
+			/************************************************************/
+			//////////////variabile OVERLAY della mappa GLOBALE*******/
+			/************************************************************/
+			popup.setPosition(coordinates);
+			$(element).popover({
+				'placement': 'top',
+				'animation': false,
+				'html': true,
+				'trigger': 'manual',
+				'content': popupContent // feature.OnClickTextIT;
+			});
+			$(element).popover('show');
+		} else {
+			$(element).popover('destroy');
+			popup.setPosition(undefined);
+		}
+	}
 }
 
 // ============= Menu

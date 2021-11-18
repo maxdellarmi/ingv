@@ -5,7 +5,10 @@ var localityPHPmarkers = [];
 
 var quakesPQMarkers = [];
 
+var popup;
 //var EEmarkers = [];
+
+var select1;
 
 var mapOL;
 
@@ -312,7 +315,10 @@ function visualizzaStruMMSuMappa() {
             */
 
             var element = document.getElementById('popup');
-            var popup = new ol.Overlay({
+            /************************************************/
+            ///////OVERLAY DICHIARATA COME VARIABILE GLOBALE/////
+            /***************************************************/
+            popup = new ol.Overlay({
                 element: element,
                 positioning: 'bottom-center',
                 stopEvent: true,
@@ -326,6 +332,7 @@ function visualizzaStruMMSuMappa() {
 
             // display popup on click
             mapOL.on('click', function (evt) {
+                console.log('mapOL click');
                 var feature = mapOL.forEachFeatureAtPixel(evt.pixel,
                     function (feature) {
                         return feature;
@@ -379,7 +386,9 @@ function visualizzaStruMMSuMappa() {
             console.log('popover su mapOL.js gestione terremoti commentato perche andava in errore ');
             resizeMapIndex();
             console.log('inizio gestione zoom');
+
             zoomHandlingWMSLAYERSStrum();
+
         } catch (e) {
             console.error('ERRORE Gestito');
             console.log(e, e.stack);
@@ -422,13 +431,15 @@ function creazioneMappa () {
             });
             quakeVector = new ol.layer.Vector({
                 source: clusterSource,
-                style: clusteringObjectWithFirstElementStyle,
+                style: clusteringObjectWithFirstElementStyle, //GLI DA FASTIDIO LA FUNZIONE QUANDO CLICCHI SUL CLUSTER
+                //title: 'QUAKES',
             });
             quakeVector.setVisible(true);
 
            if (mapOL === undefined) {
                console.log('creazioneMappa: mapOL undefined....')
                mapOL = new ol.Map({
+                   //interactions: ol.interaction.defaults().extend([select1]),
                    controls: ol.control.defaults({
                        attributionOptions: ({
                            collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
@@ -464,7 +475,7 @@ function creazioneMappa () {
                puliziaClearAllMapsLayers();
 
                console.log("ADDING NEW LAYERS");
-               mapOL.addLayer(rasterLayer);
+               //mapOL.addLayer(rasterLayer);
                mapOL.addLayer(quakeVector);
                (StruMMLayer!== undefined)? mapOL.addLayer(StruMMLayer): null;
            }
@@ -476,7 +487,10 @@ function creazioneMappa () {
             */
 
             var element = document.getElementById('popup');
-            var popup = new ol.Overlay({
+            /************************************************/
+            ///////OVERLAY DICHIARATA COME VARIABILE GLOBALE/////
+            /***************************************************/
+            popup = new ol.Overlay({
                 element: element,
                 positioning: 'bottom-center',
                 stopEvent: true,
@@ -490,6 +504,7 @@ function creazioneMappa () {
 
             // display popup on click
             mapOL.on('click', function (evt) {
+                console.log('mapOL click');
                 var feature = mapOL.forEachFeatureAtPixel(evt.pixel,
                     function (feature) {
                         return feature;
@@ -502,6 +517,7 @@ function creazioneMappa () {
                     console.log("FEATURE ONCLICK popup data:")
                     console.log(feature.OnClickTextIT);
                     if ( feature.get('features') !== undefined) {
+                        console.log('features multiple trovate...');
                         var allpopupContent="";
                         feature.get('features').forEach(function(feature) { 
                             if (feature.OnClickTextIT != undefined) {
@@ -512,6 +528,7 @@ function creazioneMappa () {
                         popupContent = allpopupContent;
                     }
                     else {
+                        console.log('features singola trovata...');
                         popupContent = feature.OnClickTextIT;
                     }
                     popup.setPosition(coordinates);
@@ -543,7 +560,9 @@ function creazioneMappa () {
             console.log('popover su mapOL.js gestione terremoti commentato perche andava in errore ');
             resizeMapIndex();
             console.log('inizio gestione zoom');
+            /***********************************************************/
             zoomHandlingWMSLAYERSStrum();
+            /**********************************************************/
         } catch (e) {
             console.error('ERRORE Gestito');
             console.log(e, e.stack);
@@ -556,6 +575,7 @@ function creazioneMappa () {
  * https://stackoverflow.com/questions/40862706/unable-to-remove-all-layers-from-a-map
  */
 function puliziaClearAllMapsLayers() {
+    //mapOL.getLayers().getArray()[0].getProperties()["title"]
     //create a copy and workin on that
     console.log("CLEANUP DEI LAYERS DAL CLICLO DELLA MAPPA");
     mapOL.getLayers().forEach(function (layer) {
@@ -666,7 +686,7 @@ function creazioneMappaLocalityPHP (quakes) {
                 //////////////////////////////////////////
                 puliziaClearAllMapsLayers();
                 console.log("ADDING NEW LAYERS");
-                mapOL.addLayer(rasterLayer);
+                //mapOL.addLayer(rasterLayer);
                 mapOL.addLayer(pinpointVector);
                 mapOL.addLayer(quakeVector);
                 (StruMMLayer!== undefined)? mapOL.addLayer(StruMMLayer): null;
@@ -682,7 +702,10 @@ function creazioneMappaLocalityPHP (quakes) {
             */
 
             var element = document.getElementById('popup');
-            var popup = new ol.Overlay({
+            /************************************************/
+            ///////OVERLAY DICHIARATA COME VARIABILE GLOBALE/////
+            /***************************************************/
+            popup = new ol.Overlay({
                 element: element,
                 positioning: 'bottom-center',
                 stopEvent: true,
@@ -696,6 +719,7 @@ function creazioneMappaLocalityPHP (quakes) {
 
             // display popup on click
             mapOL.on('click', function (evt) {
+                console.log('mapOL click');
                 var feature = mapOL.forEachFeatureAtPixel(evt.pixel,
                     function (feature) {
                         return feature;
@@ -825,7 +849,7 @@ function creazioneMappaQuakesPHP (quakes) {
                 //////////////////////////////////////////
                 puliziaClearAllMapsLayers();
                 console.log("ADDING NEW LAYERS");
-                mapOL.addLayer(rasterLayer);
+                //mapOL.addLayer(rasterLayer);
                 mapOL.addLayer(quakeVector);
                 (StruMMLayer!== undefined)? mapOL.addLayer(StruMMLayer): null;
             }
@@ -837,7 +861,10 @@ function creazioneMappaQuakesPHP (quakes) {
             */
 
             var element = document.getElementById('popup');
-            var popup = new ol.Overlay({
+            /************************************************/
+            ///////OVERLAY DICHIARATA COME VARIABILE GLOBALE/////
+            /***************************************************/
+            popup = new ol.Overlay({
                 element: element,
                 positioning: 'bottom-center',
                 stopEvent: true,
@@ -851,6 +878,7 @@ function creazioneMappaQuakesPHP (quakes) {
 
             // display popup on click
             mapOL.on('click', function (evt) {
+                console.log('mapOL click');
                 var feature = mapOL.forEachFeatureAtPixel(evt.pixel,
                     function (feature) {
                         return feature;
@@ -969,7 +997,7 @@ function indexLocalita () {
                 ////////////////////////////////////////////////////////////////////////
                 puliziaClearAllMapsLayers();
                 console.log("ADDING NEW LAYERS");
-                mapOL.addLayer(rasterLayer);
+                //mapOL.addLayer(rasterLayer);
                 mapOL.addLayer(localityVector);
                 (StruMMLayer!== undefined)? mapOL.addLayer(StruMMLayer): null;
             }
@@ -977,7 +1005,10 @@ function indexLocalita () {
 
 
             var element = document.getElementById('popup');
-            var popup = new ol.Overlay({
+            /************************************************/
+            ///////OVERLAY DICHIARATA COME VARIABILE GLOBALE/////
+            /***************************************************/
+            popup = new ol.Overlay({
                 element: element,
                 positioning: 'bottom-center',
                 stopEvent: true,
@@ -991,6 +1022,7 @@ function indexLocalita () {
 
             // display popup on click
             mapOL.on('click', function (evt) {
+                console.log('mapOL click');
                 var feature = mapOL.forEachFeatureAtPixel(evt.pixel,
                     function (feature) {
                         return feature;
@@ -1120,14 +1152,17 @@ function indexEEAmbiente() {
                 ////////////////////////////////////////////////////////////////////////
                 puliziaClearAllMapsLayers();
                 console.log("ADDING NEW LAYERS");
-                mapOL.addLayer(rasterLayer);
+                // mapOL.addLayer(rasterLayer);
                 mapOL.addLayer(EEVector);
                 (StruMMLayer!== undefined)? mapOL.addLayer(StruMMLayer): null;
             }
 
 
             var element = document.getElementById('popup');
-            var popup = new ol.Overlay({
+            /************************************************/
+            ///////OVERLAY DICHIARATA COME VARIABILE GLOBALE/////
+            /***************************************************/
+            popup = new ol.Overlay({
                 element: element,
                 positioning: 'bottom-center',
                 stopEvent: true,
@@ -1141,6 +1176,7 @@ function indexEEAmbiente() {
 
             // display popup on click
             mapOL.on('click', function (evt) {
+                console.log('mapOL click');
                 var feature = mapOL.forEachFeatureAtPixel(evt.pixel,
                     function (feature) {
                         return feature;
