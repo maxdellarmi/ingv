@@ -151,8 +151,8 @@ function parseLocData(XmlText){
 			 // se 0 risentimenti (solo EE), maxint = '-'
 
 			//COORDINATE DELL'ELEMENTO
-			 locLat[i] = parseFloat(locs[i].getElementsByTagName("lat_wgs84")[0].childNodes[0].nodeValue).toFixed(5);
-			 locLon[i] = parseFloat(locs[i].getElementsByTagName("lon_wgs84")[0].childNodes[0].nodeValue).toFixed(5);
+			 locLat[i] = parseFloat(locs[i].getElementsByTagName("lat_wgs84")[0].childNodes[0].nodeValue).toFixed(3);
+			 locLon[i] = parseFloat(locs[i].getElementsByTagName("lon_wgs84")[0].childNodes[0].nodeValue).toFixed(3);
 
 			var flagNote = locs[i].getElementsByTagName("notesito")[0].childNodes.length;
 			if (flagNote > 0) {

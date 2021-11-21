@@ -1284,6 +1284,10 @@ tbody {
 	background-color: white;
 }
 
+.gm-ui-hover-effect {
+	opacity: .6;
+}
+
 /* ----------------    legend  */
 .TitleLegendSTRUM{
 	margin-top: 60px;

@@ -953,7 +953,7 @@ function parseQuakeFile(INGVquakes){
             // markersSTRUMOLD.push(STRUMMarker)
             //endregion
 
-            if (StrumQuakeMagValue>=6) var markerIcon =new ol.style.Style({image: new ol.style.Icon({ src: urlIcon5, size: [512, 512], scale: 0.060/1.6})});
+            if (StrumQuakeMagValue>=6) var markerIcon =new ol.style.Style({image: new ol.style.Icon({ src: urlIcon5, size: [512, 512], scale: 0.060/1.2})});
             if (StrumQuakeMagValue<6 && StrumQuakeMagValue>=5) var markerIcon = new ol.style.Style({image: new ol.style.Icon({ src: urlIcon4, size: [512,512], scale: 0.053/1.6})});
             if (StrumQuakeMagValue<5 && StrumQuakeMagValue>=4) var markerIcon = new ol.style.Style({image: new ol.style.Icon({ src: urlIcon3, size: [512,512], scale: 0.047/1.6})});
             if (StrumQuakeMagValue<4 && StrumQuakeMagValue>=3) var markerIcon = new ol.style.Style({image: new ol.style.Icon({ src: urlIcon2, size: [512,512], scale: 0.043/1.6})});

@@ -28,6 +28,19 @@ var templateStr = 'Lat:{y}, Lon:{x}';
 
 var mousePositionControl;
 
+var buttonCloseSingle = `<button draggable="false" aria-label="Chiudi" title="Chiudi" type="button" class="gm-ui-hover-effect" style="background: none; display: block; border: 0px; margin: 0px; padding: 0px; text-transform: none; appearance: none; position: absolute; cursor: pointer; user-select: none; top: -6px; right: -6px; width: 30px; height: 30px;" onclick="closePopup();"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M19%206.41L17.59%205%2012%2010.59%206.41%205%205%206.41%2010.59%2012%205%2017.59%206.41%2019%2012%2013.41%2017.59%2019%2019%2017.59%2013.41%2012z%22/%3E%3Cpath%20d%3D%22M0%200h24v24H0z%22%20fill%3D%22none%22/%3E%3C/svg%3E" alt=""  style="pointer-events: none; display: block; width: 14px; height: 14px; margin: 8px;"></button>`
+
+var buttonCloseCluster = `<button draggable="false" aria-label="Chiudi" title="Chiudi" type="button" class="gm-ui-hover-effect" style="background: none; display: block; border: 0px; margin: 1px; padding: 0px; text-transform: none; appearance: none; position: absolute; cursor: pointer; user-select: none; top: -6px; right: 10px; width: 30px; height: 30px;" onclick="closePopup();"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M19%206.41L17.59%205%2012%2010.59%206.41%205%205%206.41%2010.59%2012%205%2017.59%206.41%2019%2012%2013.41%2017.59%2019%2019%2017.59%2013.41%2012z%22/%3E%3Cpath%20d%3D%22M0%200h24v24H0z%22%20fill%3D%22none%22/%3E%3C/svg%3E" alt=""  style="pointer-events: none; display: block; width: 14px; height: 14px; margin: 8px;"></button>`
+
+
+function closePopup() {
+    $(document.getElementById('popup')).popover('destroy');
+    //gestione ogggetto overlay
+    if ( popup !== undefined ) {
+        popup.setPosition(undefined);
+    }
+}
+
 function template(string, obj){
     var s = string;
     for(var prop in obj) {
@@ -363,7 +376,7 @@ function visualizzaStruMMSuMappa() {
                         'animation': false,
                         'html': true,
                         'trigger': 'manual',
-                        'content': popupContent // feature.OnClickTextIT;
+                        'content': popupContent// feature.OnClickTextIT;
                     });
                     $(element).popover('show');
                 } else {
@@ -517,7 +530,7 @@ function creazioneMappa () {
                     console.log("FEATURE ONCLICK popup data:")
                     console.log(feature.OnClickTextIT);
                     if ( feature.get('features') !== undefined) {
-                        console.log('features multiple trovate...');
+                        console.log('features cluster trovate...'+feature.get('features').length);
                         var allpopupContent="";
                         feature.get('features').forEach(function(feature) { 
                             if (feature.OnClickTextIT != undefined) {
@@ -526,11 +539,19 @@ function creazioneMappa () {
                         });
                         //console.log("TODO4 FEATURE SAME COORDINATES trying to merge all POPOP content:"+ allpopupContent);
                         popupContent = allpopupContent;
+                        //gestione pulsante chiusura X del popup
+                        if (feature.get('features').length ===1) {
+                            popupContent = buttonCloseSingle.toString() + " "+ popupContent;
+                        }
+                        else popupContent = buttonCloseCluster.toString() + " "+ popupContent;
                     }
                     else {
                         console.log('features singola trovata...');
                         popupContent = feature.OnClickTextIT;
+                        //gestione pulsante chiusura X del popup
+                        popupContent = buttonCloseSingle.toString() + " "+ popupContent;
                     }
+
                     popup.setPosition(coordinates);
                     $(element).popover({
                         'placement': 'top',
