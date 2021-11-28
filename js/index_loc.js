@@ -590,7 +590,7 @@ function onclickListLOC(prog){
 					'animation': false,
 					'html': true,
 					'trigger': 'manual',
-					'content': popupContent // feature.OnClickTextIT;
+					'content': buttonCloseSingle.toString() + " "+ popupContent // feature.OnClickTextIT;
 				});
 				$(element).popover('show');
 			} else {

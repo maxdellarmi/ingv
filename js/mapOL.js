@@ -366,9 +366,15 @@ function visualizzaStruMMSuMappa() {
                         });
                         //console.log("TODO4 FEATURE SAME COORDINATES trying to merge all POPOP content:"+ allpopupContent);
                         popupContent = allpopupContent;
+                        if (feature.get('features').length ===1) {
+                            popupContent = buttonCloseSingle.toString() + " "+ popupContent;
+                        }
+                        else popupContent = buttonCloseCluster.toString() + " "+ popupContent;
                     }
                     else {
                         popupContent = feature.OnClickTextIT;
+                        //gestione pulsante chiusura X del popup
+                        popupContent = buttonCloseSingle.toString() + " "+ popupContent;
                     }
                     popup.setPosition(coordinates);
                     $(element).popover({
@@ -629,7 +635,7 @@ function puliziaClearAllMapsLayers() {
  *
  * @param quakes
  */
-function creazioneMappaLocalityPHP (quakes) {
+    function creazioneMappaLocalityPHP (quakes) {
     $(document).ready(function() {
         try {
             // do some crazy stuff
@@ -761,9 +767,15 @@ function creazioneMappaLocalityPHP (quakes) {
                         });
                         //console.log("TODO4 FEATURE SAME COORDINATES trying to merge all POPOP content:"+ allpopupContent);
                         popupContent = allpopupContent;
+                        if (feature.get('features').length ===1) {
+                            popupContent = buttonCloseSingle.toString() + " "+ popupContent;
+                        }
+                        else popupContent = buttonCloseCluster.toString() + " "+ popupContent;
                     }
                     else {
                         popupContent = feature.OnClickTextIT;
+                        //gestione pulsante chiusura X del popup
+                        popupContent = buttonCloseSingle.toString() + " "+ popupContent;
                     }
                     popup.setPosition(coordinates);
                     $(element).popover({
@@ -792,15 +804,25 @@ function creazioneMappaLocalityPHP (quakes) {
 
             ///TODO AUTOPOSIZIONAMENTO AL CARICAMENTO DEL LAYER
             // mapOL.getView().fit(  quakeVector.getSource().getExtent(), mapOL.getSize()); //versione senza padding
-            var padding = [500, 50, 500, 50]
-            mapOL.getView().fit(
-                quakeVector.getSource().getExtent(),
-                {
-                    size: mapOL.getSize(),
-                    padding: padding,
+            window.setTimeout(function() {
+                console.log('mapOL.getView().fit e zooming');
+                try {
+                    var padding = [500, 50, 500, 50]
+                    mapOL.getView().fit(
+                        pinpointVector.getSource().getExtent(),
+                        {
+                            size: mapOL.getSize(),
+                            padding: padding,
+                        }
+                    );
+                    mapOL.getView().setZoom(7);
                 }
-            );
-            mapOL.getView().setZoom(8); //si aggiunge zoom per essere sicuro di visualizzare la porzione necessaria di mappa
+                catch (e) {
+                    console.error('ERRORE Gestito');
+                    console.log(e, e.stack);
+                }
+            }, 500);
+             //si aggiunge zoom per essere sicuro di visualizzare la porzione necessaria di mappa
         } catch (e) {
             console.log("ERR gestito");
             console.log(e, e.stack);
@@ -911,6 +933,8 @@ function creazioneMappaQuakesPHP (quakes) {
                     console.log("FEATURE ONCLICK popup data:")
                     console.log(feature.OnClickTextIT);
                     var popupContent = feature.OnClickTextIT;
+                    //gestione pulsante chiusura X del popup
+                    popupContent = buttonCloseSingle.toString() + " "+ popupContent;
                     popup.setPosition(coordinates);
                     $(element).popover({
                         'placement': 'top',
@@ -1055,6 +1079,8 @@ function indexLocalita () {
                     console.log("FEATURE ONCLICK popup data:")
                     console.log(feature.OnClickTextIT);
                     var popupContent = feature.OnClickTextIT;
+                    //gestione pulsante chiusura X del popup
+                    popupContent = buttonCloseSingle.toString() + " "+ popupContent;
                     popup.setPosition(coordinates);
                     $(element).popover({
                         'placement': 'top',
@@ -1209,6 +1235,8 @@ function indexEEAmbiente() {
                     console.log("FEATURE ONCLICK popup data:")
                     console.log(feature.ContentPopupText);
                     var popupContent = feature.ContentPopupText;
+                    //gestione pulsante chiusura X del popup
+                    popupContent = buttonCloseSingle.toString() + " "+ popupContent;
                     popup.setPosition(coordinates);
                     $(element).popover({
                         'placement': 'top',

@@ -153,12 +153,98 @@ function resizeMapQuake() {
 
 // When clicking on table row, trigger event on Gmap marker (used to trigger popup window when clicking on table row)
 function onclickList(prog){
-	FlagScroll = 0
+	/*FlagScroll = 0
 	google.maps.event.trigger(PQMarkers[prog], 'click');
 	//center map on selected event (when selecting from table line)
 	var center = new google.maps.LatLng(locPQlat[prog], locPQlon[prog]);
-    map.panTo(center);
+    map.panTo(center);*/
 	// map.fitBounds(bounds);
+
+	console.log('evento click della singola feature..');
+	console.log(quakesPQMarkers[prog]);
+	//markersArray[1170]['Marker'].getGeometry().getExtent()
+	sClick = "LIST";
+	// Flag for scrolling table - set to zero when event is selected from table (and not from marker)
+	FlagScroll = 0;
+
+	//************zoom nella zona di riferimento dove e' posizionata la singola feature
+	var padding = [500, 50, 500, 50]
+	mapOL.getView().fit(
+		quakesPQMarkers[prog].getGeometry().getExtent(),
+		{
+			size: mapOL.getSize(),
+			padding: padding,
+		}
+	);
+	mapOL.getView().setZoom(10);
+
+	//gestione selezione singola feature ---->> successivamente mostra il singolo popup
+	var collection = new ol.Collection();
+	select = new ol.interaction.Select({
+		features: collection,
+		style: null,
+	});
+
+	mapOL.addInteraction(select);
+	window.setTimeout(function() {
+		collection.push(quakesPQMarkers[prog]);
+		select.dispatchEvent({
+			type: 'select',
+			selected: [quakesPQMarkers[prog]],
+			deselected: []
+		});
+	}, 500);
+
+
+
+	//EVENTO DI SELECT DELLA MAPPA SERVONO OVERLAY DICHIARATO VAR GLOBALE su mapOL e il popup
+	select.on('select', bindSelectEvent);
+
+	/*********************************************/
+	//RIMUOVE LE INTERAZIONI DOPO AVER CLICCATO OK se l'utente aveva selezionato il boundingBOX con la selezione ad area
+	window.setTimeout(function() {
+		console.log('removingInteractions  SELECT' + mapOL.getInteractions());
+		try {
+			mapOL.getInteractions().pop();
+		}
+		catch (e) {
+			console.error('ERRORE Gestito');
+			console.log(e, e.stack);
+		}
+	}, 1000);
+}
+
+
+function bindSelectEvent(evt) {
+	// evento = evt;
+	var element = document.getElementById('popup');
+	console.log('selectSingleQuake');
+	if (evt.selected != undefined && evt.selected.length >0) {
+		if (evt.selected[0]) {
+			$(element).popover('destroy');
+			var coordinates = evt.selected[0].getGeometry().getCoordinates();
+			var popupContent = "";
+			console.log("FEATURE ONCLICK popup data:")
+			console.log(evt.selected[0].OnClickTextIT);
+			console.log('features singola da visualizzare...');
+			popupContent = evt.selected[0].OnClickTextIT;
+			/************************************************************/
+			//////////////variabile OVERLAY della mappa GLOBALE*******/
+			/************************************************************/
+			popup.setPosition(coordinates);
+			$(element).popover({
+				'placement': 'top',
+				'animation': false,
+				'html': true,
+				'trigger': 'manual',
+				'content': buttonCloseSingle.toString() + " "+ popupContent // feature.OnClickTextIT;
+			});
+			$(element).popover('show');
+		} else {
+			$(element).popover('destroy');
+			popup.setPosition(undefined);
+		}
+	}
 }
 
 // ==========================================================================================

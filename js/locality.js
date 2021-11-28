@@ -182,6 +182,7 @@ function onclickList(prog){
 
 
 	} else {
+		/*****TODO:click elemento a destra col disegno della mappa epiBIG e' la nuova selezione ****/
 		if (flagPQ == 1) {
 			for (var ii = 0; ii < PQMarkersOLD.length; ii++) {
 				PQMarkersOLD[ii].setMap(null);
@@ -198,26 +199,114 @@ function onclickList(prog){
 			flagPQ = 0;
 	    };
 
+		/****start selezione elemento a sinistra con posizionamento ****/
 		// ---- parameters necessary for functions in js.js
 		sClick = "LIST";
 		//Flag for scrolling table - set to zero when event is selected from table (and not from marker)
 		FlagScroll = 0;
 
-		google.maps.event.trigger(epiMarkers[prog], 'click');
+		/******vecchia gestione google maps
+		 * google.maps.event.trigger(epiMarkers[prog], 'click');
 		//TODO: gestione bounds da fixare con extent del pinpoint
 		// bounds.extend(markerLOC.getPosition());
 		//map.fitBounds(bounds);
 
 		// center map on selected event (when selecting from table line)
 		var center = new google.maps.LatLng(Lat[prog], Lon[prog]);
-	    map.panTo(center);
-	}
+	    map.panTo(center);*****/
 
+		console.log('evento click della singola feature..');
+		console.log(epiMarkers[prog]);
+		//markersArray[1170]['Marker'].getGeometry().getExtent()
+		sClick = "LIST";
+		// Flag for scrolling table - set to zero when event is selected from table (and not from marker)
+		FlagScroll = 0;
+
+		//************zoom nella zona di riferimento dove e' posizionata la singola feature
+		var padding = [500, 50, 500, 50]
+		mapOL.getView().fit(
+			epiMarkers[prog].getGeometry().getExtent(),
+			{
+				size: mapOL.getSize(),
+				padding: padding,
+			}
+		);
+		mapOL.getView().setZoom(8);
+
+		//gestione selezione singola feature ---->> successivamente mostra il singolo popup
+		var collection = new ol.Collection();
+		select = new ol.interaction.Select({
+			features: collection,
+			style: null,
+		});
+
+		mapOL.addInteraction(select);
+		window.setTimeout(function() {
+			collection.push(epiMarkers[prog]);
+			select.dispatchEvent({
+				type: 'select',
+				selected: [epiMarkers[prog]],
+				deselected: []
+			});
+		}, 500);
+
+
+
+		//EVENTO DI SELECT DELLA MAPPA SERVONO OVERLAY DICHIARATO VAR GLOBALE su mapOL e il popup
+		select.on('select', bindSelectEvent);
+
+		/*********************************************/
+		//RIMUOVE LE INTERAZIONI DOPO AVER CLICCATO OK se l'utente aveva selezionato il boundingBOX con la selezione ad area
+		window.setTimeout(function() {
+			console.log('removingInteractions  SELECT' + mapOL.getInteractions());
+			try {
+				mapOL.getInteractions().pop();
+			}
+			catch (e) {
+				console.error('ERRORE Gestito');
+				console.log(e, e.stack);
+			}
+		}, 1000);
+
+
+	}
 	document.getElementById("legend").style.display = "none";
     document.getElementById("legendmin").style.display = "initial";
 	document.getElementById("legendPQ").style.display = "none";
-
 }
+
+function bindSelectEvent(evt) {
+	// evento = evt;
+	var element = document.getElementById('popup');
+	console.log('selectSingleQuake');
+	if (evt.selected != undefined && evt.selected.length >0) {
+		if (evt.selected[0]) {
+			$(element).popover('destroy');
+			var coordinates = evt.selected[0].getGeometry().getCoordinates();
+			var popupContent = "";
+			console.log("FEATURE ONCLICK popup data:")
+			console.log(evt.selected[0].OnClickTextIT);
+			console.log('features singola da visualizzare...');
+			popupContent = evt.selected[0].OnClickTextIT;
+			/************************************************************/
+			//////////////variabile OVERLAY della mappa GLOBALE*******/
+			/************************************************************/
+			popup.setPosition(coordinates);
+			$(element).popover({
+				'placement': 'top',
+				'animation': false,
+				'html': true,
+				'trigger': 'manual',
+				'content': buttonCloseSingle.toString() + " "+ popupContent // feature.OnClickTextIT;
+			});
+			$(element).popover('show');
+		} else {
+			$(element).popover('destroy');
+			popup.setPosition(undefined);
+		}
+	}
+}
+
 
 function selnum(){
 	var selection = chart.getSelection();
@@ -498,7 +587,7 @@ function parseLocData(XmlText){
 	/******TODO GESTIONE VISUALIZZAZIONE PINPOINT CON OL*****/
 	markerLOC.setStyle(stilePinPoint);
 	/******TODO variabile di appoggio per tutto quello che bisogna visualizzare sul layer*****/
-	console.log('aggiungo markerLOC al layer globale localityPHPmarkers');
+	console.log('aggiungo markerLOC al layer globale localityPHPmarkers di tipo pinpoint');
 	localityPHPmarkers.push(markerLOC);
 	/******TODO SOSTITUIRE GLI OGGETTI GOOGLE CON OL *****/
 	// -----------------------------------------     LOCALITY BIBLIOGRAPHY
@@ -1347,7 +1436,7 @@ function parsePQData2(XmlText){
 	var latEpiPQ = parseFloat(XMLLocList.getElementsByTagName("lat")[0].childNodes[0].nodeValue).toFixed(3);
 	var lonEpiPQ = parseFloat(XMLLocList.getElementsByTagName("lon")[0].childNodes[0].nodeValue).toFixed(3);
 	var StarBIG = {path: EPIpathCALC, fillColor: '#ffffff', fillOpacity: 0.6, anchor: new google.maps.Point(125,125), strokeWeight: 2, strokeColor:red, scale: 0.15};
-	/******TODO SOSTITUIRE GLI OGGETTI GOOGLE CON OL *****/
+	/******TODO: EpiBIG SOSTITUIRE GLI OGGETTI GOOGLE CON OL *****/
 	epiBIG = new google.maps.Marker({
 		position: new google.maps.LatLng(latEpiPQ, lonEpiPQ),
 		map: map,
