@@ -154,7 +154,7 @@ function resizeMapQuake() {
 // When clicking on table row, trigger event on Gmap marker (used to trigger popup window when clicking on table row)
 function onclickList(prog){
 	/*FlagScroll = 0
-	google.maps.event.trigger(PQMarkers[prog], 'click');
+
 	//center map on selected event (when selecting from table line)
 	var center = new google.maps.LatLng(locPQlat[prog], locPQlon[prog]);
     map.panTo(center);*/
@@ -162,6 +162,8 @@ function onclickList(prog){
 
 	console.log('evento click della singola feature..');
 	console.log(quakesPQMarkers[prog]);
+
+	google.maps.event.trigger(quakesPQMarkers[prog], 'click');
 	//markersArray[1170]['Marker'].getGeometry().getExtent()
 	sClick = "LIST";
 	// Flag for scrolling table - set to zero when event is selected from table (and not from marker)
@@ -803,6 +805,7 @@ function parsePQData2(XmlText){
 			// });
 
 			var marker = new ol.Feature({
+				id: i,
 				geometry: new ol.geom.Point(new ol.proj.fromLonLat([locPQlon[i], locPQlat[i]])),//new ol.geom.Point(  [ locPQlon[i], locPQlat[i]  ] ),
 				type: "locality",
 				ExportKmlR: "",
@@ -898,6 +901,7 @@ function parsePQData2(XmlText){
 						// });
 						// PQMarkers[indEE] = markerEE;
 						var marker = new ol.Feature({
+							id: indEE, //k,
 							geometry: new ol.geom.Point(new ol.proj.fromLonLat([locPQlon[indEE], locPQlat[indEE]])), //new ol.geom.Point(  [locPQlon[indEE], locPQlat[indEE] ] ),
 							type:"localityEE",
 							ExportKmlR: "",
@@ -945,6 +949,7 @@ function parsePQData2(XmlText){
 						//var eeloconly = `<svg viewBox="-10 -10 200 200" height="200px" width="200px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M13,14H2c-0.5523,0-1-0.4477-1-1V2c0-0.5523,0.4477-1,1-1h11c0.5523,0,1,0.4477,1,1v11C14,13.5523,13.5523,14,13,14z"  stroke="#30a559" stroke-width="1.8" fill="#ffffff"  /></svg>`;
 						var eeloconly= `<svg viewBox="0 0 15 15" height="33px" width="33px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M13,14H2c-0.5523,0-1-0.4477-1-1V2c0-0.5523,0.4477-1,1-1h11c0.5523,0,1,0.4477,1,1v11C14,13.5523,13.5523,14,13,14z"  stroke="#30a559" stroke-width="1.8" fill="#ffffff"  /></svg>`;
 						var singleFeature = new ol.Feature({
+							id: k,
 							geometry: new ol.geom.Point(new ol.proj.fromLonLat([EE_Lon[k], EE_Lat[k]])),//new ol.geom.Point([ EE_Lon[k], EE_Lat[k]] ),
 							type:"EEonly",
 							ExportKmlR: "",
@@ -987,7 +992,7 @@ function parsePQData2(XmlText){
 				}
 	        }
 	    }
-	}
+	} //fine cliclo for
 
 
 	//==================== 	deal with level of review
@@ -1114,6 +1119,7 @@ function parsePQData2(XmlText){
 	var compiled;
 
 	var singleFeature = new ol.Feature({
+		id: -1,
 		geometry: new ol.geom.Point(new ol.proj.fromLonLat([Lon, Lat])),//new ol.geom.Point([ Lon, Lat ] ),
 		type: "singleQuake",
 		title: 'lat: ' + Lat + ', lon: ' +Lon,
@@ -2115,59 +2121,60 @@ function showComm(evt, idname){
 
 function openPopupPQ(marker, textEN, textIT, NlocI){
 
-	//Vecchia gestione google map non piu presente
-	/*google.maps.event.addListener(marker, 'click', function() {
-		// EPICLICK MOD: restore epicenter on top
-		epicenter.setMap(null);
-		epicenter.zIndex = epiZ;
-		epicenter.setMap(map);
-	*/
 	marker.OnClickTextIT = "";
 
-		// specify language of popup window
-	   if (Langsel == "EN") {
-			textEN = textEN.split(biblioEQ_pdfT_abbrIT).join(biblioEQ_pdfT_abbrEN)
-		   textEN = textEN.split(biblioEQ_pdfR_abbrIT).join(biblioEQ_pdfR_abbrEN)
-		   textEN = textEN.split(flag1descr['IT']).join(flag1descr['EN'])
-		   textEN = textEN.split(flag2descr['IT']).join(flag2descr['EN'])
-		   textEN = textEN.split(flag3descr['IT']).join(flag3descr['EN'])
-		   textEN = textEN.split(flagMED1descr['IT']).join(flagMED1descr['EN'])
-		   textEN = textEN.split(flagMED2descr['IT']).join(flagMED2descr['EN'])
-		   for (var i=0; i<class_codeEE.length; i++){
-			   textEN = textEN.split(class_titleEE_IT[i]).join(class_titleEE_EN[i])
-		   }
-		   //Vecchia gestione google map non piu presente
-		   // infowindow.setContent(textEN);
-		   marker.OnClickTextIT = textEN;
-	   } else {
-			textIT = textIT.split(biblioEQ_pdfT_abbrEN).join(biblioEQ_pdfT_abbrIT)
-		   textIT = textIT.split(biblioEQ_pdfR_abbrEN).join(biblioEQ_pdfR_abbrIT)
-		   textIT = textIT.split(flag1descr['EN']).join(flag1descr['IT'])
-		   textIT = textIT.split(flag2descr['EN']).join(flag2descr['IT'])
-		   textIT = textIT.split(flag3descr['EN']).join(flag3descr['IT'])
-		   textIT = textIT.split(flagMED1descr['EN']).join(flagMED1descr['IT'])
-		   textIT = textIT.split(flagMED2descr['EN']).join(flagMED2descr['IT'])
-			//Vecchia gestione google map non piu presente
-		  // infowindow.setContent(textIT);
-		   marker.OnClickTextIT = textIT;
-	   }
+	// specify language of popup window
+	if (Langsel == "EN") {
+		textEN = textEN.split(biblioEQ_pdfT_abbrIT).join(biblioEQ_pdfT_abbrEN)
+		textEN = textEN.split(biblioEQ_pdfR_abbrIT).join(biblioEQ_pdfR_abbrEN)
+		textEN = textEN.split(flag1descr['IT']).join(flag1descr['EN'])
+		textEN = textEN.split(flag2descr['IT']).join(flag2descr['EN'])
+		textEN = textEN.split(flag3descr['IT']).join(flag3descr['EN'])
+		textEN = textEN.split(flagMED1descr['IT']).join(flagMED1descr['EN'])
+		textEN = textEN.split(flagMED2descr['IT']).join(flagMED2descr['EN'])
+		for (var i=0; i<class_codeEE.length; i++){
+			textEN = textEN.split(class_titleEE_IT[i]).join(class_titleEE_EN[i])
+		}
+		//Vecchia gestione google map non piu presente
+		// infowindow.setContent(textEN);
+		marker.OnClickTextIT = textEN;
+	} else {
+		textIT = textIT.split(biblioEQ_pdfT_abbrEN).join(biblioEQ_pdfT_abbrIT)
+		textIT = textIT.split(biblioEQ_pdfR_abbrEN).join(biblioEQ_pdfR_abbrIT)
+		textIT = textIT.split(flag1descr['EN']).join(flag1descr['IT'])
+		textIT = textIT.split(flag2descr['EN']).join(flag2descr['IT'])
+		textIT = textIT.split(flag3descr['EN']).join(flag3descr['IT'])
+		textIT = textIT.split(flagMED1descr['EN']).join(flagMED1descr['IT'])
+		textIT = textIT.split(flagMED2descr['EN']).join(flagMED2descr['IT'])
+		//Vecchia gestione google map non piu presente
+		// infowindow.setContent(textIT);
+		marker.OnClickTextIT = textIT;
+	}
 
-
+	//Vecchia gestione google map non piu presente
+	google.maps.event.addListener(marker, 'click', function() {
+		// EPICLICK MOD: restore epicenter on top
+		// epicenter.setMap(null);
+		// epicenter.zIndex = epiZ;
+		// epicenter.setMap(map);
 		// open popup window
 		// infowindow.open(map, marker);
 
-		$('section').translatable({
-		  contentNodeSelector     : 'span.gtranslate'
-		, translateButtonSelector : 'a[href="#translate"]'
-	  //        , autoChangeButtonText    : false
-	  //        , language                : 'en'
-	  //        , debug                   : true
-		});
+		// $('section').translatable({
+		//   contentNodeSelector     : 'span.gtranslate'
+		// , translateButtonSelector : 'a[href="#translate"]'
+	  // //        , autoChangeButtonText    : false
+	  // //        , language                : 'en'
+	  // //        , debug                   : true
+		// });
 
 		var rows = document.getElementById(NlocI);
 		// scroll to selected table row
 		if (FlagScroll == 1){ // do it only if selection from map marker
-			rows.scrollIntoView(false);
+			try {
+				rows.scrollIntoView(false);
+			}
+			catch (e) {console.log("ERR Gestito scrollIntoView"); }
 		}
 		FlagScroll = 1;
 
@@ -2181,7 +2188,7 @@ function openPopupPQ(marker, textEN, textIT, NlocI){
 		// highlight new table row
 		rows.style.backgroundColor = "#ffffaa";
 		NlocOld = NlocI;
-	//})   //Vecchia gestione google map non piu presente
+	})
 }
 
 

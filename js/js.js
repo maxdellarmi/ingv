@@ -450,73 +450,79 @@ function resizeMap() {
 	// Function that opens pop up window with quake info and highlights marker and table row,
 	// when clicking on marker
 function openPopupSpider (marker, textEN, textIT, NterrI, lat, lon){
+	console.log('openPopupSpider ... qui viene mantenuta solo la dichiarazione del click sull elemento per la tabella.')
 	google.maps.event.addListener(marker, 'click', function() {
-
+		console.log('openPopupSpider GMAPS EVENT CLICK element called');
+		//region GESTIONE VECCHIA COMMENTATA
 		// gmstyleclose();
-
-		if (map.getZoom()<7) {
-			var center = new google.maps.LatLng(lat, lon);
-		    map.panTo(center);
-			map.setZoom(7);
-		}
+		//
+		// if (map.getZoom()<7) {
+		// 	var center = new google.maps.LatLng(lat, lon);
+		//     map.panTo(center);
+		// 	map.setZoom(7);
+		// }
 
 		// turn off previously selected marker, when directly clicking on a new marker
 		// The 'if' defines the case when selection comes from spiderfier the first time (in this case don't set Marker1 to Star1, otherwise one of the spiderfied markers turns red on click!). The beginning value is lSpider = 0. When entering here from spiderfier the first time (Marker1 turns red), this becomes 1 (after Marker1 turnsorange).
 
-		if (lSpider == 0 ){
-			if (Marker1) {
-				Marker1.setIcon(StarCLICK_R);
-			}
-		}
-		else {
-			if (Marker1) {
-				Marker1.setIcon(StarCLICK_O);
-			}
-		};
+		// if (lSpider == 0 ){
+		// 	if (Marker1) {
+		// 		Marker1.setIcon(StarCLICK_R);
+		// 	}
+		// }
+		// else {
+		// 	if (Marker1) {
+		// 		Marker1.setIcon(StarCLICK_O);
+		// 	}
+		// };
 
-		// specify language of popup window
-	   if (Langsel == "EN") {
-			textEN = textEN.split(biblioEQ_pdfT_abbrIT).join(biblioEQ_pdfT_abbrEN)
-		   textEN = textEN.split(biblioEQ_pdfR_abbrIT).join(biblioEQ_pdfR_abbrEN)
-		   textEN = textEN.split(flag1descr['IT']).join(flag1descr['EN'])
-		   textEN = textEN.split(flag2descr['IT']).join(flag2descr['EN'])
-		   textEN = textEN.split(flag3descr['IT']).join(flag3descr['EN'])
-		   textEN = textEN.split(flagMED1descr['IT']).join(flagMED1descr['EN'])
-		   textEN = textEN.split(flagMED2descr['IT']).join(flagMED2descr['EN'])
-		   for (var i=0; i<class_codeEE.length; i++){
-			   textEN = textEN.split(class_titleEE_IT[i]).join(class_titleEE_EN[i])
-		   }
-		   infowindow.setContent(textEN);
+		//POPUP GESTITO DIVERSAMENTE specify language of popup window
+	  //  if (Langsel == "EN") {
+		// 	textEN = textEN.split(biblioEQ_pdfT_abbrIT).join(biblioEQ_pdfT_abbrEN)
+		//    textEN = textEN.split(biblioEQ_pdfR_abbrIT).join(biblioEQ_pdfR_abbrEN)
+		//    textEN = textEN.split(flag1descr['IT']).join(flag1descr['EN'])
+		//    textEN = textEN.split(flag2descr['IT']).join(flag2descr['EN'])
+		//    textEN = textEN.split(flag3descr['IT']).join(flag3descr['EN'])
+		//    textEN = textEN.split(flagMED1descr['IT']).join(flagMED1descr['EN'])
+		//    textEN = textEN.split(flagMED2descr['IT']).join(flagMED2descr['EN'])
+		//    for (var i=0; i<class_codeEE.length; i++){
+		// 	   textEN = textEN.split(class_titleEE_IT[i]).join(class_titleEE_EN[i])
+		//    }
+		//    infowindow.setContent(textEN);
+	  //
+	  //  } else {
+		// 	textIT = textIT.split(biblioEQ_pdfT_abbrEN).join(biblioEQ_pdfT_abbrIT)
+		//    textIT = textIT.split(biblioEQ_pdfR_abbrEN).join(biblioEQ_pdfR_abbrIT)
+		//    textIT = textIT.split(flag1descr['EN']).join(flag1descr['IT'])
+		//    textIT = textIT.split(flag2descr['EN']).join(flag2descr['IT'])
+		//    textIT = textIT.split(flag3descr['EN']).join(flag3descr['IT'])
+		//    textIT = textIT.split(flagMED1descr['EN']).join(flagMED1descr['IT'])
+		//    textIT = textIT.split(flagMED2descr['EN']).join(flagMED2descr['IT'])
+		//    for (var i=0; i<class_codeEE.length; i++){
+		// 	   textIT = textIT.split(class_titleEE_EN[i]).join(class_titleEE_IT[i])
+		//    }
+		//    infowindow.setContent(textIT);
+	  //  }
+	  //
+		// // open popup window
+		// infowindow.open(map, marker);
+	  //
+		// $('section').translatable({
+		//   contentNodeSelector     : 'span.gtranslate'
+		// , translateButtonSelector : 'a[href="#translate"]'
+	  // //        , autoChangeButtonText    : false
+	  // //        , language                : 'en'
+	  // //        , debug                   : true
+		// });
+		//endregion
 
-	   } else {
-			textIT = textIT.split(biblioEQ_pdfT_abbrEN).join(biblioEQ_pdfT_abbrIT)
-		   textIT = textIT.split(biblioEQ_pdfR_abbrEN).join(biblioEQ_pdfR_abbrIT)
-		   textIT = textIT.split(flag1descr['EN']).join(flag1descr['IT'])
-		   textIT = textIT.split(flag2descr['EN']).join(flag2descr['IT'])
-		   textIT = textIT.split(flag3descr['EN']).join(flag3descr['IT'])
-		   textIT = textIT.split(flagMED1descr['EN']).join(flagMED1descr['IT'])
-		   textIT = textIT.split(flagMED2descr['EN']).join(flagMED2descr['IT'])
-		   for (var i=0; i<class_codeEE.length; i++){
-			   textIT = textIT.split(class_titleEE_EN[i]).join(class_titleEE_IT[i])
-		   }
-		   infowindow.setContent(textIT);
-	   }
-
-		// open popup window
-		infowindow.open(map, marker);
-
-		$('section').translatable({
-		  contentNodeSelector     : 'span.gtranslate'
-		, translateButtonSelector : 'a[href="#translate"]'
-	  //        , autoChangeButtonText    : false
-	  //        , language                : 'en'
-	  //        , debug                   : true
-		});
-
-		// scroll to selected table row
+		// scroll to selected table row EVENTO DICHIARAZIONE PER CLICK sulla TABELLA A SINISTRA
 		var rows = document.getElementById(NterrI);
 		if (FlagScroll == 1){ // do it only if selection from map marker
-			rows.scrollIntoView(false);
+			try {
+				rows.scrollIntoView(false);
+			}
+			catch (e) { console.log ('ERR gestito');}
 		}
 		FlagScroll = 1;
 
@@ -530,39 +536,41 @@ function openPopupSpider (marker, textEN, textIT, NterrI, lat, lon){
 		rows.style.backgroundColor = "#ffffaa";
 		NterrOld = NterrI;
 
-		// Clicked icons: yellow color for highlighted marker
-		var iconCL = marker.icon;
-		var pathCL = iconCL.path;
-		if (pathCL == 0) {
-			var anchorCL = new google.maps.Point(0,0);
-		} else {
-			anchorCL = new google.maps.Point(125,125)
-		};
-
-		var scaleCL = iconCL.scale;
-		// SET COLOR BACK TO INITIAL; BY CHECKING ICON SCALE - needed for marker1
-		if (scaleCL == StarScale1 || scaleCL == CircleScale1) var fillColor = color1
-		else if (scaleCL == StarScale2 || scaleCL == CircleScale2) var fillColor = color2
-		else if (scaleCL == StarScale3 || scaleCL == CircleScale3) var fillColor = color3
-		else if (scaleCL == StarScale4 || scaleCL == CircleScale4) var fillColor = color4
-
-		// var fillColorCL = iconCL.fillColor;
-		var fillOpacityCL = iconCL.fillOpacity;
-		var strokeColorCL = iconCL.strokeColor;
-		var strokeOpacityCL = iconCL.strokeOpacity;
-		var strokeWeightCL = iconCL.strokeWeight;
-		var scaleCL = iconCL.scale;
-		if (strokeColorCL) {
-			// StarH = {path: pathCL, strokeColor: '#FFE51E' , fillColor: '#FFE51E', fillOpacity: fillOpacityCL, strokeOpacity: strokeOpacityCL, anchor: anchorCL, strokeWeight: strokeWeightCL, scale: scaleCL};
-			StarCLICK_O = {path: pathCL, strokeColor: '#1f708f' , fillColor: '#1f708f', fillOpacity: fillOpacityCL, strokeOpacity: strokeOpacityCL, anchor: anchorCL, strokeWeight: strokeWeightCL, scale: scaleCL};
-			StarCLICK_R = {path: pathCL, strokeColor: fillColor , fillColor: fillColor, fillOpacity: fillOpacityCL, strokeOpacity: strokeOpacityCL, anchor: anchorCL, strokeWeight: strokeWeightCL, scale: scaleCL};
-		}
-		else {
-			// StarH = {path: pathCL, fillColor: '#FFE51E', fillOpacity: fillOpacityCL, anchor: anchorCL, strokeWeight: strokeWeightCL, scale: scaleCL};
-			StarCLICK_O = {path: pathCL, fillColor: '#1f708f', fillOpacity: fillOpacityCL, anchor: anchorCL, strokeWeight: strokeWeightCL, scale: scaleCL};
-			StarCLICK_R = {path: pathCL, fillColor: fillColor, fillOpacity: fillOpacityCL, anchor: anchorCL, strokeWeight: strokeWeightCL, scale: scaleCL};
-		}
-		Marker1 = marker;
+		//region GESTIONE VECCHIA COMMENTATA
+		// // Clicked icons: yellow color for highlighted marker
+		// var iconCL = marker.icon;
+		// var pathCL = iconCL.path;
+		// if (pathCL == 0) {
+		// 	var anchorCL = new google.maps.Point(0,0);
+		// } else {
+		// 	anchorCL = new google.maps.Point(125,125)
+		// };
+		//
+		// var scaleCL = iconCL.scale;
+		// // SET COLOR BACK TO INITIAL; BY CHECKING ICON SCALE - needed for marker1
+		// if (scaleCL == StarScale1 || scaleCL == CircleScale1) var fillColor = color1
+		// else if (scaleCL == StarScale2 || scaleCL == CircleScale2) var fillColor = color2
+		// else if (scaleCL == StarScale3 || scaleCL == CircleScale3) var fillColor = color3
+		// else if (scaleCL == StarScale4 || scaleCL == CircleScale4) var fillColor = color4
+		//
+		// // var fillColorCL = iconCL.fillColor;
+		// var fillOpacityCL = iconCL.fillOpacity;
+		// var strokeColorCL = iconCL.strokeColor;
+		// var strokeOpacityCL = iconCL.strokeOpacity;
+		// var strokeWeightCL = iconCL.strokeWeight;
+		// var scaleCL = iconCL.scale;
+		// if (strokeColorCL) {
+		// 	// StarH = {path: pathCL, strokeColor: '#FFE51E' , fillColor: '#FFE51E', fillOpacity: fillOpacityCL, strokeOpacity: strokeOpacityCL, anchor: anchorCL, strokeWeight: strokeWeightCL, scale: scaleCL};
+		// 	StarCLICK_O = {path: pathCL, strokeColor: '#1f708f' , fillColor: '#1f708f', fillOpacity: fillOpacityCL, strokeOpacity: strokeOpacityCL, anchor: anchorCL, strokeWeight: strokeWeightCL, scale: scaleCL};
+		// 	StarCLICK_R = {path: pathCL, strokeColor: fillColor , fillColor: fillColor, fillOpacity: fillOpacityCL, strokeOpacity: strokeOpacityCL, anchor: anchorCL, strokeWeight: strokeWeightCL, scale: scaleCL};
+		// }
+		// else {
+		// 	// StarH = {path: pathCL, fillColor: '#FFE51E', fillOpacity: fillOpacityCL, anchor: anchorCL, strokeWeight: strokeWeightCL, scale: scaleCL};
+		// 	StarCLICK_O = {path: pathCL, fillColor: '#1f708f', fillOpacity: fillOpacityCL, anchor: anchorCL, strokeWeight: strokeWeightCL, scale: scaleCL};
+		// 	StarCLICK_R = {path: pathCL, fillColor: fillColor, fillOpacity: fillOpacityCL, anchor: anchorCL, strokeWeight: strokeWeightCL, scale: scaleCL};
+		// }
+		// Marker1 = marker;
+		//endregion
 	});
 }
 

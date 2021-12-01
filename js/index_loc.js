@@ -196,6 +196,7 @@ function createTableandPlot(Filters){
 	for (var i = 0; i < descloc.length; i++){
 		//TODO AGGIUNGERE LE PROPERTIES QUI PER VISUALIZZARLE NEL POPUP
 		var marker = new ol.Feature({
+			id: i,
 			geometry: new ol.geom.Point(new ol.proj.fromLonLat([locLon[i], locLat[i]])), //new ol.geom.Point(  [ locLon[i], locLat[i]  ] ),
 			name: country[i],
 			description: descloc[i],
@@ -296,9 +297,10 @@ function createTableandPlot(Filters){
 		].join('\n');
 
 		/*TODO VERIFICARE  SEZIONE POPUP CON COMPONENTI GOOGLE INFOWINDOW E EVENTO CLICK DELLA MAPPA
-		//markerLOC adesso contiene la singola feature e si chiama ora `marker`
-		openPopupLOC(markerLOC, OnClickTextEN, OnClickTextIT, nloc[i])
-*/
+		//markerLOC adesso contiene la singola feature e si chiama ora `marker`*/
+		//openPopupLOC(markerLOC, OnClickTextEN, OnClickTextIT, nloc[i])
+		openPopupLOC(marker, OnClickTextEN, OnClickTextIT, nloc[i])
+
 
 		if(Filters['StartImax']==0) Filters['StartImax'] = -2
 		//TODO VERIFICARE I FILTERS
@@ -474,23 +476,15 @@ function createTableandPlot(Filters){
 function openPopupLOC(marker, textEN, textIT, NlocI){
 	google.maps.event.addListener(marker, 'click', function() {
 
-		// specify language of popup window
-		if (Langsel == "EN") {
-			infowindow.setContent(textEN);
-		} else {
-			infowindow.setContent(textIT);
-		}
-
-		// open popup window
-		infowindow.open(map, marker);
-
 		var rows = document.getElementById(NlocI);
 		// scroll to selected table row
 		if (FlagScroll == 1){ // do it only if selection from map marker
-			rows.scrollIntoView(false);
+			try {
+				rows.scrollIntoView(false);
+			}
+			catch (e) { console.log ('ERR gestito');}
 		}
 		FlagScroll = 1;
-
 
 		// turn off previously selected table row when clicking on new marker
 		if (NlocOld) {
@@ -534,7 +528,8 @@ function onclickListLOC(prog){
 		} else {
 		FlagScroll = 0
 	};
-
+	//CLICK che permette di selezionare la riga nella tabella
+	google.maps.event.trigger(LOCMarkers[prog], 'click');
 	//LOCMarkers[prog]
 
 	//************zoom nella zona di riferimento dove e' posizionata la singola feature

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="fixato layer opacity GEO100">
+    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="aggiunta X popup ovunque.&#10;Gestione click tabella a sinistra su pagina quakes.php e locality.php.&#10;TODO&gt;gestione click pagina locality.php su immagine di destra nella tabella">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/manajax.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/manajax.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/index_loc.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index_loc.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/js.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/js.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/locality.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/locality.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/mapOL.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/mapOL.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/js/quake.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/quake.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +183,16 @@
       <workItem from="1635339216068" duration="4416000" />
       <workItem from="1635345702702" duration="3002000" />
       <workItem from="1635717714211" duration="1656000" />
-      <workItem from="1635760628338" duration="24295000" />
+      <workItem from="1635760628338" duration="25659000" />
+      <workItem from="1636748795820" duration="3150000" />
+      <workItem from="1636935767583" duration="521000" />
+      <workItem from="1636967524087" duration="5432000" />
+      <workItem from="1637057495578" duration="17727000" />
+      <workItem from="1637157931558" duration="9655000" />
+      <workItem from="1637191782850" duration="10729000" />
+      <workItem from="1637525554450" duration="3089000" />
+      <workItem from="1638041125438" duration="5788000" />
+      <workItem from="1638352863779" duration="29771000" />
     </task>
     <task id="LOCAL-00001" summary="img">
       <created>1631987175531</created>
@@ -364,7 +376,42 @@
       <option name="project" value="LOCAL" />
       <updated>1635784859287</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="fixati filtri mappa quakes&#10;fixato display di alcuni elementi grafici sulla mappa: Ipotetico , Regione, area, Singola località, Epicentro non parametrizzato e Evento falso.">
+      <created>1635792298198</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1635792298198</updated>
+    </task>
+    <task id="LOCAL-00028" summary="GESTIONE AREA SISMICITÀ STRUMENTALE (da INGV-ONT)&#10;GESTIONE AREA SELEZIONE TERREMOTI &#10;GESTIONE INTERAZIONE TRA I DUE LAYER&#10;GESTIONE CENTRALIZZATA SELEZIONE AREA E IMPOSTAZIONE BOUNDARIES SULL'AREA SELEZIONATA&#10;GESTIONE RESET ALLA FINE DELL'ESECUZIONE DELL'INTERROGAZIONE (tasto OK). &#10;TEST E RISOLUZIONE FIX DELLA PULIZIA DEI VECCHI LAYER CARICATI (BUG DI OPENLAYER necessaria rimozione x2 volte).">
+      <created>1637090733030</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1637090733030</updated>
+    </task>
+    <task id="LOCAL-00029" summary="SELEZIONE - POSIZIONAMENTO E VISUALIZZAZIONE POPUP a partire dalla tabella di sinistra SUI SEGUENTI layer --&gt;&gt; Index locality e Terremoti iniziali. Manca gestione 1)dettaglio terremoto singolo, 2) dettaglio localita singola 3) dettaglio effetti sull ambiente.&#10;TESTING interazioni tra i due layer Index locality&lt;&lt;---&gt;&gt;Terremoti iniziali risolti bug di pulizia eventi interazione mappa.">
+      <created>1637202407722</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1637202407722</updated>
+    </task>
+    <task id="LOCAL-00030" summary="MapLayers_Strum.js modifica dimensione della grafica di un elemento&#10;index_loc.js portati a 3 cifre decimali i punti su mappa su richiesta del cliente&#10;mapOL.js e css.css introduzione X per la chiusura del popup solo sul primo layer (gestione differenziata se + di 1 elemento o uno solo nel popup per problemi di spazio -- TODO sugli altri layer">
+      <created>1637528638421</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1637528638421</updated>
+    </task>
+    <task id="LOCAL-00031" summary="aggiunta X popup ovunque.&#10;Gestione click tabella a sinistra su pagina quakes.php e locality.php.&#10;TODO&gt;gestione click pagina locality.php su immagine di destra nella tabella">
+      <created>1638070220195</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1638070220195</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -395,10 +442,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="img" />
-    <MESSAGE value="aggiornamento quake funzione parseQuakes in index.js" />
-    <MESSAGE value="TEST PROGRESS STELLE NERE." />
-    <MESSAGE value="terremoti a stella visualizzati OK" />
     <MESSAGE value="aggiornamento files index.js index2.js index_loc.js(untouched) aggiornata versione openLayers per gestione SVG, manajax.js aggiornamento javascript per verificare punto di ingresso per inserire la gestione del caricamento dati su mappaOpenLayer, mapOL.js gestire il caricamento dei terremoti." />
     <MESSAGE value="aggiornamento forzatura contorno &quot;STROKE&quot; proprieta svg per il contorno delle icone stelle a valore 5. stroke-width=&quot;5&quot;" />
     <MESSAGE value="gestione caricamento localita sulla pagina index2.php -- gestione filtro localita sulla pressione del tasto ok -- gestione layers attivi e disattivi tra quakes e locality." />
@@ -419,6 +462,11 @@
     <MESSAGE value="1) rimosse forzature a UTF8&#10;2) gestione layer KML e wms aggiunte&#10;3) proiezione mappa aggiornata a webmarcator e tutti i layer impostati di conseguenza" />
     <MESSAGE value="gestione layer KML e wms aggiunte completata l'aggiunta di tutti i layer risorse esterne. NB. molti rispondono errore 503 es: http://wms.pcn.minambiente.it e http://geoservices.isprambiente.it/arcgis/services/Geologia/geologia_italia_100k/ImageServer/WMSServer&#10;&#10;Questo sembrerebbe essere il nuovo indirizzo&#10;http://sgi2.isprambiente.it/arcgis/services/servizi/carta_geologica_100k/MapServer/WmsServer  contenente una serie di layer. &#10;LAYERS: 1 sembra essere quello necessario ma dovrebbe essere attivato solamente ad un certo livello di zoom." />
     <MESSAGE value="fixato layer opacity GEO100" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixato layer opacity GEO100" />
+    <MESSAGE value="fixati filtri mappa quakes&#10;fixato display di alcuni elementi grafici sulla mappa: Ipotetico , Regione, area, Singola località, Epicentro non parametrizzato e Evento falso." />
+    <MESSAGE value="GESTIONE AREA SISMICITÀ STRUMENTALE (da INGV-ONT)&#10;GESTIONE AREA SELEZIONE TERREMOTI &#10;GESTIONE INTERAZIONE TRA I DUE LAYER&#10;GESTIONE CENTRALIZZATA SELEZIONE AREA E IMPOSTAZIONE BOUNDARIES SULL'AREA SELEZIONATA&#10;GESTIONE RESET ALLA FINE DELL'ESECUZIONE DELL'INTERROGAZIONE (tasto OK). &#10;TEST E RISOLUZIONE FIX DELLA PULIZIA DEI VECCHI LAYER CARICATI (BUG DI OPENLAYER necessaria rimozione x2 volte)." />
+    <MESSAGE value="SELEZIONE - POSIZIONAMENTO E VISUALIZZAZIONE POPUP a partire dalla tabella di sinistra SUI SEGUENTI layer --&gt;&gt; Index locality e Terremoti iniziali. Manca gestione 1)dettaglio terremoto singolo, 2) dettaglio localita singola 3) dettaglio effetti sull ambiente.&#10;TESTING interazioni tra i due layer Index locality&lt;&lt;---&gt;&gt;Terremoti iniziali risolti bug di pulizia eventi interazione mappa." />
+    <MESSAGE value="MapLayers_Strum.js modifica dimensione della grafica di un elemento&#10;index_loc.js portati a 3 cifre decimali i punti su mappa su richiesta del cliente&#10;mapOL.js e css.css introduzione X per la chiusura del popup solo sul primo layer (gestione differenziata se + di 1 elemento o uno solo nel popup per problemi di spazio -- TODO sugli altri layer" />
+    <MESSAGE value="aggiunta X popup ovunque.&#10;Gestione click tabella a sinistra su pagina quakes.php e locality.php.&#10;TODO&gt;gestione click pagina locality.php su immagine di destra nella tabella" />
+    <option name="LAST_COMMIT_MESSAGE" value="aggiunta X popup ovunque.&#10;Gestione click tabella a sinistra su pagina quakes.php e locality.php.&#10;TODO&gt;gestione click pagina locality.php su immagine di destra nella tabella" />
   </component>
 </project>

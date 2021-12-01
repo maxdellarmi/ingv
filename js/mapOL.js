@@ -528,7 +528,7 @@ function creazioneMappa () {
                     function (feature) {
                         return feature;
                     });
-            
+                var featureId;
                 if (feature) {
                     $(element).popover('destroy')
                     var coordinates = feature.getGeometry().getCoordinates();
@@ -542,6 +542,7 @@ function creazioneMappa () {
                             if (feature.OnClickTextIT != undefined) {
                                 allpopupContent += (feature.OnClickTextIT + '<br>'); 
                             }
+                            featureId = feature.getProperties().id;
                         });
                         //console.log("TODO4 FEATURE SAME COORDINATES trying to merge all POPOP content:"+ allpopupContent);
                         popupContent = allpopupContent;
@@ -552,10 +553,17 @@ function creazioneMappa () {
                         else popupContent = buttonCloseCluster.toString() + " "+ popupContent;
                     }
                     else {
+                        featureId = feature.getProperties().id;
                         console.log('features singola trovata...');
                         popupContent = feature.OnClickTextIT;
                         //gestione pulsante chiusura X del popup
                         popupContent = buttonCloseSingle.toString() + " "+ popupContent;
+                    }
+                    console.log(featureId);
+                    //console.log(markersArray[featureId]["Marker"]);
+                    if ( featureId != undefined && markersArray[featureId] != undefined ) {
+                        //evento click sull'elemento selezionato per evidenziare sulla tabella di sinistra
+                        google.maps.event.trigger(markersArray[featureId]["Marker"], 'click');
                     }
 
                     popup.setPosition(coordinates);
@@ -621,6 +629,9 @@ function puliziaClearAllMapsLayers() {
     });
 }
 
+
+
+
 /**
  * Terremoti quakes di dettaglio caricati: localityPHPmarkers.push(epiMarkers[i]);
  * Pinpoint della location: localityPHPmarkers.push(markerLOC);
@@ -652,16 +663,19 @@ function puliziaClearAllMapsLayers() {
             /*****ricerca il pinpoint per aggiungerlo separatamente tra i layers *****/
             var pinpoint= [];
             var result = localityPHPmarkers.filter(obj => {
-                if (obj.values_.type== "pinpoint") { pinpoint.push(obj); }
+                //if (obj.values_.type== "pinpoint" || obj.values_.type== "area" ) { pinpoint.push(obj); }
+                if (obj.values_.type== "pinpoint" ) { pinpoint.push(obj); }
               })
 
             pinpointVector = new ol.layer.Vector({
                 source: new ol.source.Vector({
                     features: pinpoint,
                     projection: 'EPSG:3857'
-                })
+                }),
+                title: 'PINPOINT'
             });
             pinpointVector.setVisible(true);
+
 
             var source = new ol.source.Vector ({
                 features: quakes,
@@ -678,6 +692,7 @@ function puliziaClearAllMapsLayers() {
             quakeVector = new ol.layer.Vector({
                 source: clusterSource,
                 style: clusteringObjectWithFirstElementStyle,
+                title: 'QUAKES'
             });
 
             if (mapOL === undefined) {
@@ -751,7 +766,7 @@ function puliziaClearAllMapsLayers() {
                     function (feature) {
                         return feature;
                     });
-            
+                var featureId;
                 if (feature) {
                     $(element).popover('destroy')
                     var coordinates = feature.getGeometry().getCoordinates();
@@ -764,6 +779,7 @@ function puliziaClearAllMapsLayers() {
                             if (feature.OnClickTextIT != undefined) {
                                 allpopupContent += (feature.OnClickTextIT + '<br>'); 
                             }
+                            featureId = feature.getProperties().id;
                         });
                         //console.log("TODO4 FEATURE SAME COORDINATES trying to merge all POPOP content:"+ allpopupContent);
                         popupContent = allpopupContent;
@@ -773,10 +789,16 @@ function puliziaClearAllMapsLayers() {
                         else popupContent = buttonCloseCluster.toString() + " "+ popupContent;
                     }
                     else {
+                        featureId = feature.getProperties().id;
                         popupContent = feature.OnClickTextIT;
                         //gestione pulsante chiusura X del popup
                         popupContent = buttonCloseSingle.toString() + " "+ popupContent;
                     }
+                    if ( featureId != undefined && localityPHPmarkers[featureId] != undefined ) {
+                        //evento click sull'elemento selezionato per evidenziare sulla tabella di sinistra
+                        google.maps.event.trigger(localityPHPmarkers[featureId], 'click');
+                    }
+
                     popup.setPosition(coordinates);
                     $(element).popover({
                         'placement': 'top',
@@ -926,13 +948,18 @@ function creazioneMappaQuakesPHP (quakes) {
                     function (feature) {
                         return feature;
                     });
-
+                var featureId;
                 if (feature) {
                     $(element).popover('destroy')
                     var coordinates = feature.getGeometry().getCoordinates();
                     console.log("FEATURE ONCLICK popup data:")
                     console.log(feature.OnClickTextIT);
                     var popupContent = feature.OnClickTextIT;
+                    featureId = feature.getProperties().id;
+                    if ( featureId != undefined && quakesPQMarkers[featureId] != undefined ) {
+                        //evento click sull'elemento selezionato per evidenziare sulla tabella di sinistra
+                        google.maps.event.trigger(quakesPQMarkers[featureId], 'click');
+                    }
                     //gestione pulsante chiusura X del popup
                     popupContent = buttonCloseSingle.toString() + " "+ popupContent;
                     popup.setPosition(coordinates);
@@ -1072,13 +1099,18 @@ function indexLocalita () {
                     function (feature) {
                         return feature;
                     });
-
+                var featureId;
                 if (feature) {
                     $(element).popover('destroy')
                     var coordinates = feature.getGeometry().getCoordinates();
                     console.log("FEATURE ONCLICK popup data:")
                     console.log(feature.OnClickTextIT);
                     var popupContent = feature.OnClickTextIT;
+                    featureId = feature.getProperties().id;
+                    if ( featureId != undefined && LOCMarkers[featureId] != undefined ) {
+                        //evento click sull'elemento selezionato per evidenziare sulla tabella di sinistra
+                        google.maps.event.trigger(LOCMarkers[featureId], 'click');
+                    }
                     //gestione pulsante chiusura X del popup
                     popupContent = buttonCloseSingle.toString() + " "+ popupContent;
                     popup.setPosition(coordinates);

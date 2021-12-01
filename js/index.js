@@ -459,8 +459,6 @@ var GmapsTools = function(){
 				var cerchio = `<svg viewBox="0 0 250 250"   {height} {width} xmlns="http://www.w3.org/2000/svg" version="1.1"><circle cx="50" cy="50" r="40" {stroke} {widthS} {fill} /></svg>`;
 				var stella = `<svg viewBox="0 0 250 250" {height} {width} xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M 125,5 155,90 245,90 175,145 200,230 125,180 50,230 75,145 5,90 95,90 z" {fill} {stroke} {widthS} /></svg>`;
 
-
-
 				//stroke="{strokeColor}" stroke-width="{strokeWeight}" fill="{fillColor}
 				//{stroke} {stroke-width} {fill}
 				/*
@@ -508,7 +506,6 @@ var GmapsTools = function(){
 				var strokeString = new String();
 				var strokeWidthString = new String();
 				var fillString = new String()
-
 
 				//template replace dei parametri nella stringa svg
 				if  ( Star.path === google.maps.SymbolPath.CIRCLE ) {
@@ -632,6 +629,7 @@ var GmapsTools = function(){
 
 
 				// Call function that opens pop up window with quake info
+				console.log('chiamata a openPopupSpider' );
 				openPopupSpider(markersArray[i]['Marker'], OnClickTextEN, OnClickTextIT, markersArray[i]['Nterr'], markersArray[i]['Lat'], markersArray[i]['Lon']);
 			}
 		}
@@ -1021,7 +1019,8 @@ function onclickList(prog){
 	sClick = "LIST";
 	// Flag for scrolling table - set to zero when event is selected from table (and not from marker)
 	FlagScroll = 0;
-
+	// SCATENA EVENTO CLICK per selezione in tabella. L'evento e' stato dichiarato nel metodo openPoupSpider
+	google.maps.event.trigger(markersArray[prog]['Marker'], 'click');
 	//************zoom nella zona di riferimento dove e' posizionata la singola feature
 	var padding = [500, 50, 500, 50]
 	mapOL.getView().fit(
