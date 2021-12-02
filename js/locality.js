@@ -32,7 +32,7 @@ var scaleLoc = 2;
 //LOCApath = PINPOINT!!!!
 var LOCpath = "M7.5,0C5.0676, 0,2.2297, 1.4865,2.2297, 5.2703 C2.2297,7.8378, 6.2838,13.5135, 7.5,15c1.0811-1.4865, 5.2703-7.027, 5.2703-9.7297C12.7703, 1.4865,9.9324, 0,7.5,0z";
 var pinpoint = `<svg viewBox="0 -1 15 18" height="18px" width="18px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M7.5,0C5.0676, 0,2.2297, 1.4865,2.2297, 5.2703 C2.2297,7.8378, 6.2838,13.5135, 7.5,15c1.0811-1.4865, 5.2703-7.027, 5.2703-9.7297C12.7703, 1.4865,9.9324, 0,7.5,0z" stroke="#000000" stroke-width="0.8" fill="#FFE51E" /></svg>`;
-var pinpointLOCpath = `<svg viewBox="0 -1 15 18" height="18px" width="18px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M7.5,0C5.0676, 0,2.2297, 1.4865,2.2297, 5.2703 C2.2297,7.8378, 6.2838,13.5135, 7.5,15c1.0811-1.4865, 5.2703-7.027, 5.2703-9.7297C12.7703, 1.4865,9.9324, 0,7.5,0z" stroke-width="2.5" {fill} {stroke} /></svg>`;
+var pinpointLOCpath = `<svg viewBox="0 -1 15 18" height="18px" width="18px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M7.5,0C5.0676, 0,2.2297, 1.4865,2.2297, 5.2703 C2.2297,7.8378, 6.2838,13.5135, 7.5,15c1.0811-1.4865, 5.2703-7.027, 5.2703-9.7297C12.7703, 1.4865,9.9324, 0,7.5,0z" stroke-width="1.25" {fill} {stroke} /></svg>`;
 //<svg viewBox="0 -1 15 18" height="20px" width="20px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M7.5,0C5.0676, 0,2.2297, 1.4865,2.2297, 5.2703 C2.2297,7.8378, 6.2838,13.5135, 7.5,15c1.0811-1.4865, 5.2703-7.027, 5.2703-9.7297C12.7703, 1.4865,9.9324, 0,7.5,0z" stroke="#000000" stroke-width="0.5px" fill="red" /></svg>
 
 var PQMarkersOL = [];
@@ -322,6 +322,7 @@ function onclickListLocalityOnlyZoom(prog){
 
 		console.log('evento click della singola feature..');
 		console.log(epiMarkers[prog]);
+		google.maps.event.trigger(epiMarkers[prog], 'click');
 		//markersArray[1170]['Marker'].getGeometry().getExtent()
 		sClick = "LIST";
 		// Flag for scrolling table - set to zero when event is selected from table (and not from marker)
@@ -1543,7 +1544,7 @@ function parsePQData2(XmlText){
 
 	var compiled = template(stella, {
 		stroke:  String().concat("stroke=\"","red",'\"'),
-		widthS: String().concat("stroke-width=\"","4",'\"'),
+		widthS: String().concat("stroke-width=\"","16",'\"'), // inizialmente era 4 aumentato a 3 volte tanto
 		fill:	String().concat("fill=\"","#FFFFFF",'\"'),
 		height: String().concat("height=\"",'200px','\"'),
 		width: String().concat("width=\"",'200px','\"')
@@ -1561,7 +1562,6 @@ function parsePQData2(XmlText){
 	});
 
 	epiBIG.setStyle(stileIcone);
-	PQMarkersOL.push(epiBIG);  //aggiunge stella grande
 
 	/******TODO: EpiBIG SOSTITUIRE GLI OGGETTI GOOGLE CON OL *****/
 	/*epiBIG = new google.maps.Marker({
@@ -1742,8 +1742,8 @@ function parsePQData2(XmlText){
 				var fillString = new String()
 
 				compiled = template(pinpointLOCpath, {
-					stroke:  String().concat("stroke=\"",fillCol,'\"'),
-					fill:	String().concat("fill=\"",strokeColLOC,'\"'),
+					stroke:  String().concat("stroke=\"",strokeColLOC,'\"'),
+					fill:	String().concat("fill=\"",fillCol,'\"'),
 				});
 				//assegno la stringa svg parametrizzata
 				var workingSvg = compiled;
@@ -1804,8 +1804,7 @@ function parsePQData2(XmlText){
 			boundsPQ.extend(markerPQ.getPosition());
 			boundsPQ.extend(epiBIG.getPosition());*/
 			PQMarkers.push(markerPQ);
-			//layer da renderizzare su MapOL
-			PQMarkersOL.push(markerPQ);
+
 		}
 
 		// ===========================     READ BIBLIOGRAPHY    ===================================================
@@ -1939,7 +1938,6 @@ function parsePQData2(XmlText){
 	                    locPQlat[EmoreIn] = EE_Lat[k];
 	                    locPQlon[EmoreIn] = EE_Lon[k];
 	                    if (EE_nloc[k] != nloc) {
-							/////TODO GESTIONE MARKERS DA SOSTITUIRE V GOOGLE MAPS iconaEE only effetti ambientali//////
 							var eeloconly= `<svg viewBox="0 0 15 15" height="33px" width="33px" xmlns="http://www.w3.org/2000/svg" version="1.1"><path d="M13,14H2c-0.5523,0-1-0.4477-1-1V2c0-0.5523,0.4477-1,1-1h11c0.5523,0,1,0.4477,1,1v11C14,13.5523,13.5523,14,13,14z"  stroke="#30a559" stroke-width="1.8" fill="#ffffff"  /></svg>`;
 							var markerEE = new ol.Feature({
 								id: k,
@@ -1958,7 +1956,7 @@ function parsePQData2(XmlText){
 								})
 							});
 							markerEE.setStyle(stileIcone);
-							/* markerEE only
+							/* markerEE only sostituta sopra
 							var markerEE = new google.maps.Marker({
 		        				position: new google.maps.LatLng(EE_Lat[k], EE_Lon[k]),
 		        				map: map,
@@ -2080,16 +2078,22 @@ function parsePQData2(XmlText){
 	            ].join('\n');
 
 	        }
-			console.log('inizio gestione popupPQ per PQMarkers EEMarkers epiBIG');
+			//console.log('inizio gestione popupPQ per PQMarkers EEMarkers epiBIG');
 			openPopupPQ(PQMarkers[i], OnClickTextEN, OnClickTextIT)
-			if (EEMarkers[i]) openPopupPQ(EEMarkers[i], OnClickTextEN, OnClickTextIT)
-		}
+			if (EEMarkers[i]) openPopupPQ(EEMarkers[i], OnClickTextEN, OnClickTextIT);
+
+		}// chiusura ciclo for per gli elementi feature
 		openPopupPQ(epiBIG, EQ_textEN[nRow], EQ_textIT[nRow])
+		PQMarkersOL.push(epiBIG);  //aggiunge stella grande
+		//layer da renderizzare su MapOL
+		for (var i = 0; i < PQMarkers.length; i++) {
+			PQMarkersOL.push(PQMarkers[i]);
+		}
+		for (var i = 0; i < EEMarkers.length; i++) {
+			PQMarkersOL.push(EEMarkers[i]);
+		}
 	}
-
-
 	// -------  save PQ markers for later
-
 	console.log('save PQ markers for later1');
 	for (var ii = 0; ii < PQMarkers.length; ii++) {
 		PQMarkersOLD[ii] = PQMarkers[ii]
@@ -2102,7 +2106,9 @@ function parsePQData2(XmlText){
 	// ------- additional map and table settings
 	console.log("dati passati a onclickListLocalityOnlyZoom");
 	console.log(nRow);
+	//in questa funzione ONCLICK se non dovesse funzionare l'evidenza in giallo sulla tabella a SX sara in futuro oggetto di ulteriore indagine.
 	onclickListLocalityOnlyZoom(nRow);
+
 	//funzionalita di google maps non piu utilizzata
 	//map.fitBounds(boundsPQ);
 
@@ -2116,6 +2122,9 @@ function parsePQData2(XmlText){
 	document.getElementById("legend").style.display = "none";
 	document.getElementById("legendmin").style.display = "none";
 	document.getElementById("legendPQ").style.display = "inline";
+
+	/******TODO CHIAMARE UNA FUNZIONALITA CHE MOSTRA SU MAPPA IL LAYER E RIMUOVE GLI ALTRI******/
+	creazioneMappaLocalityPHP(PQMarkersOL);
 }
 
 
