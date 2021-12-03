@@ -355,6 +355,7 @@ function parseEEData(XmlText){
 				}*/
 
 				marker = new ol.Feature({
+					id: seli, //dopo viene effettuato il sort e va rielaborato
 					geometry: new ol.geom.Point(new ol.proj.fromLonLat([fEE_Lon, fEE_Lat])),//new ol.geom.Point([fEE_Lon, fEE_Lat]),
 					ExportKmlR: "",
 					OnClickTextIT: "",
@@ -426,6 +427,7 @@ function parseEEData(XmlText){
 					// title: onMouseOverText,
 				}),*/
 
+
 				seli += 1
 			}
 
@@ -433,10 +435,16 @@ function parseEEData(XmlText){
 		}
 
 
+		//QUI AVVIENE UN ORDINAMENTO PER DATA
 		EEmarkersArray.sort(function(a, b){
 			return a.EE_orderdate - b.EE_orderdate
 		});
 		for (var i = 0; i < EEmarkersArray.length; i++) {
+			/**NB.IMPORTANTE*E' stato necessario reimpostare tutti quanti gli ID degli elementi per poter riselezionarli e scatenare il proprio evento Click successivamente ****/
+			//console.log('oldId:' +EEmarkersArray[i]['Marker'].values_.id);
+			EEmarkersArray[i]['Marker'].values_.id = i;
+			//console.log("newId:"+i);
+
 			nlocXarray[i] = EEmarkersArray[i]['EE_nloc'];
 		}
 	}
@@ -605,8 +613,8 @@ function parseEEData(XmlText){
 		tbody.appendChild(row);
 
 
-		openPopupEE(RecEE['Marker'], OnClickText, RecEE['EE_nloc'], E1commIT, E1commEN)
-		// console.log("DUMP marker con info popup valorizate....");
+		openPopupEE(RecEE['Marker'], OnClickText, RecEE['EE_nloc'], E1commIT, E1commEN);
+		 // console.log("DUMP marker con info popup valorizate....");
 		// console.log(RecEE['Marker']);
 		// console.log(RecEE['Marker'].ContentPopupText);
 
@@ -711,7 +719,7 @@ function hideE1(idname){
 function openPopupEE(marker, text, Nloc, E1textIT, E1textEN){
 
 	//Vecchia gestione google map non piu presente
-	//google.maps.event.addListener(marker, 'click', function() {
+
 	   marker.OnClickTextIT = text;   //Testo popup iniziale
 	// specify language of popup window
 		if (Langsel == "EN") {
@@ -748,7 +756,9 @@ function openPopupEE(marker, text, Nloc, E1textIT, E1textEN){
 
 /*     GESTIONE GOOGLE MAPS COMMENTATA
 		// open popup window
-		infowindow.open(map, marker);
+		infowindow.open(map, marker);*/
+
+		google.maps.event.addListener(marker, 'click', function() {
 		var rows = [];
 		rows = document.getElementsByClassName(Nloc);
 		// scroll to selected table row
@@ -771,7 +781,7 @@ function openPopupEE(marker, text, Nloc, E1textIT, E1textEN){
 			rows[i].style.backgroundColor = "#ffffaa";
 		}
 		NlocOld = Nloc;
-	})*/
+	})
 }
 
 
@@ -784,8 +794,54 @@ function onclickListEE(prog){
 
 	// center map on selected event (when selecting from table line)
 	var center = new google.maps.LatLng(EEmarkersArray[prog]['EE_Lat'], EEmarkersArray[prog]['EE_Lon']);
-	map.setZoom(10);
-    map.panTo(center);
+	/*map.setZoom(10);
+    map.panTo(center);*/
+
+	//************zoom nella zona di riferimento dove e' posizionata la singola feature
+	var padding = [500, 50, 500, 50]
+	mapOL.getView().fit(
+		EEmarkersArray[prog]['Marker'].getGeometry().getExtent(),
+		{
+			size: mapOL.getSize(),
+			padding: padding,
+		}
+	);
+	mapOL.getView().setZoom(10);
+
+	//gestione selezione singola feature ---->> successivamente mostra il singolo popup
+	var collection = new ol.Collection();
+	select = new ol.interaction.Select({
+		features: collection,
+		style: null,
+	});
+
+	mapOL.addInteraction(select);
+	window.setTimeout(function() {
+		collection.push(EEmarkersArray[prog]['Marker']);
+		select.dispatchEvent({
+			type: 'select',
+			selected: [EEmarkersArray[prog]['Marker']],
+			deselected: []
+		});
+	}, 500);
+
+
+
+	//EVENTO DI SELECT DELLA MAPPA SERVONO OVERLAY DICHIARATO VAR GLOBALE su mapOL e il popup
+	select.on('select', bindSelectEvent);
+
+	/*********************************************/
+	//RIMUOVE LE INTERAZIONI DOPO AVER CLICCATO OK se l'utente aveva selezionato il boundingBOX con la selezione ad area
+	window.setTimeout(function() {
+		console.log('removingInteractions  SELECT' + mapOL.getInteractions());
+		try {
+			mapOL.getInteractions().pop();
+		}
+		catch (e) {
+			console.error('ERRORE Gestito');
+			console.log(e, e.stack);
+		}
+	}, 1000);
 }
 
 

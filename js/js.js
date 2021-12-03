@@ -529,11 +529,13 @@ function openPopupSpider (marker, textEN, textIT, NterrI, lat, lon){
 		// turn off previously selected table row when clicking on new marker
 		if (NterrOld) {
 			var rowsOld = document.getElementById(NterrOld);
-			rowsOld.style.backgroundColor = "#ffffff";
+			if (rowsOld!=null && rowsOld!= undefined) {
+				rowsOld.style.backgroundColor = "#ffffff";
+			}
 		}
 
 		// highlight new table row
-		rows.style.backgroundColor = "#ffffaa";
+		if (rows!=null && rows!= undefined) rows.style.backgroundColor = "#ffffaa";
 		NterrOld = NterrI;
 
 		//region GESTIONE VECCHIA COMMENTATA

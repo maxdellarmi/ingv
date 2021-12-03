@@ -209,31 +209,31 @@ function createTableandPlot(Filters){
 		if (EEnum[i]== 0) {
 			//console.log("colora eddaie");
 			//console.log(maxint[i]);
-			if (maxint[i] >= 11) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 10.9 && maxint[i] > 9.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/10.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 9.9 && maxint[i] > 8.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/9.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 8.9 && maxint[i] > 7.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/8.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 7.9 && maxint[i] > 6.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/7.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 6.9 && maxint[i] > 5.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/6.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 5.9 && maxint[i] > 4.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/5.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 4.9 && maxint[i] > 3.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/4.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 3.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/3.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] >= 11) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 10.9 && maxint[i] > 9.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/10.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 9.9 && maxint[i] > 8.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/9.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 8.9 && maxint[i] > 7.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/8.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 7.9 && maxint[i] > 6.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/7.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 6.9 && maxint[i] > 5.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/6.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 5.9 && maxint[i] > 4.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/5.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 4.9 && maxint[i] > 3.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/4.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 3.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/3.png', size: [13, 13], scale: 1})}));}
 		}
 		else if (EEnum[i]>0 && ris[i]>0)
 		{
-			if (maxint[i] >= 11) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11EE.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 10.9 && maxint[i] > 9.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/10EE.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 9.9 && maxint[i] > 8.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/9EE.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 8.9 && maxint[i] > 7.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/8EE.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 7.9 && maxint[i] > 6.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/7EE.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 6.9 && maxint[i] > 5.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/6EE.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 5.9 && maxint[i] > 4.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/5EE.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 4.9 && maxint[i] > 3.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/4EE.png', size: [13, 13], scale: 0.7})}));}
-			if (maxint[i] <= 3.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/3EE.png', size: [13, 13], scale: 0.7})}));}
+			if (maxint[i] >= 11) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11EE.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 10.9 && maxint[i] > 9.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/10EE.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 9.9 && maxint[i] > 8.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/9EE.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 8.9 && maxint[i] > 7.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/8EE.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 7.9 && maxint[i] > 6.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/7EE.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 6.9 && maxint[i] > 5.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/6EE.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 5.9 && maxint[i] > 4.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/5EE.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 4.9 && maxint[i] > 3.9) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/4EE.png', size: [13, 13], scale: 1})}));}
+			if (maxint[i] <= 3.9 ) {marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/3EE.png', size: [13, 13], scale: 1})}));}
 		}
 		else {
 			//console.log("verde");
-			marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/EE.png', size: [13, 13], scale: 0.7})}));
+			marker.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/EE.png', size: [13, 13], scale: 1})}));
 		}
 		/* vecchia sezione google tradotta
 		  if (EEnum[i]==0) {

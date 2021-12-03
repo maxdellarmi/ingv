@@ -1780,15 +1780,15 @@ function parsePQData2(XmlText){
 				if (fISPQ[i] <= 5.9 && fISPQ[i] > 4.9) {var icon = {url: "images/IS/5.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
 				if (fISPQ[i] <= 4.9 && fISPQ[i] > 3.9) {var icon = {url: "images/IS/4.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}
 				if (fISPQ[i] <= 3.9 ) {var icon = {url: "images/IS/3.png", anchor: new google.maps.Point(PQanchor1 , PQanchor2)}}*/
-				if (fISPQ[i] >= 11) { markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11.png', size: [13, 13], scale: 0.7})}));}
-				if (fISPQ[i] <= 10.9 && fISPQ[i] > 9.9) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/10.png', size: [13, 13], scale: 0.7})}));}
-				if (fISPQ[i] <= 9.9 && fISPQ[i] > 8.9) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/9.png', size: [13, 13], scale: 0.7})}));}
-				if (fISPQ[i] <= 8.9 && fISPQ[i] > 7.9) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/8.png', size: [13, 13], scale: 0.7})}));}
-				if (fISPQ[i] <= 7.9 && fISPQ[i] > 6.9) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/7.png', size: [13, 13], scale: 0.7})}));}
-				if (fISPQ[i] <= 6.9 && fISPQ[i] > 5.9 ) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/6.png', size: [13, 13], scale: 0.7})}));}
-				if (fISPQ[i] <= 5.9 && fISPQ[i] > 4.9) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/5.png', size: [13, 13], scale: 0.7})}));}
-				if (fISPQ[i] <= 4.9 && fISPQ[i] > 3.9) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/4.png', size: [13, 13], scale: 0.7})}));}
-				if (fISPQ[i] <= 3.9 ) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/3.png', size: [13, 13], scale: 0.7})}));}
+				if (fISPQ[i] >= 11) { markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/11.png', size: [13, 13], scale: 1})}));}
+				if (fISPQ[i] <= 10.9 && fISPQ[i] > 9.9) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/10.png', size: [13, 13], scale: 1})}));}
+				if (fISPQ[i] <= 9.9 && fISPQ[i] > 8.9) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/9.png', size: [13, 13], scale: 1})}));}
+				if (fISPQ[i] <= 8.9 && fISPQ[i] > 7.9) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/8.png', size: [13, 13], scale: 1})}));}
+				if (fISPQ[i] <= 7.9 && fISPQ[i] > 6.9) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/7.png', size: [13, 13], scale: 1})}));}
+				if (fISPQ[i] <= 6.9 && fISPQ[i] > 5.9 ) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/6.png', size: [13, 13], scale: 1})}));}
+				if (fISPQ[i] <= 5.9 && fISPQ[i] > 4.9) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/5.png', size: [13, 13], scale: 1})}));}
+				if (fISPQ[i] <= 4.9 && fISPQ[i] > 3.9) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/4.png', size: [13, 13], scale: 1})}));}
+				if (fISPQ[i] <= 3.9 ) {markerPQ.setStyle(new ol.style.Style({image: new ol.style.Icon({ src: 'images/IS/3.png', size: [13, 13], scale: 1})}));}
 				markerPQ.type = "localityPQ";
 			}
 

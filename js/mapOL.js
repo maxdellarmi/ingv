@@ -1260,14 +1260,21 @@ function indexEEAmbiente() {
                     function (feature) {
                         return feature;
                     });
-
+                var featureId;
                 if (feature) {
                     $(element).popover('destroy')
                     var coordinates = feature.getGeometry().getCoordinates();
                     console.log("FEATURE ONCLICK popup data:")
                     console.log(feature.ContentPopupText);
                     var popupContent = feature.ContentPopupText;
+                    featureId = feature.getProperties().id;
                     //gestione pulsante chiusura X del popup
+
+                    if ( featureId != undefined && EEmarkersArray[featureId] != undefined ) {
+                        //evento click sull'elemento selezionato per evidenziare sulla tabella di sinistra
+                        google.maps.event.trigger(EEmarkersArray[featureId]['Marker'], 'click');
+                    }
+
                     popupContent = buttonCloseSingle.toString() + " "+ popupContent;
                     popup.setPosition(coordinates);
                     $(element).popover({
