@@ -450,9 +450,9 @@ function resizeMap() {
 	// Function that opens pop up window with quake info and highlights marker and table row,
 	// when clicking on marker
 function openPopupSpider (marker, textEN, textIT, NterrI, lat, lon){
-	console.log('openPopupSpider ... qui viene mantenuta solo la dichiarazione del click sull elemento per la tabella.')
+	//console.log('openPopupSpider ... qui viene mantenuta solo la dichiarazione del click sull elemento per la tabella.')
 	google.maps.event.addListener(marker, 'click', function() {
-		console.log('openPopupSpider GMAPS EVENT CLICK element called');
+		//console.log('openPopupSpider GMAPS EVENT CLICK element called');
 		//region GESTIONE VECCHIA COMMENTATA
 		// gmstyleclose();
 		//

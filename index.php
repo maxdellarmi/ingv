@@ -281,6 +281,17 @@
     </div>
     <?php include("html/legendPQ.html"); ?>
 
+    <div id="copyright">
+        <b>© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.</b>
+    </div>
+    <div id="LaySel">
+        <select id="layer-select">
+            <option value="Topo1">Stamen Terrain</option>
+            <option value="Topo2">OpenTopoMap</option>
+            <option value="Road" selected>OpenStreetMap</option>
+            <option value="Black">Stamen Toner blackwhite</option>
+        </select>
+    </div>
     <div id="mapOL" >
     </div>
     <div id="popup"></div>

@@ -32,6 +32,102 @@ var buttonCloseSingle = `<button draggable="false" aria-label="Chiudi" title="Ch
 
 var buttonCloseCluster = `<button draggable="false" aria-label="Chiudi" title="Chiudi" type="button" class="gm-ui-hover-effect" style="background: none; display: block; border: 0px; margin: 1px; padding: 0px; text-transform: none; appearance: none; position: absolute; cursor: pointer; user-select: none; top: -6px; right: 10px; width: 30px; height: 30px;" onclick="closePopup();"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20d%3D%22M19%206.41L17.59%205%2012%2010.59%206.41%205%205%206.41%2010.59%2012%205%2017.59%206.41%2019%2012%2013.41%2017.59%2019%2019%2017.59%2013.41%2012z%22/%3E%3Cpath%20d%3D%22M0%200h24v24H0z%22%20fill%3D%22none%22/%3E%3C/svg%3E" alt=""  style="pointer-events: none; display: block; width: 14px; height: 14px; margin: 8px;"></button>`
 
+var styles = [];
+var stamenlayer;
+var tonerlayer;
+var layers;
+var copy;
+
+function prepareBASEMAPLayers() {
+    // $(document).ready(function() {
+    //     try {
+            console.log('prepareBASEMAPLayers....');
+            styles = [
+                'Road',
+                'Topo2',
+                'Topo1',
+                'Black'
+            ];
+
+            stamenlayer = new ol.layer.Tile({
+                source: new ol.source.Stamen({
+                    layer: 'terrain'
+                }),
+                projection: 'EPSG:3857',
+                title: 'BASEMAP',
+            });
+
+            tonerlayer = new ol.layer.Tile({
+                source: new ol.source.Stamen({
+                    layer: 'toner'
+                }),
+                projection: 'EPSG:3857',
+                title: 'BASEMAP',
+            });
+
+            layers = [
+                /***layer 0 openStreet ***/
+                new ol.layer.Tile({
+                    source: new ol.source.OSM(
+                    ),
+                    projection: 'EPSG:3857',
+                    title: 'BASEMAP',
+                }),
+                /***layer 1 openTopo ***/
+                new ol.layer.Tile({
+                    //title: 'OSM',
+                    type: 'base',
+                    projection: 'EPSG:3857',
+                    title: 'BASEMAP',
+                    visible: true,
+                    source: new ol.source.XYZ({
+                        url: '//{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png'
+                    })
+                }),
+                /***layer 2 terrain ***/
+                stamenlayer,
+                /***layer 3 blackWhite ***/
+                tonerlayer
+            ];
+
+            copy = [];
+            copy[0] = '<b>© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.</b>';
+            copy[2] = '<b>Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a></b>'
+            copy[1] = '<b>Map Data: © <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> Contributor, SRTM | Map View: © <a href="http://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a></b>)'
+            copy[3] = '<b>© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.</b>';
+
+            var selectLayers = document.getElementById('layer-select');
+            //console.log("1:" + selectLayers);
+            function onChangeLayerS() {
+                console.log("onChangeLayerS()");
+                var k;
+                var style =  document.getElementById('layer-select').value;
+                //console.log("2:" + style);
+                for (var i = 0, ii = layers.length; i < ii; ++i) {
+                    if ( mapOL !== undefined  && mapOL.getLayers() !== undefined && mapOL.getLayers().getArray() !== undefined && mapOL.getLayers().getArray().length > 0) {
+                        console.log("styles[i]:"+styles[i]+ "||style:" +style);
+                        console.log(styles[i] === style);
+                        if ( mapOL.getLayers().getArray()[i]  !== null)
+                        {
+                            mapOL.getLayers().getArray()[i].setVisible(styles[i] === style);
+                        }
+                    }
+                    //layers[i].setVisible(styles[i] === style);
+                    if (styles[i] === style) {k=i}
+                }
+                document.getElementById('copyright').innerHTML = copy[k];
+            }
+            selectLayers.addEventListener('change', onChangeLayerS);
+            onChangeLayerS(); //fa sempre 2 click quindi
+    //     } catch (e) {
+    //         console.error('ERRORE Gestito');
+    //         console.log(e, e.stack);
+    //     }
+    // });
+}
+
+
+
 
 function closePopup() {
     $(document.getElementById('popup')).popover('destroy');
@@ -273,6 +369,8 @@ function clusteringObjectWithFirstElementStyle (feature) {
 function visualizzaStruMMSuMappa() {
     $(document).ready(function() {
         try {
+            prepareBASEMAPLayers();
+
             var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
             rasterLayer = new ol.layer.Tile({
                 source: new ol.source.OSM(),
@@ -301,12 +399,14 @@ function visualizzaStruMMSuMappa() {
             StruMMLayer.setVisible(true);
 
             if (mapOL === undefined) {
-                console.log('mapOL undefined...')
+                console.log('mapOL undefined...visualizzaStruMMSuMappa');
                 mapOL = new ol.Map({
+                    loadTilesWhileInteracting: true,
                     controls: ol.control.defaults({
                         attributionOptions: ({
                             collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
-                    layers: [rasterLayer, StruMMLayer],
+                    // layers: [rasterLayer, StruMMLayer],
+                    layers: layers, StruMMLayer,
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
                         projection: 'EPSG:3857',
@@ -422,7 +522,9 @@ function visualizzaStruMMSuMappa() {
 function creazioneMappa () {
     $(document).ready(function() {
         try {
+            prepareBASEMAPLayers();
             var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
+
             rasterLayer = new ol.layer.Tile({
                 source: new ol.source.OSM(),
                 projection: 'EPSG:3857',
@@ -456,13 +558,15 @@ function creazioneMappa () {
             quakeVector.setVisible(true);
 
            if (mapOL === undefined) {
-               console.log('creazioneMappa: mapOL undefined....')
+               console.log('creazioneMappa: mapOL undefined....creazioneMappa')
                mapOL = new ol.Map({
+                   loadTilesWhileInteracting: true,
                    //interactions: ol.interaction.defaults().extend([select1]),
                    controls: ol.control.defaults({
                        attributionOptions: ({
                            collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
-                   layers: [rasterLayer, quakeVector],
+                   // layers: [layers, quakeVector],
+                   layers: layers, quakeVector,
                    target: document.getElementById('mapOL'),
                    view: new ol.View({
                        projection: 'EPSG:3857',
@@ -649,6 +753,7 @@ function puliziaClearAllMapsLayers() {
     function creazioneMappaLocalityPHP (quakes) {
     $(document).ready(function() {
         try {
+            prepareBASEMAPLayers();
             // do some crazy stuff
             var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
 
@@ -696,12 +801,14 @@ function puliziaClearAllMapsLayers() {
             });
 
             if (mapOL === undefined) {
-
+                console.log('creazioneMappa: mapOL undefined....creazioneMappaLocalityPHP');
                 mapOL = new ol.Map({
+                    loadTilesWhileInteracting: true,
                     controls: ol.control.defaults({
                         attributionOptions: ({
                             collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
-                    layers: [rasterLayer, pinpoint, quakeVector  ],
+                    // layers: [rasterLayer, pinpoint, quakeVector  ],
+                    layers: layers, pinpoint, quakeVector,
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
                         projection: 'EPSG:3857',
@@ -854,9 +961,11 @@ function puliziaClearAllMapsLayers() {
 
 function creazioneMappaQuakesPHP (quakes) {
     console.log("creazioneMappaQuakesPHP - quakesPQMarkers");
-    console.log(quakes);
+    //console.log(quakes);
     $(document).ready(function() {
         try {
+            prepareBASEMAPLayers();
+
             // do some crazy stuff
             var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
 
@@ -877,16 +986,14 @@ function creazioneMappaQuakesPHP (quakes) {
             quakeVector.setVisible(true);
 
             if (mapOL === undefined) {
+                console.log('creazioneMappa: mapOL undefined....creazioneMappaQuakesPHP');
                 mapOL = new ol.Map({
-                    // controls: ol.control.defaults({
-                    //     attributionOptions: ({
-                    //         collapsible: false
-                    //     })
-                    // }),
+                    loadTilesWhileInteracting: true,
                     controls: ol.control.defaults({
                         attributionOptions: ({
                             collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
-                    layers: [rasterLayer, quakeVector],
+                    // layers: [rasterLayer, quakeVector],
+                    layers: layers, quakeVector,
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
                         projection: 'EPSG:3857',
@@ -1010,7 +1117,7 @@ function indexLocalita () {
         try {
            var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
             console.log(center);
-
+            prepareBASEMAPLayers();
             console.log("carico i dati");
             console.log("LOC Markers" + LOCMarkers.length); //inizializzato nel js index_loc.js
             //console.log(LOCMarkers);
@@ -1034,16 +1141,14 @@ function indexLocalita () {
 
 
             if (mapOL === undefined) {
+                console.log('creazioneMappa: mapOL undefined....indexLocalita');
                 mapOL = new ol.Map({
-                    // controls: ol.control.defaults({
-                    //     attributionOptions: ({
-                    //         collapsible: false
-                    //     })
-                    // }),
+                    loadTilesWhileInteracting: true,
                     controls: ol.control.defaults({
                         attributionOptions: ({
                             collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
-                    layers: [rasterLayer, localityVector],
+                    // layers: [rasterLayer, localityVector],
+                    layers: layers, localityVector,
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
                         projection: 'EPSG:3857',
@@ -1162,7 +1267,7 @@ function indexEEAmbiente() {
     $(document).ready(function() {
         try {
            var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
-            
+            prepareBASEMAPLayers();
             console.log(center);
 
             console.log("carico i dati");
@@ -1193,16 +1298,14 @@ function indexEEAmbiente() {
 
 
             if (mapOL === undefined) {
+                console.log('creazioneMappa: mapOL undefined.... indexEEAmbiente');
                 mapOL = new ol.Map({
-                    // controls: ol.control.defaults({
-                    //     attributionOptions: ({
-                    //         collapsible: false
-                    //     })
-                    // }),
+                    loadTilesWhileInteracting: true,
                     controls: ol.control.defaults({
                         attributionOptions: ({
                             collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
-                    layers: [rasterLayer, EEVector],
+                    // layers: [rasterLayer, EEVector],
+                    layers: layers, EEVector,
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
                         projection: 'EPSG:3857',

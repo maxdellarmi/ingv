@@ -89,6 +89,7 @@ var Manajax = function(xmlService){
 						console.log("mySelf.URLString - localitySources");
 						//creazioneMappaLocalityPHP(epiMarkers);
 						creazioneMappaLocalityPHP(localityPHPmarkers);
+
 					}
 					//CONTROLLA SE E' STATO CHIAMATO UN LAYER DIRETTO QUAKES.php o l'altro col dettaglio
 					else if (mySelf.URLString.indexOf("quakeSources") >0 ) {
@@ -103,6 +104,7 @@ var Manajax = function(xmlService){
 						}
 						///TODO:DETAILQUAKES dopo aver valorizzato l'array con tutti le feature mostrarle sulla mappa simile a creazioneMappaLocalityPHP
 						creazioneMappaQuakesPHP(quakesPQMarkers);
+						prepareBASEMAPLayers();
 					}
 					console.log(mySelf);
 				}

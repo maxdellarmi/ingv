@@ -629,7 +629,7 @@ var GmapsTools = function(){
 
 
 				// Call function that opens pop up window with quake info
-				console.log('chiamata a openPopupSpider' );
+				//console.log('chiamata a openPopupSpider' );
 				openPopupSpider(markersArray[i]['Marker'], OnClickTextEN, OnClickTextIT, markersArray[i]['Nterr'], markersArray[i]['Lat'], markersArray[i]['Lon']);
 			}
 		}

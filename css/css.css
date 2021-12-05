@@ -1334,8 +1334,22 @@ tbody {
 	margin-top: 0px;
 	z-index: 10;
 }
+#LaySel{
+	position: absolute;
+	top: 14px;
+	right: 50px;
+	z-index: 10;
+	display: block;
+}
 
-
+#copyright {
+	position: absolute;
+	top: 16px;
+	right: 230px;
+	z-index: 10;
+	height: 10px;
+	display: block;
+}
 
 /* ----------------    infowindow   */
 .IWSTRUM{
