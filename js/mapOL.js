@@ -59,7 +59,8 @@ function prepareBASEMAPLayers() {
 
             tonerlayer = new ol.layer.Tile({
                 source: new ol.source.Stamen({
-                    layer: 'toner'
+                    //layer: 'toner' //ALTO contrasto biancoNero
+                    layer: 'toner-lite' // scala di grigi
                 }),
                 projection: 'EPSG:3857',
                 title: 'BASEMAP',
