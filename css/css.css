@@ -152,13 +152,60 @@ body { top: 0px !important; }
     height: 100%;
 }
 
+
+
 #mapOL{
 	position:relative;
 	margin-left: 460px;
 	margin-top: 5px;
 	height: 100%;
+	/*z-index:1;*/
 }
 
+.ol-zoom {
+	top: 60em!important;
+}
+.ol-zoom-in {
+	font-size: 1.8em!important;
+}
+.ol-zoom-out {
+	font-size: 1.8em!important;
+}
+.ol-full-screen {
+	font-size: 1.3em!important;
+}
+.gcd-gl-control {
+	/*font-size: 2em!important;*/
+	font-size: 1.8em!important;
+	/*top: 32em!important;*/
+	/*top: 0.5em!important;*/
+	top: 0.13em!important;
+	left: 0.001em!important;
+}
+.gcd-gl-result {
+	/*top: 34em!important;*/
+	/*top: 2.5em!important;*/
+	top: 2.3em!important;
+	left: 3em!important;
+	font-size: 1.5em!important;
+}
+
+#gcd-input-query {
+	height: 25px!important;
+}
+
+/*.ol-control {*/
+/*	!*background-color: rgba(40, 40, 40, 0.8) !important;*!*/
+/*	!*height: 2.3em!important;*/
+/*	width: 2.3em!important;*!*/
+/*	!*top: 15em!important;*!*/
+/*}*/
+
+/*
+.ol-control button:hover {
+	background-color: rgba(40, 40, 40, 1) !important;
+}
+*/
 #banner {
 	padding-top: 4px;
 	background-color: rgba(255,255,255,0.9);

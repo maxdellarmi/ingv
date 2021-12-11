@@ -604,6 +604,23 @@ function creazioneMappa () {
                (StruMMLayer!== undefined)? mapOL.addLayer(StruMMLayer): null;
            }
 
+            //Instantiate with some options and add the Control
+            var geocoder = new Geocoder('nominatim', {
+                //provider: 'osm',
+                //lang: 'it',
+                provider: 'mapquest',
+                key:'IqnooAc16rOxA4pLbaSoMpuKyPmL61wQ',
+                lang: 'it',
+                placeholder: 'Ricerca (OpenStreetMap)',
+                targetType: 'glass-button',
+                limit: 15,
+                debug: false,
+                autoComplete: true,
+                keepOpen: true,
+                zindex: 50
+            });
+            mapOL.addControl(geocoder);
+
             /*
             https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html
             setLayers(layers) inherited

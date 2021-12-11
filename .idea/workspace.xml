@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="aggiunta X popup ovunque.&#10;Gestione click tabella a sinistra su pagina quakes.php e locality.php.&#10;TODO&gt;gestione click pagina locality.php su immagine di destra nella tabella">
+    <list default="true" id="9605398d-a905-43c6-a629-7a8d79f1ce76" name="Default Changelist" comment="1 bugfix grandezze locality&#10;2) Introduzione BASEMAP toner, terrain, openTopo e layerOSM normale openstreetmap. &#10;Gestione al cambio della dropdown ovunque in TUTTI i layer presenti.&#10;Adeguamento locality.php e quake.php.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/index_loc.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/index_loc.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/js.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/js.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/locality.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/locality.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/css.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/css.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/MapLayers_Gsearch_Strum.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/MapLayers_Gsearch_Strum.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/MapLayers_Gsearch_Strum_old.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/MapLayers_Gsearch_Strum_old.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html_old/Gsearch_and_WMS.html" beforeDir="false" afterPath="$PROJECT_DIR$/html_old/Gsearch_and_WMS.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html_old/MapLayers_Gsearch_Strum.html" beforeDir="false" afterPath="$PROJECT_DIR$/html_old/MapLayers_Gsearch_Strum.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js/mapOL.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/mapOL.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/js/quake.js" beforeDir="false" afterPath="$PROJECT_DIR$/js/quake.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,7 +196,12 @@
       <workItem from="1637191782850" duration="10729000" />
       <workItem from="1637525554450" duration="3089000" />
       <workItem from="1638041125438" duration="5788000" />
-      <workItem from="1638352863779" duration="29771000" />
+      <workItem from="1638352863779" duration="30181000" />
+      <workItem from="1638433082284" duration="1019000" />
+      <workItem from="1638465222047" duration="1936000" />
+      <workItem from="1638542356248" duration="5317000" />
+      <workItem from="1638723553149" duration="8368000" />
+      <workItem from="1639170277263" duration="7057000" />
     </task>
     <task id="LOCAL-00001" summary="img">
       <created>1631987175531</created>
@@ -411,7 +420,35 @@
       <option name="project" value="LOCAL" />
       <updated>1638070220195</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Per i seguenti layer&#10;Terremoti&#10;indexLocalita &#10;LocalitaPHP&#10;QuakesPHP&#10;introdotta gestione evento ONCLICK definito come google maps click event sulla singola Feature. Recuperata con il campo attributo ID che contiene indice dell'elemento. Negli eventi OpenPopup ci sono le dichiarazioni dell'evento click da associare alla feature. Mentre nelle funzioni OnclickList OnclickLOC OnClickLocality viene invocato il codice che scatena l'evento dichiarato. Nella mappa onclick viene recuperato il feature-&gt;id con il quale e' possibile invocare questo evento click custom. Attraverso questo evento viene evidenziato il record sulla tabella di sinstra nonche' il grafico in alto se presente colora di rosso la barra relativa.   &#10;Continua da qui: http://cft5.test/locality.php?036605.00IT# e click sulla localita nel campo MAPPA&#10;nel layer delle locality al click sull'immagine mappa google nella tabella vengono valorizzati gli array &#10;PQMarkers&#10;PQMarkersOL -&gt;&gt; variabile globale &#10;TODO: mostrare su mappa il layer">
+      <created>1638390706170</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1638390706170</updated>
+    </task>
+    <task id="LOCAL-00033" summary="1&quot; TEST con successo  http://cft5.test/locality.php?036605.00IT# e click sulla localita nel campo MAPPA&#10;nel layer delle locality al click sull'immagine mappa google nella tabella vengono valorizzati gli array &#10;PQMarkers&#10;PQMarkersOL -&gt;&gt; variabile globale &#10;Mostrato primo test con successo sulla mappa layer">
+      <created>1638467136620</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1638467136620</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Bugfix vari e gestione layer INDEXEE.&#10;EEmarkersArray[i]['Marker'] e' un oggette contenente tutti gli effetti ambientali. L'ordinamento di questo dataset ha reso necessario sovrascrivere gli ID. Sono state implementate le funzionalita' click tabella e click dell'elemento con evidenza della selezione in tabella. &#10;Ingrandite le immagini relative alle locality ovunque nel progetto.">
+      <created>1638548454190</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1638548454191</updated>
+    </task>
+    <task id="LOCAL-00035" summary="1 bugfix grandezze locality&#10;2) Introduzione BASEMAP toner, terrain, openTopo e layerOSM normale openstreetmap. &#10;Gestione al cambio della dropdown ovunque in TUTTI i layer presenti.&#10;Adeguamento locality.php e quake.php.">
+      <created>1638734441916</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1638734441916</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -442,10 +479,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="aggiornamento files index.js index2.js index_loc.js(untouched) aggiornata versione openLayers per gestione SVG, manajax.js aggiornamento javascript per verificare punto di ingresso per inserire la gestione del caricamento dati su mappaOpenLayer, mapOL.js gestire il caricamento dei terremoti." />
-    <MESSAGE value="aggiornamento forzatura contorno &quot;STROKE&quot; proprieta svg per il contorno delle icone stelle a valore 5. stroke-width=&quot;5&quot;" />
-    <MESSAGE value="gestione caricamento localita sulla pagina index2.php -- gestione filtro localita sulla pressione del tasto ok -- gestione layers attivi e disattivi tra quakes e locality." />
-    <MESSAGE value="introduzione popover.css e bootstrap solo js. Introduzione popup sulle localita funzionante. BugFix sullo switch tra i layer e la pulizia dei layer precedentemente costruiti." />
     <MESSAGE value="fix contolli su undefined e null degli elementi che potrebbero non essere presenti in fasi di caricamento diverse. Gestione popup del layer quakes." />
     <MESSAGE value="introdotto il layer effetti sull'ambiente gestito nel file index_EE.js.&#10;creata funzione in mapOL.js indexEEAmbiente.&#10;Visualizzazione maschera NOTA: il caricamento di tutte le icone puo' impiegare fino a 60 secondi ma funziona sembra ok. &#10;Gestione popup con la vecchia logica ricreata ok (TODO: verificare quantita info presenti con originale).&#10;IDEA-PERFORMANCE-1: ridurre le immagini a 8bit per diminuire 2500immaginiX4KB inviate&#10;IDEA-PERFORMANCE-2: creare le info nei popup solamente durante il click singolo al volo e verificare quanto impega nel caricamento senza i popup." />
     <MESSAGE value="- fix pagina filtri terremoti&#10;- introduzione selezione layer wms ISTAT regioni comuni province&#10;- LocList.xml codificato in UTF8 per corretta visualizzazione.&#10;NOTA: anche gli atri 3 file delle mappe base principali vanno ricodificati in UTF8" />
@@ -467,6 +500,10 @@
     <MESSAGE value="SELEZIONE - POSIZIONAMENTO E VISUALIZZAZIONE POPUP a partire dalla tabella di sinistra SUI SEGUENTI layer --&gt;&gt; Index locality e Terremoti iniziali. Manca gestione 1)dettaglio terremoto singolo, 2) dettaglio localita singola 3) dettaglio effetti sull ambiente.&#10;TESTING interazioni tra i due layer Index locality&lt;&lt;---&gt;&gt;Terremoti iniziali risolti bug di pulizia eventi interazione mappa." />
     <MESSAGE value="MapLayers_Strum.js modifica dimensione della grafica di un elemento&#10;index_loc.js portati a 3 cifre decimali i punti su mappa su richiesta del cliente&#10;mapOL.js e css.css introduzione X per la chiusura del popup solo sul primo layer (gestione differenziata se + di 1 elemento o uno solo nel popup per problemi di spazio -- TODO sugli altri layer" />
     <MESSAGE value="aggiunta X popup ovunque.&#10;Gestione click tabella a sinistra su pagina quakes.php e locality.php.&#10;TODO&gt;gestione click pagina locality.php su immagine di destra nella tabella" />
-    <option name="LAST_COMMIT_MESSAGE" value="aggiunta X popup ovunque.&#10;Gestione click tabella a sinistra su pagina quakes.php e locality.php.&#10;TODO&gt;gestione click pagina locality.php su immagine di destra nella tabella" />
+    <MESSAGE value="Per i seguenti layer&#10;Terremoti&#10;indexLocalita &#10;LocalitaPHP&#10;QuakesPHP&#10;introdotta gestione evento ONCLICK definito come google maps click event sulla singola Feature. Recuperata con il campo attributo ID che contiene indice dell'elemento. Negli eventi OpenPopup ci sono le dichiarazioni dell'evento click da associare alla feature. Mentre nelle funzioni OnclickList OnclickLOC OnClickLocality viene invocato il codice che scatena l'evento dichiarato. Nella mappa onclick viene recuperato il feature-&gt;id con il quale e' possibile invocare questo evento click custom. Attraverso questo evento viene evidenziato il record sulla tabella di sinstra nonche' il grafico in alto se presente colora di rosso la barra relativa.   &#10;Continua da qui: http://cft5.test/locality.php?036605.00IT# e click sulla localita nel campo MAPPA&#10;nel layer delle locality al click sull'immagine mappa google nella tabella vengono valorizzati gli array &#10;PQMarkers&#10;PQMarkersOL -&gt;&gt; variabile globale &#10;TODO: mostrare su mappa il layer" />
+    <MESSAGE value="1&quot; TEST con successo  http://cft5.test/locality.php?036605.00IT# e click sulla localita nel campo MAPPA&#10;nel layer delle locality al click sull'immagine mappa google nella tabella vengono valorizzati gli array &#10;PQMarkers&#10;PQMarkersOL -&gt;&gt; variabile globale &#10;Mostrato primo test con successo sulla mappa layer" />
+    <MESSAGE value="Bugfix vari e gestione layer INDEXEE.&#10;EEmarkersArray[i]['Marker'] e' un oggette contenente tutti gli effetti ambientali. L'ordinamento di questo dataset ha reso necessario sovrascrivere gli ID. Sono state implementate le funzionalita' click tabella e click dell'elemento con evidenza della selezione in tabella. &#10;Ingrandite le immagini relative alle locality ovunque nel progetto." />
+    <MESSAGE value="1 bugfix grandezze locality&#10;2) Introduzione BASEMAP toner, terrain, openTopo e layerOSM normale openstreetmap. &#10;Gestione al cambio della dropdown ovunque in TUTTI i layer presenti.&#10;Adeguamento locality.php e quake.php." />
+    <option name="LAST_COMMIT_MESSAGE" value="1 bugfix grandezze locality&#10;2) Introduzione BASEMAP toner, terrain, openTopo e layerOSM normale openstreetmap. &#10;Gestione al cambio della dropdown ovunque in TUTTI i layer presenti.&#10;Adeguamento locality.php e quake.php." />
   </component>
 </project>
