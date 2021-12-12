@@ -45,8 +45,13 @@
     <!--sezione mappa OL begin-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 <!--    FINO ALLA VERSIONE 6.8.1 jsdelivr e una nuova cdn-->
-    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.2/build/ol.js"></script>
-    <link rel="stylesheet" href="https://openlayers.org/en/v6.4.2/css/ol.css" type="text/css">
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/build/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/ol-popup@4.0.0/src/ol-popup.css" type="text/css">
+    <script src="https://unpkg.com/ol-popup@4.0.0/dist/ol-popup.js" ></script>
+    <script src="js/ol-geocoder.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/ol-geocoder@4.1.2/dist/ol-geocoder.min.css">
+
 
     <link rel="stylesheet" href="css/popover.css" />
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>

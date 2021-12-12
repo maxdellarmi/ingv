@@ -38,6 +38,28 @@ var tonerlayer;
 var layers;
 var copy;
 
+
+function prepareControlAddressSearchGeocoding() {
+    //Instantiate with some options and add the Control
+    var geocoder = new Geocoder('nominatim', {
+        //provider: 'osm',
+        //lang: 'it',
+        provider: 'mapquest',
+        key:'IqnooAc16rOxA4pLbaSoMpuKyPmL61wQ',
+        lang: 'it',
+        placeholder: 'Ricerca (OpenStreetMap)',
+        targetType: 'glass-button',
+        limit: 15,
+        debug: false,
+        autoComplete: true,
+        keepOpen: true,
+        zindex: 50
+    });
+    if (mapOL!=null && mapOL!= undefined) {
+        mapOL.addControl(geocoder);
+    }
+}
+
 function prepareBASEMAPLayers() {
     // $(document).ready(function() {
     //     try {
@@ -566,7 +588,7 @@ function creazioneMappa () {
                    controls: ol.control.defaults({
                        attributionOptions: ({
                            collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
-                   // layers: [layers, quakeVector],
+                   //NEL CASO IN CUI NON SI VEDA IL LAYER fare un mapOL.addLayer(quakeVector) successivo e lasciare solo l'assegnazione ai layers di base.
                    layers: layers, quakeVector,
                    target: document.getElementById('mapOL'),
                    view: new ol.View({
@@ -605,21 +627,7 @@ function creazioneMappa () {
            }
 
             //Instantiate with some options and add the Control
-            var geocoder = new Geocoder('nominatim', {
-                //provider: 'osm',
-                //lang: 'it',
-                provider: 'mapquest',
-                key:'IqnooAc16rOxA4pLbaSoMpuKyPmL61wQ',
-                lang: 'it',
-                placeholder: 'Ricerca (OpenStreetMap)',
-                targetType: 'glass-button',
-                limit: 15,
-                debug: false,
-                autoComplete: true,
-                keepOpen: true,
-                zindex: 50
-            });
-            mapOL.addControl(geocoder);
+            prepareControlAddressSearchGeocoding();
 
             /*
             https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html
@@ -974,6 +982,8 @@ function puliziaClearAllMapsLayers() {
             console.log("ERR gestito");
             console.log(e, e.stack);
         }
+        //Instantiate with some options and add the Control
+        prepareControlAddressSearchGeocoding();
     });
 }
 
@@ -984,14 +994,9 @@ function creazioneMappaQuakesPHP (quakes) {
         try {
             prepareBASEMAPLayers();
 
-            // do some crazy stuff
+            //default center
             var center = new ol.proj.fromLonLat([12.6508, 42.5681]);
 
-            rasterLayer = new ol.layer.Tile({
-                source: new ol.source.OSM(),
-                projection: 'EPSG:3857',
-                title: 'BASEMAP'
-            });
             console.log('caricamento dei terremoti in input quakes:');
             console.log(quakes);
 
@@ -1011,7 +1016,7 @@ function creazioneMappaQuakesPHP (quakes) {
                         attributionOptions: ({
                             collapsible: false})}).extend([calculateMousePosition()]).extend([new ol.control.FullScreen()]),
                     // layers: [rasterLayer, quakeVector],
-                    layers: layers, quakeVector,
+                    layers: layers,
                     target: document.getElementById('mapOL'),
                     view: new ol.View({
                         projection: 'EPSG:3857',
@@ -1019,6 +1024,8 @@ function creazioneMappaQuakesPHP (quakes) {
                         zoom: 6,
                     })
                 });
+                console.log('quake vector aggiunto in fase di inizializzazione');
+                mapOL.addLayer(quakeVector);
             }
             else {
                 //TODO: CLEANUP degli altri layers dalle variabili globali
@@ -1040,9 +1047,12 @@ function creazioneMappaQuakesPHP (quakes) {
                 puliziaClearAllMapsLayers();
                 console.log("ADDING NEW LAYERS");
                 //mapOL.addLayer(rasterLayer);
+                console.log('quake vector aggiunto in fase di reload');
                 mapOL.addLayer(quakeVector);
                 (StruMMLayer!== undefined)? mapOL.addLayer(StruMMLayer): null;
             }
+            //Instantiate with some options and add the Control
+            prepareControlAddressSearchGeocoding();
 
             /*
             https://openlayers.org/en/latest/apidoc/module-ol_Map-Map.html
@@ -1126,6 +1136,7 @@ function creazioneMappaQuakesPHP (quakes) {
         } catch (e) {
             console.error(e, e.stack);
         }
+
     });
 }
 
@@ -1277,6 +1288,8 @@ function indexLocalita () {
         } catch (e) {
             console.error(e, e.stack);
         }
+        //Instantiate with some options and add the Control
+        prepareControlAddressSearchGeocoding();
     });
 
 }
@@ -1426,6 +1439,8 @@ function indexEEAmbiente() {
         } catch (e) {
             console.error(e, e.stack);
         }
+        //Instantiate with some options and add the Control
+        prepareControlAddressSearchGeocoding();
     });
 
 
