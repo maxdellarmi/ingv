@@ -970,7 +970,7 @@ function puliziaClearAllMapsLayers() {
                             padding: padding,
                         }
                     );
-                    mapOL.getView().setZoom(7);
+                    mapOL.getView().setZoom(8);
                 }
                 catch (e) {
                     console.error('ERRORE Gestito');
