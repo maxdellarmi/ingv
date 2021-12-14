@@ -688,9 +688,9 @@
 /* ---- INFOWINDOW INDEX_EE ----- */
 .EEinfow{
 	font-size: 100%;
-	width: 380px;
+	width: 400px;
 	max-height: 500px;
-	overflow-y: auto;
+	overflow-y: hidden;
 	padding-right: 15px;
 	padding-left: 15px;
 }
