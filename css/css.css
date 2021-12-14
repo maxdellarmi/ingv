@@ -384,7 +384,7 @@ footer p#license { width: 100%; text-align: center; font-size: 80%; }
 }
 
 .iw-title {
-   width: 360px;  /*  BRUTALE: 50px in meno perche è messo padding per il testo...   */
+   width: 380px;  /*  BRUTALE: 50px in meno perche è messo padding per il testo...   */
    overflow: hidden;
    padding-top: 7px;
    padding-bottom: 7px;
