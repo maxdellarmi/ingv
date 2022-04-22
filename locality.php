@@ -141,9 +141,6 @@
 			<div id = "legendmintext"><b>Legenda</b></div>
 		</div>
 
-        <div id="copyright">
-            <b>© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.</b>
-        </div>
         <div id="LaySel">
             <select id="layer-select">
                 <option value="Topo1">Stamen Terrain</option>
@@ -155,7 +152,7 @@
     <div id="mapOL" >
     </div>
     <div id="popup"></div>
-    <span id="status" >STATUS</span>
+    <!-- <span id="status" >STATUS</span> -->
 
 		<div id="legend"></div>
 	</div>

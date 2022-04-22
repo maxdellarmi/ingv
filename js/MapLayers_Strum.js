@@ -921,7 +921,11 @@ function parseQuakeFile(INGVquakes){
 	var colorSTRUM = '#0c6b2f'
 
 
+
 	lines = INGVquakes.split(/\n/)
+
+    console.log("INGVquakes caricamento lines splitta le righe");
+    console.log(lines);
 
     if (lines.length>1){
         // toglie la prima riga di intestazione e l'ultima riga vuota
@@ -960,8 +964,6 @@ function parseQuakeFile(INGVquakes){
             if (StrumQuakeMagValue<3)var markerIcon = new ol.style.Style({image: new ol.style.Icon({ src: urlIcon1, size: [512,512], scale: 0.030/1.6})});
 
 ////////////////////TODO: STRUM LAYER ATTIVARE ////////////////////////////////////*
-
-
             var STRUMMarker =new ol.Feature({
                 geometry: new ol.geom.Point(new ol.proj.fromLonLat([StrumQuakeLon, StrumQuakeLat])), //new ol.geom.Point([locLon, locLat]),
                 type: "StruMM",
@@ -974,20 +976,24 @@ function parseQuakeFile(INGVquakes){
             var time = StrumQuakeTime.split('T')[1]
             var date = StrumQuakeTime.split('T')[0]
 
-            // controlla se terremoto ha punti in HSIT
-            HSITrequest(StrumQuakeCode, i)
 
-    		var titleEN = '<b>' + StrumQuakeMagType + ': ' + StrumQuakeMagValue + ' - ' + StrumQuakeLocation +  '</b><br><br>Time (UTC): '  + date + '  ' + time.substring(0,8) + '<br>Depth: ' + StrumQuakeDepth + ' km'
+            var titleEN = '<b>' + StrumQuakeMagType + ': ' + StrumQuakeMagValue + ' - ' + StrumQuakeLocation +  '</b><br><br>Time (UTC): '  + date + '  ' + time.substring(0,8) + '<br>Depth: ' + StrumQuakeDepth + ' km'
 
             var titleIT = '<b>' + StrumQuakeMagType + ': ' + StrumQuakeMagValue + ' - ' + StrumQuakeLocation +  '</b><br><br>Ora (UTC): '  + date + '  ' + time.substring(0,8) + '<br>Prof.: ' + StrumQuakeDepth + ' km'
 
-    		var OnClickTextEN = '<div class="IWSTRUM"><div id="IWcloseSTRUM"><a onclick="infowindow2.close()" href="#"><img src="images/close.png" width="10px"></a></div>' + titleEN + '<br>' + '<br><a href="http://cnt.rm.ingv.it/en/event/' + StrumQuakeCode + '" target="_blank"> INGV-ONT page </a><br></div>'
+            var OnClickTextEN = '<div class="IWSTRUM"><div id="IWcloseSTRUM"><a onclick="infowindow2.close()" href="#"><img src="images/close.png" width="10px"></a></div>' + titleEN + '<br>' + '<br><a href="http://cnt.rm.ingv.it/en/event/' + StrumQuakeCode + '" target="_blank"> INGV-ONT page </a><br></div>'
 
-    		var OnClickTextIT = '<div class="IWSTRUM"><div id="IWcloseSTRUM"><a onclick="infowindow2.close()" href="#"><img src="images/close.png" width="10px"></a></div>' + titleIT + '<br>' + '<br><a href="http://cnt.rm.ingv.it/event/' + StrumQuakeCode + '" target="_blank"> Pagina INGV-ONT </a><br></div>'
+            var OnClickTextIT = '<div class="IWSTRUM"><div id="IWcloseSTRUM"><a onclick="infowindow2.close()" href="#"><img src="images/close.png" width="10px"></a></div>' + titleIT + '<br>' + '<br><a href="http://cnt.rm.ingv.it/event/' + StrumQuakeCode + '" target="_blank"> Pagina INGV-ONT </a><br></div>'
+
+            // controlla se terremoto ha punti in HSIT NOTA>22042022 aggiunta anche la
+            HSITrequest(StrumQuakeCode, i, STRUMMarker, OnClickTextEN, OnClickTextIT, StrumQuakeCode);
 
 
             /**********TODO TRADURRE IL LAYER STRUM gestione popup *********************/
-            openPopupSTRUM(STRUMMarker, OnClickTextEN, OnClickTextIT, i, StrumQuakeCode);
+            //la chiamata  openPopupSTRUM(STRUMMarker, OnClickTextEN, OnClickTextIT, i, StrumQuakeCode); e' stata importata dentro la funzione  **HSITrequest** per HSIT
+            //a seguito della risposta dalla prima chiamata a 200 o diverso da 200 chiama poi la funzionalita' di popup con il flagHSIT sicuramente aggiornato.
+            //Altrimenti funzionava certe volte SI e certe volte NO.
+            //openPopupSTRUM(STRUMMarker, OnClickTextEN, OnClickTextIT, i, StrumQuakeCode);
 
             console.log('aggiungo STRUMMarker al layer globale markersSTRUMOLD');
             markersSTRUMOLD.push(STRUMMarker);
@@ -1018,7 +1024,7 @@ function parseQuakeFile(INGVquakes){
 
 // check if quake exists in HSIT and return flag in array (used in open popup)
 var flagHSIT = []
-function HSITrequest(HSITcode, s){
+function HSITrequest(HSITcode, s, STRUMMarker, OnClickTextEN, OnClickTextIT, StrumQuakeCode){
     // alert('entroqui')
     var flagresponse;
     // read text from URL location
@@ -1031,9 +1037,13 @@ function HSITrequest(HSITcode, s){
                    var type = request.getResponseHeader('Content-Type');
                    if (type.indexOf("text") !== 1) {
                        flagHSIT[s]= 1;
+                       //chiamata successiva dopo aver aggiornato il flag.
+                       openPopupSTRUM(STRUMMarker, OnClickTextEN, OnClickTextIT, s, StrumQuakeCode);
                   }
               } else{
                   flagHSIT[s]= 0;
+                   //chiamata successiva dopo aver aggiornato il flag.
+                  openPopupSTRUM(STRUMMarker, OnClickTextEN, OnClickTextIT, s, StrumQuakeCode);
               }
         }
     }
@@ -1059,6 +1069,7 @@ function openPopupSTRUM(marker, textEN, textIT, s, StrumQuakeCode){
     }
 
     if (flagHSIT[s] == 1){
+        console.log('CONTIENE HSIT true:' + HSITlinkIT + confrontoPQlinkIT );
         textIT = textIT + '<div class="IWSTRUM"' + HSITlinkIT + confrontoPQlinkIT + '</div>'
         flagHSIT[s] = 0
     }

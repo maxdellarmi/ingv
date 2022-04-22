@@ -138,7 +138,7 @@ function prepareBASEMAPLayers() {
                     //layers[i].setVisible(styles[i] === style);
                     if (styles[i] === style) {k=i}
                 }
-                document.getElementById('copyright').innerHTML = copy[k];
+                // document.getElementById('copyright').innerHTML = copy[k];
             }
             selectLayers.addEventListener('change', onChangeLayerS);
             onChangeLayerS(); //fa sempre 2 click quindi

@@ -557,7 +557,8 @@ function parsePQData2(XmlText){
 			IoPER[s] = IoALLEQ[ind]
 			ImaxPER[s] = ImaxALLEQ[ind]
 			npunPER[s] = iNP_ALLEQ[ind]
-			QuakePagePER[s] = createQuakePageLink(window.location.href, NterrALLEQ[ind], 'quake')
+			//QuakePagePER[s] = createQuakePageLink(window.location.href, NterrALLEQ[ind], 'quake')
+			QuakePagePER[s] = createQuakePageLink(window.location.href, NterrALLEQ[ind], 'index')
 			MePER[s] = MeALLEQ[ind]
 			EtypePER[s] = EpicenterALLEQ[ind]
 

@@ -285,9 +285,7 @@
     </div>
     <?php include("html/legendPQ.html"); ?>
 
-    <div id="copyright">
-        <b>© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.</b>
-    </div>
+
     <div id="LaySel">
         <select id="layer-select">
             <option value="Topo1">Stamen Terrain</option>
@@ -300,7 +298,7 @@
     </div>
     <div id="popup"></div>
 <!--    <div id="mouse-position" class="custom-mouse-position" style="color: red;"></div>-->
-    <span id="status" >STATUS</span>
+ <!--   <span id="status" >STATUS</span> -->
 
 <!--    <div id="map" >   </div>-->
 </div>

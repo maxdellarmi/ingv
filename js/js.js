@@ -745,13 +745,13 @@ function readBiblio(XMLlist, xmltagname){
 	 * @returns {*}
 	 */
 	function createQuakePageLink(urlTOT, nterr, pagetype){
-    // console.log("createQuakePageLink:" + pagetype );
-    // console.log("createQuakePageLink:" + urlTOT );
-    // console.log("createQuakePageLink:" + nterr );
+     //console.log("createQuakePageLink:" + pagetype );
+     //console.log("createQuakePageLink:" + urlTOT );
+     //console.log("createQuakePageLink:" + nterr );
 	if ( urlTOT.split('/').length >2 ) {
     	var basePath = urlTOT.substring(0, urlTOT.lastIndexOf('/'));
     	urlTOT = basePath + "/";
-    	// console.log("newURLTOT:"+ urlTOT);
+    	//console.log("basePath:"+ urlTOT);
 	}
     if (pagetype == 'index') {
         if (urlTOT.slice(-1) == '#') var QuakeLink = urlTOT.substring(0, urlTOT.length - 1) + 'quake.php?' + nterr;
@@ -768,6 +768,7 @@ function readBiblio(XMLlist, xmltagname){
         var url = urlTOT.substr(0,urlTOT.indexOf('?')-13);
         var QuakeLink = url + '/quake.php?' + nterr;
     } else if (pagetype == 'quake'){
+    	//ATTENZIONE QUESTO PEZZO DI CODICE E' NON VERRA PIU CHIAMATO PERCHE' NON FUNZIONAVA BENE LA CHIAMATA CON pagetype == 'quake' VIENE SOSTITUITO CON pagetype == 'index'
 		if (urlTOT.slice(-1) == '#') var nchar = urlTOT.length - 19;
         else var nchar = urlTOT.length - 18;
         var url = urlTOT.substr(0,nchar);

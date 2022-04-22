@@ -6,11 +6,18 @@
   display: none;
   /*max-width: 276px;*/  /*sembra un bug che non faceva disegnare correttamente il popup lo rendeva piu' corto del dovuto*/
   padding: 1px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.42857143;
+
+  font-variant-ligatures: normal;
+  font-variant-caps: normal;
+  font-variant-numeric: normal;
+  font-variant-east-asian: normal;
+  font-stretch: normal;
+  font-size: 12px;
+  line-height: normal;
+  font-family: Roboto, Arial, sans-serif;
+  font-weight: 300;
   text-align: left;
+
   white-space: normal;
   background-color: #fff;
   -webkit-background-clip: padding-box;

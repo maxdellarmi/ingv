@@ -286,7 +286,7 @@
     <div id="mapOL" >
     </div>
     <div id="popup"></div>
-    <span id="status" >STATUS</span>
+<!--    <span id="status" >STATUS</span> -->
 
 <!--    <div id="map" >   </div>-->
 </div>
