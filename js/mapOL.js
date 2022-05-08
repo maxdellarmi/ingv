@@ -122,6 +122,15 @@ function prepareBASEMAPLayers() {
             var selectLayers = document.getElementById('layer-select');
             //console.log("1:" + selectLayers);
             function onChangeLayerS() {
+                console.log('fixing bug popup stayed open... ');
+                try {
+                var element = document.getElementById('popup');
+                $(element).popover('destroy');
+                popup.setPosition(undefined);
+                } catch (e) {
+                    console.error(e, e.stack);
+                }
+
                 console.log("onChangeLayerS()");
                 var k;
                 var style =  document.getElementById('layer-select').value;
@@ -435,6 +444,8 @@ function visualizzaStruMMSuMappa() {
                         projection: 'EPSG:3857',
                         center: center,
                         zoom: 6,
+                        minZoom: 3.777,  //introduzione limiti zoom come da produzione bug fixed 08052022
+                        maxZoom: 14.807  //introduzione limiti zoom come da produzione bug fixed 08052022
                     })
                 });
             }
@@ -595,6 +606,8 @@ function creazioneMappa () {
                        projection: 'EPSG:3857',
                        center: center,
                        zoom: 6,
+                       minZoom: 3.777,  //introduzione limiti zoom come da produzione bug fixed 08052022
+                       maxZoom: 14.807  //introduzione limiti zoom come da produzione bug fixed 08052022
                    })
                });
            }
@@ -840,6 +853,8 @@ function puliziaClearAllMapsLayers() {
                         projection: 'EPSG:3857',
                         center: center,
                         zoom: 6,
+                        minZoom: 3.777,  //introduzione limiti zoom come da produzione bug fixed 08052022
+                        maxZoom: 14.807  //introduzione limiti zoom come da produzione bug fixed 08052022
                     })
                 });
             }
@@ -1022,6 +1037,8 @@ function creazioneMappaQuakesPHP (quakes) {
                         projection: 'EPSG:3857',
                         center: center,
                         zoom: 6,
+                        minZoom: 3.777,  //introduzione limiti zoom come da produzione bug fixed 08052022
+                        maxZoom: 14.807  //introduzione limiti zoom come da produzione bug fixed 08052022
                     })
                 });
                 console.log('quake vector aggiunto in fase di inizializzazione');
@@ -1183,6 +1200,8 @@ function indexLocalita () {
                         projection: 'EPSG:3857',
                         center: center,
                         zoom: 6,
+                        minZoom: 3.777,  //introduzione limiti zoom come da produzione bug fixed 08052022
+                        maxZoom: 14.807  //introduzione limiti zoom come da produzione bug fixed 08052022
                     })
                 });
             }
@@ -1342,6 +1361,8 @@ function indexEEAmbiente() {
                         projection: 'EPSG:3857',
                         center: center,
                         zoom: 6,
+                        minZoom: 3.777,  //introduzione limiti zoom come da produzione bug fixed 08052022
+                        maxZoom: 14.807  //introduzione limiti zoom come da produzione bug fixed 08052022
                     })
                 });
             }

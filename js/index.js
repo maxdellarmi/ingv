@@ -172,8 +172,8 @@ var GmapsTools = function(){
 				else var EQlevel = XMLQuakeList.getElementsByTagName("level")[i].childNodes[0].nodeValue;
 
 
-				var Lat = parseFloat(XMLQuakeList.getElementsByTagName("lat")[i].childNodes[0].nodeValue).toFixed(5);
-				var Lon = parseFloat(XMLQuakeList.getElementsByTagName("lon")[i].childNodes[0].nodeValue).toFixed(5);
+				var Lat = parseFloat(XMLQuakeList.getElementsByTagName("lat")[i].childNodes[0].nodeValue).toFixed(3);
+				var Lon = parseFloat(XMLQuakeList.getElementsByTagName("lon")[i].childNodes[0].nodeValue).toFixed(3);
 
 
 				var DateLabel = XMLQuakeList.getElementsByTagName("data_label")[i].childNodes[0].nodeValue;

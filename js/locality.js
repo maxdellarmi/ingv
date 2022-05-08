@@ -477,8 +477,8 @@ function parseQuakeList(XmlText){
 			SecALLEQ[i] = CheckSec.childNodes.length ? CheckSec.childNodes[0].nodeValue : '';
 			if (SecALLEQ[i]=="-9" || SecALLEQ[i]=="" ) SecALLEQ[i] = 0;
 
-			LatALLEQ[i] = parseFloat(XMLQuakeList.getElementsByTagName("lat")[i].childNodes[0].nodeValue).toFixed(5);
-			LonALLEQ[i] = parseFloat(XMLQuakeList.getElementsByTagName("lon")[i].childNodes[0].nodeValue).toFixed(5);
+			LatALLEQ[i] = parseFloat(XMLQuakeList.getElementsByTagName("lat")[i].childNodes[0].nodeValue).toFixed(3);
+			LonALLEQ[i] = parseFloat(XMLQuakeList.getElementsByTagName("lon")[i].childNodes[0].nodeValue).toFixed(3);
 
 			ImaxALLEQ[i] = parseFloat(XMLQuakeList.getElementsByTagName("imax")[i].childNodes[0].nodeValue);
 
@@ -589,8 +589,8 @@ function parseLocData(XmlText){
 
 	// -----------------------------------------     LOCALITY PARAMETERS AND MARKER
 
-	locLat = parseFloat(XMLQuakeList.getElementsByTagName("lat_wgs84")[0].childNodes[0].nodeValue).toFixed(5);
-	locLon = parseFloat(XMLQuakeList.getElementsByTagName("lon_wgs84")[0].childNodes[0].nodeValue).toFixed(5);
+	locLat = parseFloat(XMLQuakeList.getElementsByTagName("lat_wgs84")[0].childNodes[0].nodeValue).toFixed(3);
+	locLon = parseFloat(XMLQuakeList.getElementsByTagName("lon_wgs84")[0].childNodes[0].nodeValue).toFixed(3);
 
 	desloc = XMLQuakeList.getElementsByTagName("desloc_cfti")[0].childNodes[0].nodeValue;
 	var flagProv = XMLQuakeList.getElementsByTagName("provlet")[0].childNodes.length;
@@ -721,8 +721,8 @@ function parseLocData(XmlText){
 			Sec[i] = CheckSec.childNodes.length ? CheckSec.childNodes[0].nodeValue : '';
 			if (Sec[i]=="-9" || Sec[i]=="" ) Sec[i] = 0;
 
-			Lat[i] = parseFloat(XMLQuakeList.getElementsByTagName("lat")[i].childNodes[0].nodeValue).toFixed(5);
-			Lon[i] = parseFloat(XMLQuakeList.getElementsByTagName("lon")[i].childNodes[0].nodeValue).toFixed(5);
+			Lat[i] = parseFloat(XMLQuakeList.getElementsByTagName("lat")[i].childNodes[0].nodeValue).toFixed(3);
+			Lon[i] = parseFloat(XMLQuakeList.getElementsByTagName("lon")[i].childNodes[0].nodeValue).toFixed(3);
 			fIS[i] = parseFloat(XMLQuakeList.getElementsByTagName("intpqnum")[i].childNodes[0].nodeValue);
 			sISrom[i] = XMLQuakeList.getElementsByTagName("intpq")[i].childNodes[0].nodeValue;
 			// da decidere questo:
@@ -1523,8 +1523,8 @@ function parsePQData2(XmlText){
 	EEMarkersOLD = [];
 
 	// -----------   READ EPICENTER COORD FROM XML AND CREATE EPICENTER marker
-	var latEpiPQ = parseFloat(XMLLocList.getElementsByTagName("lat")[0].childNodes[0].nodeValue).toFixed(5);
-	var lonEpiPQ = parseFloat(XMLLocList.getElementsByTagName("lon")[0].childNodes[0].nodeValue).toFixed(5);
+	var latEpiPQ = parseFloat(XMLLocList.getElementsByTagName("lat")[0].childNodes[0].nodeValue).toFixed(3);
+	var lonEpiPQ = parseFloat(XMLLocList.getElementsByTagName("lon")[0].childNodes[0].nodeValue).toFixed(3);
 	//vecchio Gmaps - oggetto
 	//var StarBIG = {path: EPIpathCALC, fillColor: '#ffffff', fillOpacity: 0.6, anchor: new google.maps.Point(125,125), strokeWeight: 2, strokeColor:red, scale: 0.15};
 

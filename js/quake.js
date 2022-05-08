@@ -443,8 +443,8 @@ function parseEEData(XmlText){
 				}
 
 				EE_codeff[k] = XMLEEList.getElementsByTagName("CODICE_EFF")[i].childNodes[0].nodeValue;
-				EE_Lat[k] = parseFloat(XMLEEList.getElementsByTagName("LAT_WGS84")[i].childNodes[0].nodeValue).toFixed(5);
-				EE_Lon[k] = parseFloat(XMLEEList.getElementsByTagName("LON_WGS84")[i].childNodes[0].nodeValue).toFixed(5);
+				EE_Lat[k] = parseFloat(XMLEEList.getElementsByTagName("LAT_WGS84")[i].childNodes[0].nodeValue).toFixed(3);
+				EE_Lon[k] = parseFloat(XMLEEList.getElementsByTagName("LON_WGS84")[i].childNodes[0].nodeValue).toFixed(3);
 
                 k += 1
 			} else k = k;
@@ -755,8 +755,8 @@ function parsePQData2(XmlText){
 			else locPQname[i] =  locPQdesloc + " (" + locPQcountry + ')'
 
 
-			locPQlat[i] = parseFloat(XMLLocList.getElementsByTagName("lat_wgs84")[i].childNodes[0].nodeValue).toFixed(5);
-			locPQlon[i] = parseFloat(XMLLocList.getElementsByTagName("lon_wgs84")[i].childNodes[0].nodeValue).toFixed(5);
+			locPQlat[i] = parseFloat(XMLLocList.getElementsByTagName("lat_wgs84")[i].childNodes[0].nodeValue).toFixed(3);
+			locPQlon[i] = parseFloat(XMLLocList.getElementsByTagName("lon_wgs84")[i].childNodes[0].nodeValue).toFixed(3);
 
 			//D1comm[i] = XMLLocList.getElementsByTagName("COMM")[i].childNodes[0].nodeValue;
 			 distance[i] = (google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(locPQlat[i], locPQlon[i]), new google.maps.LatLng(Lat, Lon)) / 1000).toFixed(1);

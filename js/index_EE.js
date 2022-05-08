@@ -262,9 +262,9 @@ function parseEEData(XmlText){
 			if (EE_locNote == '-') EE_locNote = "";
 			var EE_codeff = XMLEEList.getElementsByTagName("CODICE_EFF")[i].childNodes[0].nodeValue;
 			var EE_Lat = XMLEEList.getElementsByTagName("LAT_WGS84")[i].childNodes[0].nodeValue;
-			var fEE_Lat = parseFloat(EE_Lat).toFixed(5);
+			var fEE_Lat = parseFloat(EE_Lat).toFixed(3);
 			var EE_Lon = XMLEEList.getElementsByTagName("LON_WGS84")[i].childNodes[0].nodeValue;
-			var fEE_Lon = parseFloat(EE_Lon).toFixed(5);
+			var fEE_Lon = parseFloat(EE_Lon).toFixed(3);
 
 
 			// take effect only if in list of "on" toggles
