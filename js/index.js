@@ -1092,7 +1092,10 @@ function bindSelectEvent(evt) {
 				'trigger': 'manual',
 				'content': buttonCloseSingle.toString() + " "+ popupContent // feature.OnClickTextIT;
 			});
-			$(element).popover('show');
+			//bugfix 10052022 per i popup vuoti.
+			if ($(element).data('bs.popover').options.content.includes("<div") === true) {
+				$(element).popover('show');
+			}
 		} else {
 			$(element).popover('destroy');
 			popup.setPosition(undefined);
